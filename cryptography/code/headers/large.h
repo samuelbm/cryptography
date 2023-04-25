@@ -13,9 +13,9 @@ public:
     bool operator[](uint16_t index) const;
     bool& operator[](uint16_t index);
     uint16_t get_number_of_bits() const;
+    void initialize_array_to_false();
 
 private:
-    void initialize_array_to_false();
     void allocate_memory();
     void copy_array(Large const& large);
 

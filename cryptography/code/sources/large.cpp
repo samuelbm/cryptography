@@ -46,6 +46,7 @@ uint16_t Large::get_number_of_bits() const
     return this->bits_size;
 }
 
+
 void Large::initialize_array_to_false()
 {
     for(uint16_t i=0; i<this->bits_size; i++)

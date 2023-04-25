@@ -57,3 +57,16 @@ bool is_greater_or_equal(Large const& a, Large const& b, uint64_t& operation_cou
 {
     return ~is_less_than(a, b, operation_count);
 }
+
+void addition(Large const& a, Large const& b, Large& sum, uint16_t& a_start, uint16_t& sum_start, bool carry_in, uint64_t& operation_count)
+{
+    bool carry = carry_in;
+    uint16_t n_bits = b.get_number_of_bits();
+    for(uint16_t i=0; i<n_bits; i++)
+    {
+        operation_count++;
+        sum[i + sum_start] = a[i + a_start] ^ b[i] ^ carry;
+        carry = (a[i + a_start] & b[i]) | (a[i + a_start] & carry) | (b[i] & carry);
+    }
+    sum[n_bits + sum_start] = carry;
+}
