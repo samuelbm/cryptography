@@ -1,11 +1,29 @@
 #ifndef PRIME_ARITHMETIC_H
 #define PRIME_ARITHMETIC_H
 
+#include "large.h"
 
-class Prime_arithmetic
-{
-public:
-    Prime_arithmetic();
-};
+bool is_equal(Large const& a, Large const& b, uint64_t& operation_count);
+bool is_less_than(Large const& a, Large const& b, uint64_t& operation_count);
+bool is_not_equal(Large const& a, Large const& b, uint64_t& operation_count);
+bool is_greater_than(Large const& a, Large const& b, uint64_t& operation_count);
+bool is_less_or_equal(Large const& a, Large const& b, uint64_t& operation_count);
+bool is_greater_or_equal(Large const& a, Large const& b, uint64_t& operation_count);
+
+/*
+void modular_addition();
+void modular_substraction();
+void modular_negation();
+void modular_multiplication();
+void modular_division_and_remainder();
+void modular_squaring();
+void modular_exponentiation();
+void modular_inverse();
+
+void compute_greater_common_divisor();
+void compute_naive_factorisation();
+void compute_phi_n();
+bool is_prime_with_miller_rabin();
+*/
 
 #endif // PRIME_ARITHMETIC_H

@@ -7,6 +7,8 @@
 #include "rsa_test.h"
 #include "testsuite.hpp"
 
+#include "large.h"
+
 
 int main(int argc, char *argv[])
 {
@@ -25,12 +27,12 @@ int main(int argc, char *argv[])
 
     if(status)
     {
-        qDebug() << "Test Failed" << Qt::endl;
+        qDebug() << "Test Failed";// << Qt::endl;
         return 0;
     }
     else
     {
-        qDebug() << "Test Successful" << Qt::endl;
+        qDebug() << "Test Successful";// << Qt::endl;
     }
 
 //
