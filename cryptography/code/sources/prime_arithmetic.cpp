@@ -1,36 +1,36 @@
 #include "prime_arithmetic.h"
 
-bool is_equal(Large const& a, Large const& b, uint64_t& operation_count)
+void count_initialization(Count& count)
+{
+    count.operation = 0;
+    count.clock = 0;
+}
+
+bool is_equal(Large const& a, Large const& b, Count& count)
 {
     uint16_t n_bits = a.get_number_of_bits();
-    if(n_bits != b.get_number_of_bits())
-        return false;
-
     for(uint16_t i=0; i<n_bits; i++)
     {
-        operation_count++;
+        count.operation++;
         if(a[i] != b[i])
             return false;
     }
     return true;
 }
 
-bool is_less_than(Large const& a, Large const& b, uint64_t& operation_count)
+bool is_less_than(Large const& a, Large const& b, Count& count)
 {
     uint16_t n_bits = a.get_number_of_bits();
-    if(n_bits != b.get_number_of_bits())
-        return false;
-
     uint16_t index = n_bits;
     for(uint16_t i=0; i<n_bits; i++)
     {
-        operation_count++;
+        count.operation++;
         index--;
-        if(a[i] & ~b[i])
+        if(a[index] & !b[index])
         {
             return false;
         }
-        else if(~a[i] & b[i])
+        else if(!a[index] & b[index])
         {
             return true;
         }
@@ -38,35 +38,73 @@ bool is_less_than(Large const& a, Large const& b, uint64_t& operation_count)
     return false;
 }
 
-bool is_not_equal(Large const& a, Large const& b, uint64_t& operation_count)
+bool is_not_equal(Large const& a, Large const& b, Count& count)
 {
-    return ~is_equal(a, b, operation_count);
+    return !is_equal(a, b, count);
 }
 
-bool is_greater_than(Large const& a, Large const& b, uint64_t& operation_count)
+bool is_greater_than(Large const& a, Large const& b, Count& count)
 {
-    return is_less_than(b, a, operation_count);
+    return is_less_than(b, a, count);
 }
 
-bool is_less_or_equal(Large const& a, Large const& b, uint64_t& operation_count)
+bool is_less_or_equal(Large const& a, Large const& b, Count& count)
 {
-    return ~is_less_than(b, a, operation_count);
+    return !is_less_than(b, a, count);
 }
 
-bool is_greater_or_equal(Large const& a, Large const& b, uint64_t& operation_count)
+bool is_greater_or_equal(Large const& a, Large const& b, Count& count)
 {
-    return ~is_less_than(a, b, operation_count);
+    return !is_less_than(a, b, count);
 }
 
-void addition(Large const& a, Large const& b, Large& sum, uint16_t& a_start, uint16_t& sum_start, bool carry_in, uint64_t& operation_count)
+void addition(Large const& addend1, Large const& addend2, Large& sum, Count& count)
 {
-    bool carry = carry_in;
-    uint16_t n_bits = b.get_number_of_bits();
+    count.clock++;
+    uint16_t n_bits = addend1.get_number_of_bits();
+    bool carry = false;
     for(uint16_t i=0; i<n_bits; i++)
     {
-        operation_count++;
-        sum[i + sum_start] = a[i + a_start] ^ b[i] ^ carry;
-        carry = (a[i + a_start] & b[i]) | (a[i + a_start] & carry) | (b[i] & carry);
+        count.operation++;
+        sum[i] = addend1[i] ^ addend2[i] ^ carry;
+        carry = (addend1[i] & addend2[i]) | (addend1[i] & carry) | (addend2[i] & carry);
     }
-    sum[n_bits + sum_start] = carry;
+    count.operation++;
+    sum[n_bits] = carry;
 }
+
+void substraction(Large const& minuend, Large const& substrahend, Large& difference, Count& count)
+{
+    count.clock++;
+    uint16_t n_bits = minuend.get_number_of_bits();
+    bool carry = true;
+    for(uint16_t i=0; i<n_bits; i++)
+    {
+        count.operation++;
+        difference[i] = minuend[i] ^ !substrahend[i] ^ carry;
+        carry = (minuend[i] & !substrahend[i]) | (minuend[i] & carry) | (!substrahend[i] & carry);
+    }
+    count.operation++;
+    difference[n_bits] = carry;
+}
+
+void multiplication(Large const& multiplicand, Large const& multiplicator, Large& product, Count& count)
+{
+
+}
+
+void division_modulo(Large const& dividend, Large const& modulus, Large const& quotient, Large const& remainder, Count& count)
+{
+
+}
+
+void squaring(Large const& multiplicator, Large const& modulus, Count& count)
+{
+
+}
+
+void modular_exponentiation(Large const& base, Large const& exponent, Large const& modulus, Count& count)
+{
+
+}
+

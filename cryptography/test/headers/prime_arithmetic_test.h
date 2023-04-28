@@ -38,6 +38,10 @@ private slots:
     void Given_a_equal_b_When_testing_is_greater_or_equal_Than_return_true();
     void Given_a_grater_than_b_When_testing_is_graeter_or_equal_Than_return_true();
     void Given_a_equal_b_When_testing_is_greater_or_equal_Than_operation_count_is_16();
+
+    void Given_5_and_4_on_16_bits_When_testing_addition_Then_return_9();
+    void Given_5_and_4_on_16_bits_When_testing_addition_Then_operation_is_17();
+    void Given_5_and_4_on_16_bits_When_testing_addition_Then_clock_is_1();
 };
 
 #endif // PRIME_ARITHMETIC_TEST_H
