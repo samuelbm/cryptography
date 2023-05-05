@@ -18,10 +18,10 @@ public:
     Large& concatenate(Large const& large) const;
     Large& shift_left(uint16_t shift=1);
     Large& shift_right(uint16_t shift=1);
-
+    void fill_with_false(uint16_t start_index, uint16_t length);
 
 private:    
-    void fill_with_false(uint16_t start_index, uint16_t length);
+
     void allocate_memory();
 
 private:

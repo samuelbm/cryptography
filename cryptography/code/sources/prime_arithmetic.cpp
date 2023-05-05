@@ -90,7 +90,19 @@ void substraction(Large const& minuend, Large const& substrahend, Large& differe
 
 void multiplication(Large const& multiplicand, Large const& multiplicator, Large& product, Count& count)
 {
-
+    product.fill_with_false(0, product.get_number_of_bits());
+    uint16_t multiplicand_length = multiplicand.get_number_of_bits();
+    uint16_t multiplicator_length = multiplicator.get_number_of_bits();
+    Large sum(multiplicand_length+1);
+    for(uint16_t i=0; i<multiplicator_length; i++)
+    {
+        sum = product.sub_large(i, multiplicand_length);
+        addition(multiplicand, sum, sum, count);
+        if(multiplicator[i])
+        {
+            product.insert(sum, i);
+        }
+    }
 }
 
 void division_modulo(Large const& dividend, Large const& modulus, Large const& quotient, Large const& remainder, Count& count)

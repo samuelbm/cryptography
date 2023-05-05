@@ -42,6 +42,14 @@ private slots:
     void Given_5_and_4_on_16_bits_When_testing_addition_Then_return_9();
     void Given_5_and_4_on_16_bits_When_testing_addition_Then_operation_is_17();
     void Given_5_and_4_on_16_bits_When_testing_addition_Then_clock_is_1();
+
+    void Given_9_and_4_on_16_bits_When_testing_substrction_Then_return_5();
+    void Given_9_and_4_on_16_bits_When_testing_substrction_Then_operation_is_17();
+    void Given_9_and_4_on_16_bits_When_testing_substrction_Then_clock_is_1();
+
+    void Given_5_and_6_on_16_bits_When_testing_multiplication_Then_return_30();
+    void Given_5_and_6_on_16_bits_When_testing_multiplication_Then_operation_is_272();
+    void Given_5_and_6_on_16_bits_When_testing_multiplication_Then_clock_is_16();
 };
 
 #endif // PRIME_ARITHMETIC_TEST_H

@@ -270,4 +270,84 @@ void prime_arithmetic_test::Given_5_and_4_on_16_bits_When_testing_addition_Then_
     QCOMPARE(count.clock, 1);
 }
 
+void prime_arithmetic_test::Given_9_and_4_on_16_bits_When_testing_substrction_Then_return_5()
+{
+    Count count;
+    count_initialization(count);
+    Large a = create_and_initialize_large(9);
+    Large b = create_and_initialize_large(4);
+    Large difference = create_and_initialize_large(0);
+    Large expected = create_and_initialize_large(5);
+    substraction(a, b, difference, count);
+    QVERIFY(is_equal(difference, expected, count));
+}
+
+void prime_arithmetic_test::Given_9_and_4_on_16_bits_When_testing_substrction_Then_operation_is_17()
+{
+    Count count;
+    count_initialization(count);
+    Large a = create_and_initialize_large(9);
+    Large b = create_and_initialize_large(4);
+    Large difference = create_and_initialize_large(5);
+    substraction(a, b, difference, count);
+    QCOMPARE(count.operation, 17);
+}
+
+void prime_arithmetic_test::Given_9_and_4_on_16_bits_When_testing_substrction_Then_clock_is_1()
+{
+    Count count;
+    count_initialization(count);
+    Large a = create_and_initialize_large(9);
+    Large b = create_and_initialize_large(4);
+    Large difference = create_and_initialize_large(5);
+    addition(a, b, difference, count);
+    QCOMPARE(count.clock, 1);
+}
+
+void prime_arithmetic_test::Given_5_and_6_on_16_bits_When_testing_multiplication_Then_return_30()
+{
+    Count count;
+    count_initialization(count);
+    Large a = create_and_initialize_large(5);
+    Large b = create_and_initialize_large(6);
+    Large product(32);
+    Large expected(32);
+    Large sub_expected = create_and_initialize_large(30);
+    expected.insert(sub_expected);
+    multiplication(a, b, product, count);
+    for(uint16_t i=0; i<32; i++)
+    {
+        qDebug() << i << product[i] << expected[i];
+    }
+    QVERIFY(is_equal(product, expected, count));
+}
+
+void prime_arithmetic_test::Given_5_and_6_on_16_bits_When_testing_multiplication_Then_operation_is_272()
+{
+    Count count;
+    count_initialization(count);
+    Large a = create_and_initialize_large(5);
+    Large b = create_and_initialize_large(6);
+    Large product(32);
+    Large expected(32);
+    Large sub_expected = create_and_initialize_large(30);
+    expected.insert(sub_expected);
+    multiplication(a, b, product, count);
+    QCOMPARE(count.operation, 272);
+}
+
+void prime_arithmetic_test::Given_5_and_6_on_16_bits_When_testing_multiplication_Then_clock_is_16()
+{
+    Count count;
+    count_initialization(count);
+    Large a = create_and_initialize_large(5);
+    Large b = create_and_initialize_large(6);
+    Large product(32);
+    Large expected(32);
+    Large sub_expected = create_and_initialize_large(30);
+    expected.insert(sub_expected);
+    multiplication(a, b, product, count);
+    QCOMPARE(count.clock, 16);
+}
+
 static prime_arithmetic_test PRIME_ARITHMETIC_TEST;
