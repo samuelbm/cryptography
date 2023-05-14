@@ -1,4 +1,5 @@
 #include "large.h"
+#include <QDebug>
 
 Large::Large(uint16_t number_of_bits): bits_size(number_of_bits)
 {
@@ -54,7 +55,7 @@ Large& Large::sub_large(uint16_t start_index, uint16_t length) const
     Large* sub = new Large(length);
     for(uint16_t i=0; i < length; i++)
     {
-        sub[i] = (*this)[i + start_index];
+        (*sub)[i] = (*this)[i + start_index];
     }
     return *sub;
 }
@@ -110,4 +111,48 @@ void Large::allocate_memory()
     bits = new bool[this->bits_size];
 }
 
+QString Large::toBin() const
+{
+    QString str = QString::number(this->bits_size);
+    str += "Bin";
+    if(this->bits_size==0)
+    {
+        str += "0";
+    }
+    else
+    {
+        for(uint16_t i=0; i<this->bits_size; i++)
+        {
+            str += ((*this)[this->bits_size - i - 1])?"1":"0";
+        }
+    }
+    return str;
+}
+
+QString Large::toHex() const
+{
+    QString symbols = "0123456789ABCDEF";
+    QString str = QString::number(this->bits_size);
+    str += "Hex";
+    if(this->bits_size==0)
+    {
+        str += "0";
+    }
+    else
+    {
+        uint16_t digits = ((this->bits_size-1)/4)+1;
+        for(uint16_t i=0; i<digits; i++)
+        {
+            uint16_t minimum = (i==0)?this->bits_size - 4*((int)(this->bits_size/4)):4;
+            minimum = (minimum == 0)?4:minimum;
+            uint16_t digit = 0;
+            for(uint16_t j=0; j<minimum; j++)
+            {
+                digit += (*this)[4*(digits - i - 1) + j]?1<<j:0;
+            }
+            str += symbols[digit];
+        }
+    }
+    return str;
+}
 

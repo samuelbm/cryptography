@@ -2,6 +2,7 @@
 #define LARGE_H
 
 #include <stdint.h>
+#include <QString>
 
 class Large
 {
@@ -20,6 +21,8 @@ public:
     Large& shift_right(uint16_t shift=1);
     void fill_with_false(uint16_t start_index, uint16_t length);
 
+    QString toBin() const;
+    QString toHex() const;
 private:    
 
     void allocate_memory();

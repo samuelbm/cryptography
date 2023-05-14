@@ -26,7 +26,6 @@ void squaring(Large const& multiplicator, Large const& modulus, Count& count);
 void modular_exponentiation(Large const& base, Large const& exponent, Large const& modulus, Count& count);
 
 
-
 /*
 void compute_phi_n();
 void inverse();
