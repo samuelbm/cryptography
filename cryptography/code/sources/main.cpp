@@ -13,6 +13,7 @@
 
 int main(int argc, char *argv[])
 {
+
     // setup lambda
     int status = 0;
     auto runTest = [&status, argc, argv](QObject* obj) {
@@ -34,7 +35,8 @@ int main(int argc, char *argv[])
     {
         qDebug() << "Test Successful";// << Qt::endl;
     }
-//
+
+
     Count count;
     count_initialization(count);
     Large multiplicand(4);
@@ -51,7 +53,7 @@ int main(int argc, char *argv[])
 
     multiplication(multiplicand, multiplicator, product, count);
     qDebug() << multiplicand.toHex() << multiplicator.toHex() << product.toHex();
-//
+
 
     return 0;
 }

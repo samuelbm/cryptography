@@ -1,5 +1,6 @@
 #include "prime_arithmetic.h"
 #include <QDebug>
+#include <QTest>
 
 void count_initialization(Count& count)
 {
@@ -9,6 +10,7 @@ void count_initialization(Count& count)
 
 bool is_equal(Large const& a, Large const& b, Count& count)
 {
+    assert(a.get_number_of_bits() == b.get_number_of_bits());
     uint16_t n_bits = a.get_number_of_bits();
     for(uint16_t i=0; i<n_bits; i++)
     {
@@ -21,6 +23,7 @@ bool is_equal(Large const& a, Large const& b, Count& count)
 
 bool is_less_than(Large const& a, Large const& b, Count& count)
 {
+    assert(a.get_number_of_bits() == b.get_number_of_bits());
     uint16_t n_bits = a.get_number_of_bits();
     uint16_t index = n_bits;
     for(uint16_t i=0; i<n_bits; i++)
@@ -61,6 +64,9 @@ bool is_greater_or_equal(Large const& a, Large const& b, Count& count)
 
 void addition(Large const& addend1, Large const& addend2, Large& sum, Count& count)
 {
+    assert(addend1.get_number_of_bits() <= addend2.get_number_of_bits());
+    qDebug() << "addition" << addend1.get_number_of_bits() << addend2.get_number_of_bits() << sum.get_number_of_bits() << (addend1.get_number_of_bits() + 1 <= sum.get_number_of_bits()) << addend1.toHex() << addend2.toHex() << sum.toHex();
+    assert(addend1.get_number_of_bits() + 1 <= sum.get_number_of_bits());
     count.clock++;
     uint16_t n_bits = addend1.get_number_of_bits();
     bool carry = false;
@@ -78,6 +84,8 @@ void addition(Large const& addend1, Large const& addend2, Large& sum, Count& cou
 
 void substraction(Large const& minuend, Large const& substrahend, Large& difference, Count& count)
 {
+    assert(minuend.get_number_of_bits() == substrahend.get_number_of_bits());
+    assert(minuend.get_number_of_bits() == difference.get_number_of_bits());
     count.clock++;
     uint16_t n_bits = minuend.get_number_of_bits();
     bool carry = true;
@@ -93,6 +101,7 @@ void substraction(Large const& minuend, Large const& substrahend, Large& differe
 
 void multiplication(Large const& multiplicand, Large const& multiplicator, Large& product, Count& count)
 {
+    assert(multiplicand.get_number_of_bits() + multiplicator.get_number_of_bits() <= product.get_number_of_bits());
     product.fill_with_false(0, product.get_number_of_bits());
     uint16_t multiplicand_length = multiplicand.get_number_of_bits();
     uint16_t multiplicator_length = multiplicator.get_number_of_bits();
