@@ -65,7 +65,6 @@ bool is_greater_or_equal(Large const& a, Large const& b, Count& count)
 void addition(Large const& addend1, Large const& addend2, Large& sum, Count& count)
 {
     assert(addend1.get_number_of_bits() <= addend2.get_number_of_bits());
-    qDebug() << "addition" << addend1.get_number_of_bits() << addend2.get_number_of_bits() << sum.get_number_of_bits() << (addend1.get_number_of_bits() + 1 <= sum.get_number_of_bits()) << addend1.toHex() << addend2.toHex() << sum.toHex();
     assert(addend1.get_number_of_bits() + 1 <= sum.get_number_of_bits());
     count.clock++;
     uint16_t n_bits = addend1.get_number_of_bits();
@@ -119,8 +118,15 @@ void multiplication(Large const& multiplicand, Large const& multiplicator, Large
     delete sum;
 }
 
-void division_modulo(Large const& dividend, Large const& modulus, Large const& quotient, Large const& remainder, Count& count)
+void division_modulo(Large const& dividend, Large const& modulus, Large& quotient, Large& remainder, Count& count)
 {
+    Count dummy_count;
+    Large zeros(modulus.get_number_of_bits());
+    assert(is_not_equal(modulus, zeros, dummy_count));
+    assert(dividend.get_number_of_bits() == modulus.get_number_of_bits());
+    assert(dividend.get_number_of_bits() == quotient.get_number_of_bits());
+    assert(dividend.get_number_of_bits() == remainder.get_number_of_bits());
+    remainder.insert(dividend);
 
 }
 
