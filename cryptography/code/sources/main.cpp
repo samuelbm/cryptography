@@ -39,21 +39,17 @@ int main(int argc, char *argv[])
 
     Count count;
     count_initialization(count);
-    Large multiplicand(4);
-    Large multiplicator(4);
-    Large product(8);
-    multiplicand[0] = true;
-    multiplicand[1] = false;
-    multiplicand[2] = true;
-    multiplicand[3] = false;
-    multiplicator[0] = false;
-    multiplicator[1] = true;
-    multiplicator[2] = true;
-    multiplicator[3] = false;
-
-    multiplication(multiplicand, multiplicator, product, count);
-    qDebug() << multiplicand.toHex() << multiplicator.toHex() << product.toHex();
-
+    Large a(8);
+    Large b(8);
+    Large r(8);
+    Large q(8);
+    a[0] = true;
+    //a[1] = true;
+    a[4] = true;
+    b[1] = true;
+    b[0] = true;
+    division_modulo(a, b, q, r, count);
+    qDebug() << a.toHex() << b.toHex() << q.toHex() << r.toHex();
 
     return 0;
 }

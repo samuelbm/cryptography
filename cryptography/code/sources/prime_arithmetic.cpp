@@ -12,13 +12,14 @@ bool is_equal(Large const& a, Large const& b, Count& count)
 {
     assert(a.get_number_of_bits() == b.get_number_of_bits());
     uint16_t n_bits = a.get_number_of_bits();
+    bool answer = true;
     for(uint16_t i=0; i<n_bits; i++)
     {
         count.operation++;
         if(a[i] != b[i])
-            return false;
+            answer &= false;
     }
-    return true;
+    return answer;
 }
 
 bool is_less_than(Large const& a, Large const& b, Count& count)
@@ -26,20 +27,19 @@ bool is_less_than(Large const& a, Large const& b, Count& count)
     assert(a.get_number_of_bits() == b.get_number_of_bits());
     uint16_t n_bits = a.get_number_of_bits();
     uint16_t index = n_bits;
+    bool answer = false;
+    bool found = false;
     for(uint16_t i=0; i<n_bits; i++)
     {
         count.operation++;
         index--;
-        if(a[index] & !b[index])
+        if(a[index] ^ b[index])
         {
-            return false;
-        }
-        else if(!a[index] & b[index])
-        {
-            return true;
+            answer = (found)?answer:b[index];
+            found = true;
         }
     }
-    return false;
+    return answer;
 }
 
 bool is_not_equal(Large const& a, Large const& b, Count& count)
@@ -66,7 +66,6 @@ void addition(Large const& addend1, Large const& addend2, Large& sum, Count& cou
 {
     assert(addend1.get_number_of_bits() <= addend2.get_number_of_bits());
     assert(addend1.get_number_of_bits() + 1 <= sum.get_number_of_bits());
-    count.clock++;
     uint16_t n_bits = addend1.get_number_of_bits();
     bool carry = false;
     bool next_carry;
@@ -77,7 +76,6 @@ void addition(Large const& addend1, Large const& addend2, Large& sum, Count& cou
         sum[i] = addend1[i] ^ addend2[i] ^ carry;
         carry = next_carry;
     }
-    count.operation++;
     sum[n_bits] = carry;
 }
 
@@ -85,7 +83,6 @@ void substraction(Large const& minuend, Large const& substrahend, Large& differe
 {
     assert(minuend.get_number_of_bits() == substrahend.get_number_of_bits());
     assert(minuend.get_number_of_bits() == difference.get_number_of_bits());
-    count.clock++;
     uint16_t n_bits = minuend.get_number_of_bits();
     bool carry = true;
     for(uint16_t i=0; i<n_bits; i++)
@@ -94,7 +91,6 @@ void substraction(Large const& minuend, Large const& substrahend, Large& differe
         difference[i] = minuend[i] ^ !substrahend[i] ^ carry;
         carry = (minuend[i] & !substrahend[i]) | (minuend[i] & carry) | (!substrahend[i] & carry);
     }
-    count.operation++;
     difference[n_bits] = carry;
 }
 
@@ -107,6 +103,7 @@ void multiplication(Large const& multiplicand, Large const& multiplicator, Large
     Large* sum = new Large(multiplicand_length+1);
     for(uint16_t i=0; i<multiplicator_length; i++)
     {
+        count.clock++;
         (*sum).insert(product.sub_large(i, multiplicand_length));
         (*sum)[multiplicand_length] = false;
         addition(multiplicand, *sum, *sum, count);
@@ -123,11 +120,31 @@ void division_modulo(Large const& dividend, Large const& modulus, Large& quotien
     Count dummy_count;
     Large zeros(modulus.get_number_of_bits());
     assert(is_not_equal(modulus, zeros, dummy_count));
-    assert(dividend.get_number_of_bits() == modulus.get_number_of_bits());
     assert(dividend.get_number_of_bits() == quotient.get_number_of_bits());
-    assert(dividend.get_number_of_bits() == remainder.get_number_of_bits());
-    remainder.insert(dividend);
-
+    assert(modulus.get_number_of_bits() == remainder.get_number_of_bits());
+    assert(quotient.get_number_of_bits() >= remainder.get_number_of_bits());
+    uint16_t quotient_size = quotient.get_number_of_bits();
+    uint16_t remainder_size = remainder.get_number_of_bits();
+    quotient.fill_with_false(0, quotient_size);
+    Large remainder_intermediate(quotient_size + remainder_size - 1);
+    Large chunk(remainder_size);
+    remainder_intermediate.insert(dividend);
+    for(uint16_t i=0; i<quotient_size; i++)
+    {
+        count.clock++;
+        chunk.insert(remainder_intermediate.sub_large(quotient_size-1-i, remainder_size));
+        substraction(chunk, modulus, remainder, count);
+        quotient.shift_left();
+        if(is_less_or_equal(modulus, chunk, count))
+        {
+            quotient[0] = true;
+            remainder_intermediate.insert(remainder, quotient_size-1-i);
+        }
+        else
+        {
+            remainder.insert(chunk);
+        }
+    }
 }
 
 void squaring(Large const& multiplicator, Large const& modulus, Count& count)
