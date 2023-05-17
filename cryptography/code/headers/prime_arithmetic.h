@@ -21,16 +21,16 @@ void addition(Large const& addend1, Large const& addend2, Large& sum, Count& cou
 void substraction(Large const& minuend, Large const& substrahend, Large& difference, Count& count);
 void multiplication(Large const& multiplicand, Large const& multiplicator, Large& product, Count& count);
 void division_modulo(Large const& dividend, Large const& modulus, Large& quotient, Large& remainder, Count& count);
-
-void squaring(Large const& multiplicator, Large const& modulus, Count& count);
-void modular_exponentiation(Large const& base, Large const& exponent, Large const& modulus, Count& count);
+void addition_modulo(Large const& addend1, Large const& addend2, Large& modulus, Count& count);
+void substraction_modulo(Large const& minuend, Large const& substrahend, Large& modulus, Count& count);
+void multiplication_modulo(Large const& multiplicand, Large const& multiplicator, Large& modulus, Count& count);
+void squaring_modulo(Large const& multiplicator, Large const& modulus, Large& result, Count& count);
+void expnentiation_modulo(Large const& base, Large const& exponent, Large const& modulus, Large& result, Count& count);
 
 
 /*
-void compute_phi_n();
 void inverse();
 void compute_greater_common_divisor();
-void compute_naive_factorisation();
 bool is_prime_with_miller_rabin();
 void find prime random ???
 bool is prime+1 divisible by 4

@@ -55,6 +55,11 @@ private slots:
     void Given_17_and_3_on_8_bits_When_testing_division_modulo_Then_remainder_is_2();
     void Given_17_and_3_on_8_bits_When_testing_division_modulo_Then_operation_is_128();
     void Given_17_and_3_on_8_bits_When_testing_division_modulo_Then_clock_is_8();
+/*
+    void Given_3_and_5_on_3_bits_When_testing_squaring_modulo_Then_result_is_4();
+    void Given_3_and_5_on_3_bits_When_testing_squaring_modulo_Then_operation_is_45();
+    void Given_3_and_5_on_3_bits_When_testing_squaring_modulo_Then_clock_is_9();
+*/
 };
 
 #endif // PRIME_ARITHMETIC_TEST_H

@@ -39,18 +39,16 @@ int main(int argc, char *argv[])
 
     Count count;
     count_initialization(count);
-    Large a(8);
-    Large b(8);
-    Large r(8);
-    Large q(8);
-    a[0] = true;
-    //a[1] = true;
-    a[4] = true;
-    b[1] = true;
-    b[0] = true;
-    division_modulo(a, b, q, r, count);
-    qDebug() << a.toHex() << b.toHex() << q.toHex() << r.toHex();
-
+    Large dividend(6);
+    Large divisor(3);
+    Large quotient(6);
+    Large remainder(3);
+    dividend[0] = true;
+    dividend[3] = true;
+    divisor[0] = true;
+    divisor[2] = true;
+    division_modulo(dividend, divisor, quotient, remainder, count);
+    qDebug() << dividend.toHex() << divisor.toHex() << quotient.toHex() << remainder.toHex();
     return 0;
 }
 

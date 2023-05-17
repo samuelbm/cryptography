@@ -350,7 +350,6 @@ void prime_arithmetic_test::Given_17_and_3_on_8_bits_When_testing_division_modul
     Large remainder(8);
     Large expected = create_and_initialize_large(5, 8);
     division_modulo(a, b, quotient, remainder, count);
-    qDebug() << quotient.toHex() << expected.toHex();
     QVERIFY(is_equal(quotient, expected, count));
 }
 
@@ -364,7 +363,6 @@ void prime_arithmetic_test::Given_17_and_3_on_8_bits_When_testing_division_modul
     Large remainder(8);
     Large expected = create_and_initialize_large(2, 8);
     division_modulo(a, b, quotient, remainder, count);
-    qDebug() << quotient.toHex() << expected.toHex();
     QVERIFY(is_equal(remainder, expected, count));
 }
 
@@ -391,5 +389,39 @@ void prime_arithmetic_test::Given_17_and_3_on_8_bits_When_testing_division_modul
     division_modulo(a, b, quotient, remainder, count);
     QCOMPARE(count.clock, 8);
 }
+/*
+void prime_arithmetic_test::Given_3_and_5_on_3_bits_When_testing_squaring_modulo_Then_result_is_4()
+{
+    Count count;
+    count_initialization(count);
+    Large multiplicator = create_and_initialize_large(3, 3);
+    Large modulus = create_and_initialize_large(5, 3);
+    Large result(3);
+    Large expected = create_and_initialize_large(4, 3);
+    squaring_modulo(multiplicator, modulus, result, count);
+    QVERIFY(is_equal(result, expected, count));
+}
 
+void prime_arithmetic_test::Given_3_and_5_on_3_bits_When_testing_squaring_modulo_Then_operation_is_45()
+{
+    Count count;
+    count_initialization(count);
+    Large multiplicator = create_and_initialize_large(3, 3);
+    Large modulus = create_and_initialize_large(5, 3);
+    Large result(3);
+    squaring_modulo(multiplicator, modulus, result, count);
+    QCOMPARE(count.operation, 45);
+}
+
+void prime_arithmetic_test::Given_3_and_5_on_3_bits_When_testing_squaring_modulo_Then_clock_is_9()
+{
+    Count count;
+    count_initialization(count);
+    Large multiplicator = create_and_initialize_large(3, 3);
+    Large modulus = create_and_initialize_large(5, 3);
+    Large result(3);
+    squaring_modulo(multiplicator, modulus, result, count);
+    QCOMPARE(count.clock, 9);
+}
+*/
 static prime_arithmetic_test PRIME_ARITHMETIC_TEST;

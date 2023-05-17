@@ -126,7 +126,7 @@ void division_modulo(Large const& dividend, Large const& modulus, Large& quotien
     uint16_t quotient_size = quotient.get_number_of_bits();
     uint16_t remainder_size = remainder.get_number_of_bits();
     quotient.fill_with_false(0, quotient_size);
-    Large remainder_intermediate(quotient_size + remainder_size - 1);
+    Large remainder_intermediate(quotient_size + remainder_size);
     Large chunk(remainder_size);
     remainder_intermediate.insert(dividend);
     for(uint16_t i=0; i<quotient_size; i++)
@@ -135,7 +135,7 @@ void division_modulo(Large const& dividend, Large const& modulus, Large& quotien
         chunk.insert(remainder_intermediate.sub_large(quotient_size-1-i, remainder_size));
         substraction(chunk, modulus, remainder, count);
         quotient.shift_left();
-        if(is_less_or_equal(modulus, chunk, count))
+        if(is_less_or_equal(modulus, chunk, count) || remainder_intermediate[quotient_size + remainder_size - 1 - i])
         {
             quotient[0] = true;
             remainder_intermediate.insert(remainder, quotient_size-1-i);
@@ -147,13 +147,69 @@ void division_modulo(Large const& dividend, Large const& modulus, Large& quotien
     }
 }
 
-void squaring(Large const& multiplicator, Large const& modulus, Count& count)
+void addition_modulo(Large const& addend1, Large const& addend2, Large& modulus, Large& result, Count& count)
+{
+    assert(addend1.get_number_of_bits() == addend2.get_number_of_bits());
+    assert(addend1.get_number_of_bits() == modulus.get_number_of_bits());
+    assert(addend1.get_number_of_bits() == result.get_number_of_bits());
+    uint16_t n_bits = result.get_number_of_bits();
+    Large sum(n_bits + 1);
+    Large dummy_quotient(n_bits + 1);
+    addition(addend1, addend2, sum, count);
+    division_modulo(sum, modulus, dummy_quotient, result, count);
+}
+
+void substraction_modulo(Large const& minuend, Large const& substrahend, Large& modulus, Large& result, Count& count)
+{
+    assert(minuend.get_number_of_bits() == substrahend.get_number_of_bits());
+    assert(minuend.get_number_of_bits() == modulus.get_number_of_bits());
+    assert(minuend.get_number_of_bits() == result.get_number_of_bits());
+    uint16_t n_bits = result.get_number_of_bits();
+    Large sum(n_bits + 1);
+    Large minuend_modulo(n_bits);
+    Large substraend_modulo(n_bits);
+    Large dummy_quotient(n_bits);
+    division_modulo(minuend, modulus, dummy_quotient, minuend_modulo, count);
+    division_modulo(substrahend, modulus, dummy_quotient, substraend_modulo, count);
+    addition_modulo(minuend_modulo, modulus, modulus, sum, count);
+    addition_modulo(substraend_modulo, sum, modulus, sum, count);
+}
+
+void multiplication_modulo(Large const& multiplicand, Large const& multiplicator, Large& modulus, Large& result, Count& count)
 {
 
 }
 
-void modular_exponentiation(Large const& base, Large const& exponent, Large const& modulus, Count& count)
+void squaring_modulo(Large const& multiplicator, Large const& modulus, Large& result, Count& count)
 {
+    /*
+    assert(multiplicator.get_number_of_bits() == modulus.get_number_of_bits());
+    assert(multiplicator.get_number_of_bits() == result.get_number_of_bits());
+    uint16_t n_bits = multiplicator.get_number_of_bits();
+    Large product(2*n_bits);
+    Large quotient(2*n_bits);
+    multiplication(multiplicator, multiplicator, product, count);
+    division_modulo(product, modulus, quotient, result, count);
+    */
+}
 
+void modular_exponentiation(Large const& base, Large const& exponent, Large const& modulus, Large& result, Count& count)
+{
+    /*
+    assert(base.get_number_of_bits() == modulus.get_number_of_bits());
+    assert(base.get_number_of_bits() == result.get_number_of_bits());
+    uint16_t exponent_size = exponent.get_number_of_bits();
+    for(uint16_t i=0; i<=exponent_size; i++)
+    {
+        if(i<exponent_size)
+        {
+
+        }
+        if(i>0)
+        {
+
+        }
+    }
+    */
 }
 
