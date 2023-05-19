@@ -69,6 +69,7 @@ void addition(Large const& addend1, Large const& addend2, Large& sum, Count& cou
     uint16_t n_bits = addend1.get_number_of_bits();
     bool carry = false;
     bool next_carry;
+    count.clock++;
     for(uint16_t i=0; i<n_bits; i++)
     {
         count.operation++;
@@ -85,6 +86,7 @@ void substraction(Large const& minuend, Large const& substrahend, Large& differe
     assert(minuend.get_number_of_bits() == difference.get_number_of_bits());
     uint16_t n_bits = minuend.get_number_of_bits();
     bool carry = true;
+    count.clock++;
     for(uint16_t i=0; i<n_bits; i++)
     {
         count.operation++;
@@ -103,7 +105,6 @@ void multiplication(Large const& multiplicand, Large const& multiplicator, Large
     Large* sum = new Large(multiplicand_length+1);
     for(uint16_t i=0; i<multiplicator_length; i++)
     {
-        count.clock++;
         (*sum).insert(product.sub_large(i, multiplicand_length));
         (*sum)[multiplicand_length] = false;
         addition(multiplicand, *sum, *sum, count);
@@ -131,7 +132,6 @@ void division_modulo(Large const& dividend, Large const& modulus, Large& quotien
     remainder_intermediate.insert(dividend);
     for(uint16_t i=0; i<quotient_size; i++)
     {
-        count.clock++;
         chunk.insert(remainder_intermediate.sub_large(quotient_size-1-i, remainder_size));
         substraction(chunk, modulus, remainder, count);
         quotient.shift_left();
@@ -165,14 +165,13 @@ void substraction_modulo(Large const& minuend, Large const& substrahend, Large& 
     assert(minuend.get_number_of_bits() == modulus.get_number_of_bits());
     assert(minuend.get_number_of_bits() == result.get_number_of_bits());
     uint16_t n_bits = result.get_number_of_bits();
-    Large sum(n_bits + 1);
     Large minuend_modulo(n_bits);
     Large substraend_modulo(n_bits);
     Large dummy_quotient(n_bits);
     division_modulo(minuend, modulus, dummy_quotient, minuend_modulo, count);
     division_modulo(substrahend, modulus, dummy_quotient, substraend_modulo, count);
-    addition_modulo(minuend_modulo, modulus, modulus, sum, count);
-    addition_modulo(substraend_modulo, sum, modulus, sum, count);
+    substraction(modulus, substraend_modulo, result, count);
+    addition_modulo(minuend_modulo, result, modulus, result, count);
 }
 
 void multiplication_modulo(Large const& multiplicand, Large const& multiplicator, Large& modulus, Large& result, Count& count)

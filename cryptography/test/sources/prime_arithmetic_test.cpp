@@ -258,7 +258,7 @@ void prime_arithmetic_test::Given_5_and_4_on_8_bits_When_testing_addition_Then_o
     QCOMPARE(count.operation, 8);
 }
 
-void prime_arithmetic_test::Given_5_and_4_on_8_bits_When_testing_addition_Then_clock_is_0()
+void prime_arithmetic_test::Given_5_and_4_on_8_bits_When_testing_addition_Then_clock_is_1()
 {
     Count count;
     count_initialization(count);
@@ -266,7 +266,7 @@ void prime_arithmetic_test::Given_5_and_4_on_8_bits_When_testing_addition_Then_c
     Large b = create_and_initialize_large(4, 8);
     Large sum = create_and_initialize_large(0, 9);
     addition(a, b, sum, count);
-    QCOMPARE(count.clock, 0);
+    QCOMPARE(count.clock, 1);
 }
 
 void prime_arithmetic_test::Given_9_and_4_on_8_bits_When_testing_substrction_Then_return_5()
@@ -292,7 +292,7 @@ void prime_arithmetic_test::Given_9_and_4_on_8_bits_When_testing_substrction_The
     QCOMPARE(count.operation, 8);
 }
 
-void prime_arithmetic_test::Given_9_and_4_on_8_bits_When_testing_substrction_Then_clock_is_0()
+void prime_arithmetic_test::Given_9_and_4_on_8_bits_When_testing_substrction_Then_clock_is_1()
 {
     Count count;
     count_initialization(count);
@@ -300,7 +300,7 @@ void prime_arithmetic_test::Given_9_and_4_on_8_bits_When_testing_substrction_The
     Large b = create_and_initialize_large(4, 8);
     Large difference = create_and_initialize_large(5, 8);
     substraction(a, b, difference, count);
-    QCOMPARE(count.clock, 0);
+    QCOMPARE(count.clock, 1);
 }
 
 void prime_arithmetic_test::Given_5_and_6_on_8_bits_When_testing_multiplication_Then_return_30()
@@ -389,6 +389,46 @@ void prime_arithmetic_test::Given_17_and_3_on_8_bits_When_testing_division_modul
     division_modulo(a, b, quotient, remainder, count);
     QCOMPARE(count.clock, 8);
 }
+
+void prime_arithmetic_test::Given_18_19_and_5_on_5_bits_When_testing_addition_modulo_Then_result_is_2()
+{
+    Count count;
+    count_initialization(count);
+    Large a = create_and_initialize_large(18, 5);
+    Large b = create_and_initialize_large(19, 5);
+    Large n = create_and_initialize_large(5, 5);
+    Large result(5);
+    Large expected = create_and_initialize_large(2, 5);
+    addition_modulo(a, b, n, result, count);
+    QVERIFY(is_equal(result, expected, count));
+}
+
+void prime_arithmetic_test::Given_18_19_and_5_on_5_bits_When_testing_addition_modulo_Then_operation_is_65()
+{
+    Count count;
+    count_initialization(count);
+    Large a = create_and_initialize_large(18, 5);
+    Large b = create_and_initialize_large(19, 5);
+    Large n = create_and_initialize_large(5, 5);
+    Large result(5);
+    Large expected = create_and_initialize_large(2, 5);
+    addition_modulo(a, b, n, result, count);
+    QCOMPARE(count.operation, 65);
+}
+
+void prime_arithmetic_test::Given_18_19_and_5_on_5_bits_When_testing_addition_modulo_Then_clock_is_7()
+{
+    Count count;
+    count_initialization(count);
+    Large a = create_and_initialize_large(18, 5);
+    Large b = create_and_initialize_large(19, 5);
+    Large n = create_and_initialize_large(5, 5);
+    Large result(5);
+    Large expected = create_and_initialize_large(2, 5);
+    addition_modulo(a, b, n, result, count);
+    QCOMPARE(count.clock, 7);
+}
+
 /*
 void prime_arithmetic_test::Given_3_and_5_on_3_bits_When_testing_squaring_modulo_Then_result_is_4()
 {
