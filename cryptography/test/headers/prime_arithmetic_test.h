@@ -63,11 +63,19 @@ private slots:
     void Given_18_19_and_5_on_5_bits_When_testing_substraction_modulo_Then_result_is_4();
     void Given_18_19_and_5_on_5_bits_When_testing_substraction_modulo_Then_operation_is_170();
     void Given_18_19_and_5_on_5_bits_When_testing_substraction_modulo_Then_clock_is_13();
-/*
-    void Given_3_and_5_on_3_bits_When_testing_squaring_modulo_Then_result_is_4();
-    void Given_3_and_5_on_3_bits_When_testing_squaring_modulo_Then_operation_is_45();
-    void Given_3_and_5_on_3_bits_When_testing_squaring_modulo_Then_clock_is_9();
-*/
+
+    void Given_15_8_and_7_on_4_bits_When_testing_multiplication_modulo_Then_result_is_1();
+    void Given_15_8_and_7_on_4_bits_When_testing_multiplication_modulo_Then_operation_is_80();
+    void Given_15_8_and_7_on_4_bits_When_testing_multiplication_modulo_Then_clock_is_12();
+
+    void Given_15_8_and_7_on_4_bits_When_testing_squaring_modulo_Then_result_is_1();
+    void Given_15_8_and_7_on_4_bits_When_testing_squaring_modulo_Then_operation_is_80();
+    void Given_15_8_and_7_on_4_bits_When_testing_squaring_modulo_Then_clock_is_12();
+
+    void Given_3_5_and_7_on_3_bits_When_testing_exponentiation_modulo_Then_result_is_5();
+    void Given_3_5_and_7_on_3_bits_When_testing_exponentiation_modulo_Then_operation_is_100();
+    void Given_3_5_and_7_on_3_bits_When_testing_exponentiation_modulo_Then_clock_is_100();
+
 };
 
 #endif // PRIME_ARITHMETIC_TEST_H

@@ -218,9 +218,9 @@ addend2 (size)                  : n
 modulus (size)                  : n
 result (size)                   : n
 Latency (clocks)                : n + 2
-Operations (per bit)            : n(2*n + 3)
+Operations (per bit)            : n*(2*n + 3)
 */
-void addition_modulo(Large const& addend1, Large const& addend2, Large& modulus, Large& result, Count& count)
+void addition_modulo(Large const& addend1, Large const& addend2, Large const& modulus, Large& result, Count& count)
 {
     assert(addend1.get_number_of_bits() == addend2.get_number_of_bits());
     assert(addend1.get_number_of_bits() == modulus.get_number_of_bits());
@@ -240,7 +240,7 @@ result (size)                   : n
 Latency (clocks)                : 2*n + 3
 Operations (per bit)            : 2*n*(3*n + 2)
 */
-void substraction_modulo(Large const& minuend, Large const& substrahend, Large& modulus, Large& result, Count& count)
+void substraction_modulo(Large const& minuend, Large const& substrahend, Large const& modulus, Large& result, Count& count)
 {
     assert(minuend.get_number_of_bits() == substrahend.get_number_of_bits());
     assert(minuend.get_number_of_bits() == modulus.get_number_of_bits());
@@ -258,36 +258,37 @@ void substraction_modulo(Large const& minuend, Large const& substrahend, Large& 
 }
 
 /*
-minuend (size)                  : n
-substrahend (size)              : n
+multiplicand (size)             : n
+multiplicator (size)            : n
 modulus (size)                  : n
 result (size)                   : n
-Latency (clocks)                : 2*(n + 1)
-Operations (per bit)            : 2*n*(3*n + 2)
+Latency (clocks)                : 3*n
+Operations (per bit)            : 5*n*n
 */
-void multiplication_modulo(Large const& multiplicand, Large const& multiplicator, Large& modulus, Large& result, Count& count)
+void multiplication_modulo(Large const& multiplicand, Large const& multiplicator, Large const& modulus, Large& result, Count& count)
 {
-
+    assert(multiplicand.get_number_of_bits() == multiplicator.get_number_of_bits());
+    assert(multiplicand.get_number_of_bits() == multiplicator.get_number_of_bits());
+    assert(multiplicand.get_number_of_bits() == result.get_number_of_bits());
+    uint16_t n_bits = result.get_number_of_bits();
+    Large product(2*n_bits);
+    Large dummy_quotient(2*n_bits);
+    multiplication(multiplicand, multiplicator, product, count);
+    division_modulo(product, modulus, dummy_quotient, result, count);
 }
 
 /*
-multiplicator (size)            :
-modulus (size)                  :
-result (size)                   :
-Latency (clocks)                :
-Operations (per bit)            :
+multiplicator (size)            : n
+modulus (size)                  : n
+result (size)                   : n
+Latency (clocks)                : 3*n
+Operations (per bit)            : 5*n*n
 */
 void squaring_modulo(Large const& multiplicator, Large const& modulus, Large& result, Count& count)
 {
-    /*
     assert(multiplicator.get_number_of_bits() == modulus.get_number_of_bits());
     assert(multiplicator.get_number_of_bits() == result.get_number_of_bits());
-    uint16_t n_bits = multiplicator.get_number_of_bits();
-    Large product(2*n_bits);
-    Large quotient(2*n_bits);
-    multiplication(multiplicator, multiplicator, product, count);
-    division_modulo(product, modulus, quotient, result, count);
-    */
+    multiplication_modulo(multiplicator, multiplicator, modulus, result, count);
 }
 
 /*
@@ -298,7 +299,7 @@ result (size)                   :
 Latency (clocks)                :
 Operations (per bit)            :
 */
-void modular_exponentiation(Large const& base, Large const& exponent, Large const& modulus, Large& result, Count& count)
+void exponentiation_modulo(Large const& base, Large const& exponent, Large const& modulus, Large& result, Count& count)
 {
     /*
     assert(base.get_number_of_bits() == modulus.get_number_of_bits());
