@@ -39,9 +39,9 @@ int main(int argc, char *argv[])
 
     Count count;
     count_initialization(count);
-    Large dividend(6);
+    Large dividend(256);
     Large divisor(3);
-    Large quotient(6);
+    Large quotient(256);
     Large remainder(3);
     dividend[0] = true;
     dividend[3] = true;
@@ -49,6 +49,7 @@ int main(int argc, char *argv[])
     divisor[2] = true;
     division_modulo(dividend, divisor, quotient, remainder, count);
     qDebug() << dividend.toHex() << divisor.toHex() << quotient.toHex() << remainder.toHex();
+    qDebug() << count.operation << count.clock;
     return 0;
 }
 

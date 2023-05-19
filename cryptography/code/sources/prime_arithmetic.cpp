@@ -8,6 +8,12 @@ void count_initialization(Count& count)
     count.clock = 0;
 }
 
+/*
+a (size)                        : n
+b (size)                        : n
+Latency (clocks)                : 0
+Operations (per bit)            : n
+*/
 bool is_equal(Large const& a, Large const& b, Count& count)
 {
     assert(a.get_number_of_bits() == b.get_number_of_bits());
@@ -22,6 +28,12 @@ bool is_equal(Large const& a, Large const& b, Count& count)
     return answer;
 }
 
+/*
+a (size)                        : n
+b (size)                        : n
+Latency (clocks)                : 0
+Operations (per bit)            : n
+*/
 bool is_less_than(Large const& a, Large const& b, Count& count)
 {
     assert(a.get_number_of_bits() == b.get_number_of_bits());
@@ -42,30 +54,61 @@ bool is_less_than(Large const& a, Large const& b, Count& count)
     return answer;
 }
 
+/*
+a (size)                        : n
+b (size)                        : n
+Latency (clocks)                : 0
+Operations (per bit)            : n
+*/
 bool is_not_equal(Large const& a, Large const& b, Count& count)
 {
     return !is_equal(a, b, count);
 }
 
+/*
+a (size)                        : n
+b (size)                        : n
+Latency (clocks)                : 0
+Operations (per bit)            : n
+*/
 bool is_greater_than(Large const& a, Large const& b, Count& count)
 {
     return is_less_than(b, a, count);
 }
 
+/*
+a (size)                        : n
+b (size)                        : n
+Latency (clocks)                : 0
+Operations (per bit)            : n
+*/
 bool is_less_or_equal(Large const& a, Large const& b, Count& count)
 {
     return !is_less_than(b, a, count);
 }
 
+/*
+a (size)                        : n
+b (size)                        : n
+Latency (clocks)                : 0
+Operations (per bit)            : n
+*/
 bool is_greater_or_equal(Large const& a, Large const& b, Count& count)
 {
     return !is_less_than(a, b, count);
 }
 
+/*
+addend1 (size)                  : n
+addend2 (size)                  : m (n <= m)
+sum (size)                      : >= n + 1
+Latency (clocks)                : 1
+Operations (per bit)            : n
+*/
 void addition(Large const& addend1, Large const& addend2, Large& sum, Count& count)
 {
     assert(addend1.get_number_of_bits() <= addend2.get_number_of_bits());
-    assert(addend1.get_number_of_bits() + 1 <= sum.get_number_of_bits());
+    assert(addend1.get_number_of_bits() < sum.get_number_of_bits());
     uint16_t n_bits = addend1.get_number_of_bits();
     bool carry = false;
     bool next_carry;
@@ -80,6 +123,13 @@ void addition(Large const& addend1, Large const& addend2, Large& sum, Count& cou
     sum[n_bits] = carry;
 }
 
+/*
+minuend (size)                  : n
+substrahend (size)              : n
+difference (size)               : n
+Latency (clocks)                : 1
+Operations (per bit)            : n
+*/
 void substraction(Large const& minuend, Large const& substrahend, Large& difference, Count& count)
 {
     assert(minuend.get_number_of_bits() == substrahend.get_number_of_bits());
@@ -96,6 +146,13 @@ void substraction(Large const& minuend, Large const& substrahend, Large& differe
     difference[n_bits] = carry;
 }
 
+/*
+multiplicand (size)             : n
+multiplicator (size)            : m
+product (size)                  : >= n+m
+Latency (clocks)                : m
+Operations (per bit)            : n*m
+*/
 void multiplication(Large const& multiplicand, Large const& multiplicator, Large& product, Count& count)
 {
     assert(multiplicand.get_number_of_bits() + multiplicator.get_number_of_bits() <= product.get_number_of_bits());
@@ -116,6 +173,14 @@ void multiplication(Large const& multiplicand, Large const& multiplicator, Large
     delete sum;
 }
 
+/*
+dividend (size)                 : n
+modulus (size)                  : m
+quotient (size)                 : n
+remainder (size)                : m
+Latency (clocks)                : n
+Operations (per bit)            : 2*n*m
+*/
 void division_modulo(Large const& dividend, Large const& modulus, Large& quotient, Large& remainder, Count& count)
 {
     Count dummy_count;
@@ -147,6 +212,14 @@ void division_modulo(Large const& dividend, Large const& modulus, Large& quotien
     }
 }
 
+/*
+addend1 (size)                  : n
+addend2 (size)                  : n
+modulus (size)                  : n
+result (size)                   : n
+Latency (clocks)                : n + 2
+Operations (per bit)            : n(2*n + 3)
+*/
 void addition_modulo(Large const& addend1, Large const& addend2, Large& modulus, Large& result, Count& count)
 {
     assert(addend1.get_number_of_bits() == addend2.get_number_of_bits());
@@ -159,6 +232,14 @@ void addition_modulo(Large const& addend1, Large const& addend2, Large& modulus,
     division_modulo(sum, modulus, dummy_quotient, result, count);
 }
 
+/*
+minuend (size)                  : n
+substrahend (size)              : n
+modulus (size)                  : n
+result (size)                   : n
+Latency (clocks)                : 2*n + 3
+Operations (per bit)            : 2*n*(3*n + 2)
+*/
 void substraction_modulo(Large const& minuend, Large const& substrahend, Large& modulus, Large& result, Count& count)
 {
     assert(minuend.get_number_of_bits() == substrahend.get_number_of_bits());
@@ -169,16 +250,33 @@ void substraction_modulo(Large const& minuend, Large const& substrahend, Large& 
     Large substraend_modulo(n_bits);
     Large dummy_quotient(n_bits);
     division_modulo(minuend, modulus, dummy_quotient, minuend_modulo, count);
+    uint16_t freeze_clock_count = count.clock;// division_modulo in parallel
     division_modulo(substrahend, modulus, dummy_quotient, substraend_modulo, count);
+    count.clock = freeze_clock_count;
     substraction(modulus, substraend_modulo, result, count);
     addition_modulo(minuend_modulo, result, modulus, result, count);
 }
 
+/*
+minuend (size)                  : n
+substrahend (size)              : n
+modulus (size)                  : n
+result (size)                   : n
+Latency (clocks)                : 2*(n + 1)
+Operations (per bit)            : 2*n*(3*n + 2)
+*/
 void multiplication_modulo(Large const& multiplicand, Large const& multiplicator, Large& modulus, Large& result, Count& count)
 {
 
 }
 
+/*
+multiplicator (size)            :
+modulus (size)                  :
+result (size)                   :
+Latency (clocks)                :
+Operations (per bit)            :
+*/
 void squaring_modulo(Large const& multiplicator, Large const& modulus, Large& result, Count& count)
 {
     /*
@@ -192,6 +290,14 @@ void squaring_modulo(Large const& multiplicator, Large const& modulus, Large& re
     */
 }
 
+/*
+base (size)                     :
+exponent (size)                 :
+modulus (size)                  :
+result (size)                   :
+Latency (clocks)                :
+Operations (per bit)            :
+*/
 void modular_exponentiation(Large const& base, Large const& exponent, Large const& modulus, Large& result, Count& count)
 {
     /*

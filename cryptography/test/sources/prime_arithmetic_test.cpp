@@ -269,7 +269,7 @@ void prime_arithmetic_test::Given_5_and_4_on_8_bits_When_testing_addition_Then_c
     QCOMPARE(count.clock, 1);
 }
 
-void prime_arithmetic_test::Given_9_and_4_on_8_bits_When_testing_substrction_Then_return_5()
+void prime_arithmetic_test::Given_9_and_4_on_8_bits_When_testing_substraction_Then_return_5()
 {
     Count count;
     count_initialization(count);
@@ -281,7 +281,7 @@ void prime_arithmetic_test::Given_9_and_4_on_8_bits_When_testing_substrction_The
     QVERIFY(is_equal(difference, expected, count));
 }
 
-void prime_arithmetic_test::Given_9_and_4_on_8_bits_When_testing_substrction_Then_operation_is_8()
+void prime_arithmetic_test::Given_9_and_4_on_8_bits_When_testing_substraction_Then_operation_is_8()
 {
     Count count;
     count_initialization(count);
@@ -292,7 +292,7 @@ void prime_arithmetic_test::Given_9_and_4_on_8_bits_When_testing_substrction_The
     QCOMPARE(count.operation, 8);
 }
 
-void prime_arithmetic_test::Given_9_and_4_on_8_bits_When_testing_substrction_Then_clock_is_1()
+void prime_arithmetic_test::Given_9_and_4_on_8_bits_When_testing_substraction_Then_clock_is_1()
 {
     Count count;
     count_initialization(count);
@@ -427,6 +427,45 @@ void prime_arithmetic_test::Given_18_19_and_5_on_5_bits_When_testing_addition_mo
     Large expected = create_and_initialize_large(2, 5);
     addition_modulo(a, b, n, result, count);
     QCOMPARE(count.clock, 7);
+}
+
+void prime_arithmetic_test::Given_18_19_and_5_on_5_bits_When_testing_substraction_modulo_Then_result_is_4()
+{
+    Count count;
+    count_initialization(count);
+    Large a = create_and_initialize_large(18, 5);
+    Large b = create_and_initialize_large(19, 5);
+    Large n = create_and_initialize_large(5, 5);
+    Large result(5);
+    Large expected = create_and_initialize_large(4, 5);
+    substraction_modulo(a, b, n, result, count);
+    QVERIFY(is_equal(result, expected, count));
+}
+
+void prime_arithmetic_test::Given_18_19_and_5_on_5_bits_When_testing_substraction_modulo_Then_operation_is_170()
+{
+    Count count;
+    count_initialization(count);
+    Large a = create_and_initialize_large(18, 5);
+    Large b = create_and_initialize_large(19, 5);
+    Large n = create_and_initialize_large(5, 5);
+    Large result(5);
+    Large expected = create_and_initialize_large(4, 5);
+    substraction_modulo(a, b, n, result, count);
+    QCOMPARE(count.operation, 170);
+}
+
+void prime_arithmetic_test::Given_18_19_and_5_on_5_bits_When_testing_substraction_modulo_Then_clock_is_13()
+{
+    Count count;
+    count_initialization(count);
+    Large a = create_and_initialize_large(18, 5);
+    Large b = create_and_initialize_large(19, 5);
+    Large n = create_and_initialize_large(5, 5);
+    Large result(5);
+    Large expected = create_and_initialize_large(4, 5);
+    substraction_modulo(a, b, n, result, count);
+    QCOMPARE(count.clock, 13);
 }
 
 /*
