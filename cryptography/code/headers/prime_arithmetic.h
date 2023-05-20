@@ -2,14 +2,7 @@
 #define PRIME_ARITHMETIC_H
 
 #include "large.h"
-
-typedef struct Count
-{
-    uint64_t operation;
-    uint64_t clock;
-} Count;
-
-void count_initialization(Count& count);
+#include "bool_algeabra.h"
 
 bool is_equal(Large const& a, Large const& b, Count& count);
 bool is_less_than(Large const& a, Large const& b, Count& count);

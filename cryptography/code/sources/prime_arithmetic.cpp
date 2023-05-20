@@ -2,11 +2,6 @@
 #include <QDebug>
 #include <QTest>
 
-void count_initialization(Count& count)
-{
-    count.operation = 0;
-    count.clock = 0;
-}
 
 /*
 a (size)                        : n
@@ -22,8 +17,8 @@ bool is_equal(Large const& a, Large const& b, Count& count)
     for(uint16_t i=0; i<n_bits; i++)
     {
         count.operation++;
-        if(a[i] != b[i])
-            answer &= false;
+        if(XOR(a[i], b[i], count))
+            answer = false;
     }
     return answer;
 }
@@ -38,16 +33,15 @@ bool is_less_than(Large const& a, Large const& b, Count& count)
 {
     assert(a.get_number_of_bits() == b.get_number_of_bits());
     uint16_t n_bits = a.get_number_of_bits();
-    uint16_t index = n_bits;
     bool answer = false;
     bool found = false;
     for(uint16_t i=0; i<n_bits; i++)
     {
+        uint16_t index = n_bits - 1 - i;
         count.operation++;
-        index--;
-        if(a[index] ^ b[index])
+        if(XOR(a[index], b[index], count))
         {
-            answer = (found)?answer:b[index];
+            answer = OR(AND(found, answer, count), AND(NOT(found, count), b[index], count), count);
             found = true;
         }
     }
@@ -109,18 +103,7 @@ void addition(Large const& addend1, Large const& addend2, Large& sum, Count& cou
 {
     assert(addend1.get_number_of_bits() <= addend2.get_number_of_bits());
     assert(addend1.get_number_of_bits() < sum.get_number_of_bits());
-    uint16_t n_bits = addend1.get_number_of_bits();
-    bool carry = false;
-    bool next_carry;
-    count.clock++;
-    for(uint16_t i=0; i<n_bits; i++)
-    {
-        count.operation++;
-        next_carry = (addend1[i] & addend2[i]) | (addend1[i] & carry) | (addend2[i] & carry);
-        sum[i] = addend1[i] ^ addend2[i] ^ carry;
-        carry = next_carry;
-    }
-    sum[n_bits] = carry;
+    ADDER_n_bits(addend1, addend2, sum, false, count);
 }
 
 /*
@@ -134,16 +117,7 @@ void substraction(Large const& minuend, Large const& substrahend, Large& differe
 {
     assert(minuend.get_number_of_bits() == substrahend.get_number_of_bits());
     assert(minuend.get_number_of_bits() == difference.get_number_of_bits());
-    uint16_t n_bits = minuend.get_number_of_bits();
-    bool carry = true;
-    count.clock++;
-    for(uint16_t i=0; i<n_bits; i++)
-    {
-        count.operation++;
-        difference[i] = minuend[i] ^ !substrahend[i] ^ carry;
-        carry = (minuend[i] & !substrahend[i]) | (minuend[i] & carry) | (!substrahend[i] & carry);
-    }
-    difference[n_bits] = carry;
+    ADDER_n_bits(minuend, substrahend, difference, true, count);
 }
 
 /*
@@ -156,21 +130,19 @@ Operations (per bit)            : n*m
 void multiplication(Large const& multiplicand, Large const& multiplicator, Large& product, Count& count)
 {
     assert(multiplicand.get_number_of_bits() + multiplicator.get_number_of_bits() <= product.get_number_of_bits());
-    product.fill_with_false(0, product.get_number_of_bits());
+    product.clear(0, product.get_number_of_bits());
     uint16_t multiplicand_length = multiplicand.get_number_of_bits();
     uint16_t multiplicator_length = multiplicator.get_number_of_bits();
-    Large* sum = new Large(multiplicand_length+1);
+    Large sum = Large(multiplicand_length+1);
     for(uint16_t i=0; i<multiplicator_length; i++)
     {
-        (*sum).insert(product.sub_large(i, multiplicand_length));
-        (*sum)[multiplicand_length] = false;
-        addition(multiplicand, *sum, *sum, count);
+        sum.insert(product.sub_large(i, multiplicand_length + 1));
+        addition(multiplicand, sum, sum, count);
         if(multiplicator[i])
         {
-            product.insert(*sum, i);
+            product.insert(sum, i);
         }
     }
-    delete sum;
 }
 
 /*
@@ -191,7 +163,7 @@ void division_modulo(Large const& dividend, Large const& modulus, Large& quotien
     assert(quotient.get_number_of_bits() >= remainder.get_number_of_bits());
     uint16_t quotient_size = quotient.get_number_of_bits();
     uint16_t remainder_size = remainder.get_number_of_bits();
-    quotient.fill_with_false(0, quotient_size);
+    quotient.clear(0, quotient_size);
     Large remainder_intermediate(quotient_size + remainder_size);
     Large chunk(remainder_size);
     remainder_intermediate.insert(dividend);
@@ -301,7 +273,6 @@ Operations (per bit)            :
 */
 void exponentiation_modulo(Large const& base, Large const& exponent, Large const& modulus, Large& result, Count& count)
 {
-    /*
     assert(base.get_number_of_bits() == modulus.get_number_of_bits());
     assert(base.get_number_of_bits() == result.get_number_of_bits());
     uint16_t exponent_size = exponent.get_number_of_bits();
@@ -316,6 +287,5 @@ void exponentiation_modulo(Large const& base, Large const& exponent, Large const
 
         }
     }
-    */
 }
 

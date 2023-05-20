@@ -22,6 +22,7 @@ SOURCES += \
     code/sources/ecc.cpp \
     code/sources/large.cpp \
     code/sources/prime_arithmetic.cpp \
+    code/sources/bool_algeabra.cpp \
     code/sources/galois.cpp \
     test/sources/testsuite.cpp \
     test/sources/des_test.cpp \
@@ -37,6 +38,7 @@ HEADERS += \
     code/headers/ecc.h \
     code/headers/large.h \
     code/headers/prime_arithmetic.h \
+    code/headers/bool_algeabra.h \
     code/headers/galois.h \
     test/headers/testsuite.hpp \
     test/headers/des_test.h \
