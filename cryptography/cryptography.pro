@@ -16,35 +16,39 @@ INCLUDEPATH += ./code/sources \
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    bool_algeabra_test.cpp \
     code/sources/main.cpp \
     code/sources/des.cpp \
     code/sources/rsa.cpp \
     code/sources/ecc.cpp \
     code/sources/large.cpp \
-    code/sources/prime_arithmetic.cpp \
     code/sources/bool_algeabra.cpp \
+    code/sources/prime_arithmetic.cpp \
     code/sources/galois.cpp \
     test/sources/testsuite.cpp \
     test/sources/des_test.cpp \
     test/sources/rsa_test.cpp \
     test/sources/ecc_test.cpp \
     test/sources/large_test.cpp \
+    test/sources/bool_algeabra_test.cpp \
     test/sources/prime_arithmetic_test.cpp \
     test/sources/galois_test.cpp \
 
 HEADERS += \
+    bool_algeabra_test.h \
     code/headers/des.h \
     code/headers/rsa.h \
     code/headers/ecc.h \
     code/headers/large.h \
-    code/headers/prime_arithmetic.h \
     code/headers/bool_algeabra.h \
+    code/headers/prime_arithmetic.h \
     code/headers/galois.h \
     test/headers/testsuite.hpp \
     test/headers/des_test.h \
     test/headers/rsa_test.h \
     test/headers/ecc_test.h \
     test/headers/large_test.h \
+    test/headers/bool_algeabra_test.h \
     test/headers/prime_arithmetic_test.h \
     test/headers/galois_test.h \
 

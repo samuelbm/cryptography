@@ -49,7 +49,7 @@ uint16_t Large::get_number_of_bits() const
 {
     return this->bits_size;
 }
-/*
+
 Large& Large::sub_large(uint16_t start_index, uint16_t length) const
 {
     Large* sub = new Large(length);
@@ -97,13 +97,25 @@ Large& Large::shift_right(uint16_t shift)
     this->clear(this->bits_size - shift, shift);
     return *this;
 }
-*/
+
 void Large::clear(uint16_t start_index, uint16_t length)
 {
     for(uint16_t i=start_index; i<start_index + length; i++)
     {
         this->bits[i] = false;
     }
+}
+
+bool Large::is_null() const
+{
+    for(uint16_t i=0; i<this->bits_size; i++)
+    {
+        if((*this)[i])
+        {
+            return false;
+        }
+    }
+    return true;
 }
 
 void Large::allocate_memory()

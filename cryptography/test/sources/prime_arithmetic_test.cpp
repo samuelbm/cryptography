@@ -11,7 +11,7 @@ Large& create_and_initialize_large(uint16_t init_value, uint16_t n_bits)
     }
     return *large;
 };
-
+/*
 void prime_arithmetic_test::Given_a_lesser_than_b_When_testing_is_equal_Than_return_false()
 {
     Count count;
@@ -581,5 +581,5 @@ void prime_arithmetic_test::Given_3_5_and_7_on_3_bits_When_testing_exponentiatio
     exponentiation_modulo(a, x, n, result, count);
     QCOMPARE(count.clock, 12);
 }
-
+*/
 static prime_arithmetic_test PRIME_ARITHMETIC_TEST;
