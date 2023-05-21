@@ -4,6 +4,20 @@
 #include <stdint.h>
 #include <QString>
 
+typedef struct Count
+{
+    uint64_t operation;
+    uint64_t clock;
+    uint64_t regs;
+    uint64_t NOT_gates;
+    uint64_t AND_gates;
+    uint64_t NAND_gates;
+    uint64_t OR_gates;
+    uint64_t NOR_gates;
+    uint64_t XOR_gates;
+    uint64_t XNOR_gates;
+} Count;
+
 class Large
 {
 public:
@@ -18,14 +32,13 @@ public:
     bool is_null() const;
     QString toBin() const;
     QString toHex() const;
+    void split(Large& subpart, uint16_t start_index);
+    void REG(bool enable, Large const& D, Count& count);
+    bool SHIFT_LEFT(bool enable, bool insert, Count& count);
+    bool SHIFT_RIGHT(bool enable, bool insert, Count& count);
 private:    
     void allocate_memory();
-    Large& sub_large(uint16_t start_index, uint16_t length) const;
-    Large& insert(Large const& large, uint16_t start_index=0);
-    Large& concatenate(Large const& large) const;
-    Large& shift_left(uint16_t shift=1);
-    Large& shift_right(uint16_t shift=1);
-
+    void copy(Large const& large);
 private:
     bool* bits;
     uint16_t bits_size;

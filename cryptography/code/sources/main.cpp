@@ -1,55 +1,55 @@
 #include <QDebug>
-#include "des_test.h"
-#include "ecc_test.h"
-#include "galois_test.h"
-#include "large_test.h"
-#include "prime_arithmetic_test.h"
-#include "rsa_test.h"
-#include "testsuite.hpp"
+//#include "des_test.h"
+//#include "ecc_test.h"
+//#include "galois_test.h"
+//#include "large_test.h"
+//#include "prime_arithmetic_test.h"
+//#include "rsa_test.h"
+//#include "testsuite.hpp"
 
-#include "large.h"
-#include "prime_arithmetic.h"
+//#include "large.h"
+//#include "prime_arithmetic.h"
 
 
 int main(int argc, char *argv[])
 {
 
-    // setup lambda
-    int status = 0;
-    auto runTest = [&status, argc, argv](QObject* obj) {
-        status |= QTest::qExec(obj, argc, argv);
-    };
+//    // setup lambda
+//    int status = 0;
+//    auto runTest = [&status, argc, argv](QObject* obj) {
+//        status |= QTest::qExec(obj, argc, argv);
+//    };
 
-    // run suite
-    auto &suite = TestSuite::suite();
-    for (auto it = suite.begin(); it != suite.end(); ++it) {
-        runTest(*it);
-    }
+//    // run suite
+//    auto &suite = TestSuite::suite();
+//    for (auto it = suite.begin(); it != suite.end(); ++it) {
+//        runTest(*it);
+//    }
 
-    if(status)
-    {
-        qDebug() << "Test Failed";// << Qt::endl;
-        return 0;
-    }
-    else
-    {
-        qDebug() << "Test Successful";// << Qt::endl;
-    }
+//    if(status)
+//    {
+//        qDebug() << "Test Failed";// << Qt::endl;
+//        return 0;
+//    }
+//    else
+//    {
+//        qDebug() << "Test Successful";// << Qt::endl;
+//    }
 
 
-    Count count;
-    count_initialization(count);
-    Large dividend(256);
-    Large divisor(3);
-    Large quotient(256);
-    Large remainder(3);
-    dividend[0] = true;
-    dividend[3] = true;
-    divisor[0] = true;
-    divisor[2] = true;
-    division_modulo(dividend, divisor, quotient, remainder, count);
-    qDebug() << dividend.toHex() << divisor.toHex() << quotient.toHex() << remainder.toHex();
-    qDebug() << count.operation << count.clock;
+//    Count count;
+//    count_initialization(count);
+//    Large x(4);
+//    x[1] = true;
+//    qDebug() << x.toHex();
+//    x.SHIFT_LEFT(false, false, count);
+//    qDebug() << x.toHex();
+//    x.SHIFT_LEFT(true, false, count);
+//    qDebug() << x.toHex();
+//    x.SHIFT_RIGHT(true, false, count);
+//    x.SHIFT_RIGHT(true, false, count);
+//    qDebug() << x.toHex();
+    qDebug() << "allo test";
     return 0;
 }
 

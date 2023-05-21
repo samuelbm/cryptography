@@ -12,7 +12,7 @@ Large::Large(Large const& large)
 
     this->bits_size = large.bits_size;
     this->allocate_memory();
-    this->insert(large);
+    this->copy(large);
 }
 
 Large::~Large()
@@ -30,7 +30,7 @@ Large& Large::operator=(Large const& large)
             this->bits_size = large.bits_size;
             this->allocate_memory();
         }
-        this->insert(large);
+        this->copy(large);
     }
     return *this;
 }
@@ -48,54 +48,6 @@ bool& Large::operator[](uint16_t index)
 uint16_t Large::get_number_of_bits() const
 {
     return this->bits_size;
-}
-
-Large& Large::sub_large(uint16_t start_index, uint16_t length) const
-{
-    Large* sub = new Large(length);
-    for(uint16_t i=0; i < length; i++)
-    {
-        (*sub)[i] = (*this)[i + start_index];
-    }
-    return *sub;
-}
-
-Large& Large::insert(Large const& large, uint16_t start_index)
-{
-    for(uint16_t i=0; i < large.get_number_of_bits(); i++)
-    {
-        (*this)[i + start_index] = large[i];
-    }
-    return *this;
-}
-
-Large& Large::concatenate(Large const& large) const
-{
-    uint16_t n_bits = this->bits_size + large.bits_size;
-    Large* concatenated = new Large(n_bits);
-    concatenated->insert(*this);
-    concatenated->insert(large, this->bits_size);
-    return *concatenated;
-}
-
-Large& Large::shift_left(uint16_t shift)
-{
-    for(uint16_t i=this->bits_size; i>shift; i--)
-    {
-        (*this)[i-1] =(*this)[i-shift-1];
-    }
-    this->clear(0, shift);
-    return *this;
-}
-
-Large& Large::shift_right(uint16_t shift)
-{
-    for(uint16_t i=shift; i<this->bits_size; i++)
-    {
-        (*this)[i-shift] =(*this)[i];
-    }
-    this->clear(this->bits_size - shift, shift);
-    return *this;
 }
 
 void Large::clear(uint16_t start_index, uint16_t length)
@@ -121,6 +73,14 @@ bool Large::is_null() const
 void Large::allocate_memory()
 {
     bits = new bool[this->bits_size];
+}
+
+void Large::copy(Large const& large)
+{
+    for(uint16_t i=0; i<this->bits_size; i++)
+    {
+        (*this)[i] = large[i];
+    }
 }
 
 QString Large::toBin() const
@@ -168,3 +128,50 @@ QString Large::toHex() const
     return str;
 }
 
+void Large::split(Large& subpart, uint16_t start_index)
+{
+    assert(this->bits_size >= subpart.bits_size + start_index);
+    uint16_t size = subpart.get_number_of_bits();
+    for(uint16_t i=0; i<size; i++)
+    {
+        subpart[i] = (*this)[i + start_index];
+    }
+}
+
+void Large::REG(bool enable, Large const& D, Count& count)
+{
+    assert(this->bits_size == D.bits_size);
+    for(uint16_t i=0; i<this->bits_size; i++)
+    {
+        count.regs++;
+        (*this)[i] = (enable)?D[i]:(*this)[i];
+    }
+}
+
+bool Large::SHIFT_LEFT(bool enable, bool insert, Count& count)
+{
+    bool cout = (*this)[this->bits_size-1];
+    uint16_t index = this->bits_size;
+    for(uint16_t i=1; i<this->bits_size; i++)
+    {
+        count.regs++;
+        index--;
+        (*this)[index] = (enable)?(*this)[index - 1]:(*this)[index];
+    }
+    (*this)[0] = insert;
+    return cout;
+}
+
+bool Large::SHIFT_RIGHT(bool enable, bool insert, Count& count)
+{
+    bool cout = (*this)[0];
+    uint16_t index = 0;
+    for(uint16_t i=1; i<this->bits_size; i++)
+    {
+        count.regs++;
+        index++;
+        (*this)[index - 1] = (enable)?(*this)[index]:(*this)[index-1];
+    }
+    (*this)[this->bits_size-1] = insert;
+    return cout;
+}
