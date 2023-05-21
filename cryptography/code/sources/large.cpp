@@ -175,3 +175,27 @@ bool Large::SHIFT_RIGHT(bool enable, bool insert, Count& count)
     (*this)[this->bits_size-1] = insert;
     return cout;
 }
+
+void count_initialization(Count& count)
+{
+    count.operation = 0;
+    count.clock = 0;
+    count.regs = 0;
+    count.NOT_gates = 0;
+    count.AND_gates = 0;
+    count.NAND_gates = 0;
+    count.OR_gates = 0;
+    count.NOR_gates = 0;
+    count.XOR_gates = 0;
+    count.XNOR_gates = 0;
+}
+
+Large& create_and_initialize_large(uint16_t init_value, uint16_t n_bits)
+{
+    Large* large = new Large(n_bits);
+    for(uint16_t i=0; i<n_bits; i++)
+    {
+        (*large)[i] = (init_value >> i) & 1;
+    }
+    return *large;
+};

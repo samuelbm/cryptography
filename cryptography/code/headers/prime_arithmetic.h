@@ -3,13 +3,6 @@
 
 #include "bool_algeabra.h"
 
-//bool is_equal(Large const& a, Large const& b, Count& count);
-//bool is_less_than(Large const& a, Large const& b, Count& count);
-//bool is_not_equal(Large const& a, Large const& b, Count& count);
-//bool is_greater_than(Large const& a, Large const& b, Count& count);
-//bool is_less_or_equal(Large const& a, Large const& b, Count& count);
-//bool is_greater_or_equal(Large const& a, Large const& b, Count& count);
-
 //void addition(Large const& addend1, Large const& addend2, Large& sum, Count& count);
 //void substraction(Large const& minuend, Large const& substrahend, Large& difference, Count& count);
 //void multiplication(Large const& multiplicand, Large const& multiplicator, Large& product, Count& count);

@@ -16,7 +16,6 @@ INCLUDEPATH += ./code/sources \
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    bool_algeabra_test.cpp \
     code/sources/main.cpp \
     code/sources/des.cpp \
     code/sources/rsa.cpp \
@@ -35,7 +34,6 @@ SOURCES += \
     test/sources/galois_test.cpp \
 
 HEADERS += \
-    bool_algeabra_test.h \
     code/headers/des.h \
     code/headers/rsa.h \
     code/headers/ecc.h \

@@ -44,4 +44,7 @@ private:
     uint16_t bits_size;
 };
 
+void count_initialization(Count& count);
+Large& create_and_initialize_large(uint16_t init_value, uint16_t n_bits);
+
 #endif // LARGE_H
