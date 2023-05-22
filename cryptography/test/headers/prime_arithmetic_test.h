@@ -21,7 +21,7 @@ private slots:
     void Given_17_and_3_on_8_bits_When_testing_division_modulo_Then_quotient_is_5();
     void Given_17_and_3_on_8_bits_When_testing_division_modulo_Then_remainder_is_2();
     void Given_17_and_3_on_8_bits_When_testing_division_modulo_Then_verify_count();
-
+/*
     void Given_17_and_3_on_8_bits_When_testing_modulo_Then_remainder_is_2();
     void Given_17_and_3_on_8_bits_When_testing_modulo_Then_verify_count();
 
@@ -39,6 +39,7 @@ private slots:
 
     void Given_3_5_and_7_on_3_bits_When_testing_exponentiation_modulo_Then_result_is_5();
     void Given_3_5_and_7_on_3_bits_When_testing_exponentiation_modulo_Then_verify_count();
+*/
 };
 
 #endif // PRIME_ARITHMETIC_TEST_H

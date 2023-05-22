@@ -154,7 +154,7 @@ void Large::REG(bool enable, Large const& D, uint16_t start_index, Count& count)
     for(uint16_t i=0; i<D.bits_size; i++)
     {
         count.regs++;
-        (*this)[i] = (enable)?D[i]:(*this)[i];
+        (*this)[i + start_index] = (enable)?D[i]:(*this)[i + start_index];
     }
 }
 
@@ -168,7 +168,8 @@ bool Large::SHIFT_LEFT(bool enable, bool insert, Count& count)
         index--;
         (*this)[index] = (enable)?(*this)[index - 1]:(*this)[index];
     }
-    (*this)[0] = insert;
+    count.regs++;
+    (*this)[0] = (enable)?insert:(*this)[0];
     return cout;
 }
 

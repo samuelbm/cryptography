@@ -55,11 +55,11 @@ multiplicator (size)            : m
 product (size)                  : n+m
 Latency                         : m
 Operations                      : n*m
-regs                            : n*m
+regs                            : (n + 1)*m
 NOT_gates                       : 0
 AND_gates                       : 2*n*m
 NAND_gates                      : 0
-OR_gates                        : n
+OR_gates                        : n*m
 NOR_gates                       : 0
 XOR_gates                       : 2*n*m
 XNOR_gates                      : 0
@@ -74,9 +74,10 @@ void multiplication(Large const& multiplicand, Large const& multiplicator, Large
     Large product_intermediate(product.get_number_of_bits());
     for(uint16_t i=0; i<multiplicator_length; i++)
     {
+        count.clock++;
         product_intermediate.split(subproduct, i);
         addition(multiplicand, subproduct, sum, count);
-        product_intermediate.REG(multiplicator[i], subproduct, i, count);
+        product_intermediate.REG(multiplicator[i], sum, i, count);
     }
     product.insert(product_intermediate, 0);
 }
@@ -115,15 +116,16 @@ void division_modulo(Large const& dividend, Large const& modulus, Large& quotien
     bool enable, less_or_equal, carry_out;
     for(uint16_t i=0; i<quotient_size; i++)
     {
-        dividend_intermediate.split(minuend_intermediate, i);
+        count.clock++;
+        dividend_intermediate.split(minuend_intermediate, quotient_size - 1 - i);
         substraction(minuend_intermediate, modulus, difference_intermediate, count);
         less_or_equal = is_less_or_equal(modulus, minuend_intermediate, count);
         carry_out = dividend_intermediate[full_size - 1 - i];
         enable = OR(less_or_equal, carry_out, count);
         quotient_intermediate.SHIFT_LEFT(true, enable, count);
-        dividend_intermediate.REG(enable, difference_intermediate, i, count);
+        dividend_intermediate.REG(enable, difference_intermediate, quotient_size - 1 - i, count);
     }
-    remainder.insert(MUX2_Large(enable, difference_intermediate, minuend_intermediate, count), 0);
+    remainder.insert(MUX2_Large(enable, minuend_intermediate, difference_intermediate, count), 0);
     quotient.insert(quotient_intermediate, 0);
 }
 
