@@ -33,7 +33,7 @@ public:
     QString toBin() const;
     QString toHex() const;
     void split(Large& subpart, uint16_t start_index);
-    void insert(Large const& subpart, uint16_t start_index);
+    void insert(Large const& subpart, uint16_t start_index=0);
     void REG(bool enable, Large const& D, uint16_t start_index, Count& count);
     bool SHIFT_LEFT(bool enable, bool insert, Count& count);
     bool SHIFT_RIGHT(bool enable, bool insert, Count& count);

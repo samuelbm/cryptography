@@ -15,10 +15,11 @@ void multiplication_modulo(Large const& multiplicand, Large const& multiplicator
 void squaring_modulo(Large const& multiplicator, Large const& modulus, Large& result, Count& count);
 void exponentiation_modulo(Large const& base, Large const& exponent, Large const& modulus, Large& result, Count& count);
 
-
+void greatest_common_divisor(Large const& greatest_number, Large const& smallest_number, Large& gcd_number, Count& count);
+void inverse(Large const& a, Large const& n, Large const& phi_n, Large& result, Count& count); //assume gcd(a, n) = 1
+void inverse_with_prime(Large const& a, Large const& p, Large& result, Count& count); //assume gcd(a, n) = 1
 /*
-void inverse();
-void compute_greater_common_divisor();
+
 bool is_prime_with_miller_rabin();
 void find prime random ???
 bool is prime+1 divisible by 4

@@ -48,7 +48,7 @@ void substraction(Large const& minuend, Large const& substrahend, Large& differe
     Large difference_intermediate(size);
     count.clock++;
     SUB_n_bits(minuend, substrahend, difference_intermediate, count);
-    difference.insert(difference_intermediate, 0);
+    difference.insert(difference_intermediate);
 }
 
 /*
@@ -80,7 +80,7 @@ void multiplication(Large const& multiplicand, Large const& multiplicator, Large
         addition(multiplicand, subproduct, sum, count);
         product_intermediate.REG(multiplicator[i], sum, i, count);
     }
-    product.insert(product_intermediate, 0);
+    product.insert(product_intermediate);
 }
 
 /*
@@ -113,7 +113,7 @@ void division_modulo(Large const& dividend, Large const& modulus, Large& quotien
     Large minuend_intermediate(remainder_size);
     Large difference_intermediate(remainder_size);
     Large quotient_intermediate(quotient_size);
-    dividend_intermediate.insert(dividend, 0);
+    dividend_intermediate.insert(dividend);
     bool enable, less_or_equal, carry_out;
     for(uint16_t i=0; i<quotient_size; i++)
     {
@@ -125,8 +125,8 @@ void division_modulo(Large const& dividend, Large const& modulus, Large& quotien
         quotient_intermediate.SHIFT_LEFT(true, enable, count);
         dividend_intermediate.REG(enable, difference_intermediate, quotient_size - 1 - i, count);
     }
-    remainder.insert(MUX2_Large(enable, minuend_intermediate, difference_intermediate, count), 0);
-    quotient.insert(quotient_intermediate, 0);
+    remainder.insert(MUX2_Large(enable, minuend_intermediate, difference_intermediate, count));
+    quotient.insert(quotient_intermediate);
 }
 
 /*
@@ -287,7 +287,7 @@ void exponentiation_modulo(Large const& base, Large const& exponent, Large const
     Large squared(result_size);
     Large result_intermediate(result_size);
     result[0] = true; //init to 1
-    squared.insert(base, 0);
+    squared.insert(base);
     uint64_t freeze_clock_count; // operations in parallel
     for(uint16_t i=0; i<exponent_size-1; i++)
     {
@@ -301,3 +301,107 @@ void exponentiation_modulo(Large const& base, Large const& exponent, Large const
     result.REG(exponent[exponent_size - 1], result_intermediate, 0, count);
 }
 
+// statistics cannot be precisely determined, depends on the number of loops the algorithm takes.
+void greatest_common_divisor(Large const& greatest_number, Large const& smallest_number, Large& gcd_number, Count& count)
+{
+    Count dummy_count;
+    count_initialization(dummy_count);
+    assert(greatest_number.get_number_of_bits() == smallest_number.get_number_of_bits());
+    assert(greatest_number.get_number_of_bits() == gcd_number.get_number_of_bits());
+    uint16_t size = gcd_number.get_number_of_bits();
+    Large r1(size), r2(size), r3(size), zero(size);
+    bool less_than = is_less_than(smallest_number, greatest_number, dummy_count);
+    r1.insert((less_than)?greatest_number:smallest_number);
+    r2.insert((less_than)?smallest_number:greatest_number);
+    do
+    {
+        modulo(r1, r2, r3, count);
+        r1.REG(true, r2, 0, count);
+        r2.REG(true, r3, 0, count);
+    }while(is_not_equal(r2, zero, count));
+    gcd_number.insert(r1, 0);
+}
+
+/*
+base (size)                     : n
+exponent (size)                 : n
+modulus (size)                  : n
+result (size)                   : n
+Latency                         : 3*n*n + 1
+Operations                      : 14*n*n*n - 5*n*n
+regs                            : 14*n*n*n - 4*n*n - n
+NOT_gates                       : 12*n*n*n - 2*n
+AND_gates                       : 24*n*n*n - 8*n*n
+NAND_gates                      : 0
+OR_gates                        : 14*n*n*n - n*n - 2*n
+NOR_gates                       : 0
+XOR_gates                       : 16*n*n*n - 8*n*n + 2*n
+XNOR_gates                      : 0
+*/
+void inverse(Large const& a, Large const& n, Large const& phi_n, Large& result, Count& count)
+{
+    Count dummy_count;
+    count_initialization(dummy_count);
+    assert(a.get_number_of_bits() == n.get_number_of_bits());
+    assert(a.get_number_of_bits() == phi_n.get_number_of_bits());
+    assert(a.get_number_of_bits() == result.get_number_of_bits());
+    uint16_t size = result.get_number_of_bits();
+    Large one(size), gcd_number(size), exponent(size);
+    one[0] = true;
+    greatest_common_divisor(a, n, gcd_number, dummy_count);
+    assert(is_greater_than(n, one, dummy_count));
+    assert(is_equal(gcd_number, one, dummy_count));
+    substraction(phi_n, one, exponent, count);
+    exponentiation_modulo(a, exponent, n, result, count);
+}
+
+/*
+base (size)                     : n
+exponent (size)                 : n
+modulus (size)                  : n
+result (size)                   : n
+Latency                         : 3*n*n + 1
+Operations                      : 14*n*n*n - 5*n*n
+regs                            : 14*n*n*n - 4*n*n - n
+NOT_gates                       : 12*n*n*n - 2*n
+AND_gates                       : 24*n*n*n - 8*n*n
+NAND_gates                      : 0
+OR_gates                        : 14*n*n*n - n*n - 2*n
+NOR_gates                       : 0
+XOR_gates                       : 16*n*n*n - 8*n*n + 2*n
+XNOR_gates                      : 0
+*/
+void inverse_with_prime(Large const& a, Large const& p, Large& result, Count& count)
+{
+    Count dummy_count;
+    count_initialization(dummy_count);
+    assert(a.get_number_of_bits() == p.get_number_of_bits());
+    assert(a.get_number_of_bits() == result.get_number_of_bits());
+    uint16_t size = result.get_number_of_bits();
+    Large one(size), two(size), gcd_number(size), exponent(size);
+    one[0] = true;
+    two[1] = true;
+    greatest_common_divisor(a, p, gcd_number, dummy_count);
+    assert(is_greater_than(p, one, dummy_count));
+    assert(is_equal(gcd_number, one, dummy_count));
+    //ajouter assert sur test primality rabin miller()
+    substraction(p, two, exponent, count);
+    exponentiation_modulo(a, exponent, p, result, count);
+}
+
+
+/*
+a (size)                        : n
+n (size)                        : n
+inverse (size)                  : n
+Latency                         :
+Operations                      :
+regs                            :
+NOT_gates                       :
+AND_gates                       :
+NAND_gates                      :
+OR_gates                        :
+NOR_gates                       :
+XOR_gates                       :
+XNOR_gates                      :
+*/

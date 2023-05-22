@@ -377,4 +377,100 @@ void prime_arithmetic_test::Given_3_5_and_7_on_3_bits_When_testing_exponentiatio
     QCOMPARE(count.XNOR_gates, 0);
 }
 
+void prime_arithmetic_test::Given_6600_and_630_on_16_bits_When_testing_greatest_common_divisor_Then_result_is_30()
+{
+    Count count;
+    count_initialization(count);
+    uint16_t n = 16;
+    Large greatest_number = create_and_initialize_large(6600, n);
+    Large smallest_number = create_and_initialize_large(630, n);
+    Large result(n);
+    Large expected = create_and_initialize_large(30, n);
+    greatest_common_divisor(greatest_number, smallest_number, result, count);
+    QVERIFY(is_equal(result, expected, count));
+}
+
+void prime_arithmetic_test::Given_5_4_On_10_bits_When_testing_inverse_Then_result_is_1()
+{
+    uint16_t n = 10;
+    Count count;
+    count_initialization(count);
+    Large a = create_and_initialize_large(5, n);
+    Large modulus = create_and_initialize_large(4, n);
+    Large phi_n = create_and_initialize_large(2, n);
+    Large result(n);
+    Large expected = create_and_initialize_large(1, n);
+    inverse(a, modulus, phi_n, result, count);
+    QVERIFY(is_equal(result, expected, count));
+}
+
+void prime_arithmetic_test::Given_5_4_On_10_bits_When_testing_inverse_Then_result_verify_count()
+{
+    uint16_t n = 10;
+    Count count;
+    count_initialization(count);
+    Large a = create_and_initialize_large(3, n);
+    Large modulus = create_and_initialize_large(5, n);
+    Large phi_n = create_and_initialize_large(2, n);
+    Large result(n);
+    Large expected = create_and_initialize_large(1, n);
+    inverse(a, modulus, phi_n, result, count);
+    QCOMPARE(count.clock, 3*n*n + 1);
+    QCOMPARE(count.operation, 14*n*n*n - 5*n*n);
+    QCOMPARE(count.regs, 14*n*n*n - 4*n*n - n);
+    QCOMPARE(count.NOT_gates, 12*n*n*n - 2*n);
+    QCOMPARE(count.AND_gates, 24*n*n*n - 8*n*n);
+    QCOMPARE(count.NAND_gates, 0);
+    QCOMPARE(count.OR_gates, 14*n*n*n - n*n - 2*n);
+    QCOMPARE(count.NOR_gates, 0);
+    QCOMPARE(count.XOR_gates, 16*n*n*n - 8*n*n + 2*n);
+    QCOMPARE(count.XNOR_gates, 0);
+}
+
+void prime_arithmetic_test::Given_5_7_on_10_bits_When_testing_inverse_with_prime_Then_result_is_3()
+{
+    uint16_t n = 10;
+    Count count;
+    count_initialization(count);
+    Large a = create_and_initialize_large(5, n);
+    Large p = create_and_initialize_large(7, n);
+    Large result(n);
+    Large expected = create_and_initialize_large(3, n);
+    inverse_with_prime(a, p, result, count);
+    QVERIFY(is_equal(result, expected, count));
+}
+
+void prime_arithmetic_test::Given_5_7_on_10_bits_When_testing_inverse_with_prime_Then_verify_count()
+{
+    uint16_t n = 10;
+    Count count;
+    count_initialization(count);
+    Large a = create_and_initialize_large(5, n);
+    Large p = create_and_initialize_large(7, n);
+    Large result(n);
+    Large expected = create_and_initialize_large(3, n);
+    inverse_with_prime(a, p, result, count);
+    QCOMPARE(count.clock, 3*n*n + 1);
+    QCOMPARE(count.operation, 14*n*n*n - 5*n*n);
+    QCOMPARE(count.regs, 14*n*n*n - 4*n*n - n);
+    QCOMPARE(count.NOT_gates, 12*n*n*n - 2*n);
+    QCOMPARE(count.AND_gates, 24*n*n*n - 8*n*n);
+    QCOMPARE(count.NAND_gates, 0);
+    QCOMPARE(count.OR_gates, 14*n*n*n - n*n - 2*n);
+    QCOMPARE(count.NOR_gates, 0);
+    QCOMPARE(count.XOR_gates, 16*n*n*n - 8*n*n + 2*n);
+    QCOMPARE(count.XNOR_gates, 0);
+}
+
+//QCOMPARE(count.clock, 0);
+//QCOMPARE(count.operation, 0);
+//QCOMPARE(count.regs, 0);
+//QCOMPARE(count.NOT_gates, 0);
+//QCOMPARE(count.AND_gates, 0);
+//QCOMPARE(count.NAND_gates, 0);
+//QCOMPARE(count.OR_gates, 0);
+//QCOMPARE(count.NOR_gates, 0);
+//QCOMPARE(count.XOR_gates, 0);
+//QCOMPARE(count.XNOR_gates, 0);
+
 static prime_arithmetic_test PRIME_ARITHMETIC_TEST;

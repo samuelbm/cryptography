@@ -40,6 +40,13 @@ private slots:
     void Given_3_5_and_7_on_3_bits_When_testing_exponentiation_modulo_Then_result_is_5();
     void Given_3_5_and_7_on_3_bits_When_testing_exponentiation_modulo_Then_verify_count();
 
+    void Given_6600_and_630_on_16_bits_When_testing_greatest_common_divisor_Then_result_is_30();
+
+    void Given_5_4_On_10_bits_When_testing_inverse_Then_result_is_1();
+    void Given_5_4_On_10_bits_When_testing_inverse_Then_result_verify_count();
+    void Given_5_7_on_10_bits_When_testing_inverse_with_prime_Then_result_is_3();
+    void Given_5_7_on_10_bits_When_testing_inverse_with_prime_Then_verify_count();
+
 };
 
 #endif // PRIME_ARITHMETIC_TEST_H
