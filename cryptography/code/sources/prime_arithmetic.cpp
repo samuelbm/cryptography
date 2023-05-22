@@ -52,19 +52,19 @@ void substraction(Large const& minuend, Large const& substrahend, Large& differe
 }
 
 /*
-multiplicand (size)             : n
-multiplicator (size)            : m
-product (size)                  : n+m
-Latency                         : m
-Operations                      : n*m
-regs                            : (n + 1)*m
-NOT_gates                       : 0
-AND_gates                       : 2*n*m
-NAND_gates                      : 0
-OR_gates                        : n*m
-NOR_gates                       : 0
-XOR_gates                       : 2*n*m
-XNOR_gates                      : 0
+multiplicand (size)             : n                                 : n
+multiplicator (size)            : m                                 : n
+product (size)                  : n + m                             : 2*n
+Latency                         : m                                 : n
+Operations                      : n*m                               : n*n
+regs                            : n*m + m                           : n*n + n
+NOT_gates                       : 0                                 : 0
+AND_gates                       : 2*n*m                             : 2*n*n
+NAND_gates                      : 0                                 : 0
+OR_gates                        : n*m                               : n*n
+NOR_gates                       : 0                                 : 0
+XOR_gates                       : 2*n*m                             :
+XNOR_gates                      : 0                                 : 0
 */
 void multiplication(Large const& multiplicand, Large const& multiplicator, Large& product, Count& count)
 {
@@ -84,20 +84,20 @@ void multiplication(Large const& multiplicand, Large const& multiplicator, Large
 }
 
 /*
-dividend (size)                 : n
-modulus (size)                  : m
-quotient (size)                 : n
-remainder (size)                : m
-Latency                         : n
-Operations                      : m*(3*n + 1)
-regs                            : n*(n + m)
-NOT_gates                       : m*(3*n + 1) + n
-AND_gates                       : m*(5*n + 2)
-NAND_gates                      : 0
-OR_gates                        : 3*m*n + m + n
-NOR_gates                       : 0
-XOR_gates                       : 3*m*n
-XNOR_gates                      : 0
+dividend (size)                 : n                                 : n
+modulus (size)                  : m                                 : n
+quotient (size)                 : n                                 : n
+remainder (size)                : m                                 : n
+Latency                         : n                                 : n
+Operations                      : 3*n*m + m                         : 3*n*n + n
+regs                            : n*n + n*m                         : 2*n*n
+NOT_gates                       : 3*n*m + n + m                     : 3*n*n + 2*n
+AND_gates                       : 5*n*m + 2*m                       : 5*n*n + 2*n
+NAND_gates                      : 0                                 : 0
+OR_gates                        : 3*m*n + m + n                     : 3*n*n + 2*n
+NOR_gates                       : 0                                 : 0
+XOR_gates                       : 3*m*n                             : 3*n*n
+XNOR_gates                      : 0                                 : 0
 */
 void division_modulo(Large const& dividend, Large const& modulus, Large& quotient, Large& remainder, Count& count)
 {
@@ -130,20 +130,20 @@ void division_modulo(Large const& dividend, Large const& modulus, Large& quotien
 }
 
 /*
-dividend (size)                 : n
-modulus (size)                  : m
-quotient (size)                 : n
-remainder (size)                : m
-Latency                         : n
-Operations                      : m*(3*n + 1)
-regs                            : n*(n + m)
-NOT_gates                       : m*(3*n + 1) + n
-AND_gates                       : m*(5*n + 2)
-NAND_gates                      : 0
-OR_gates                        : 3*m*n + m + n
-NOR_gates                       : 0
-XOR_gates                       : 3*m*n
-XNOR_gates                      : 0
+dividend (size)                 : n                                 : n
+modulus (size)                  : m                                 : n
+quotient (size)                 : n                                 : n
+remainder (size)                : m                                 : n
+Latency                         : n                                 : n
+Operations                      : 3*n*m + m                         : 3*n*n + n
+regs                            : n*n + n*m                         : 2*n*n
+NOT_gates                       : 3*n*m + n + m                     : 3*n*n + 2*n
+AND_gates                       : 5*n*m + 2*m                       : 5*n*n + 2*n
+NAND_gates                      : 0                                 : 0
+OR_gates                        : 3*n*m + n + m                     : 3*n*n + 2*n
+NOR_gates                       : 0                                 : 0
+XOR_gates                       : 3*n*m                             : 3*n*n
+XNOR_gates                      : 0                                 : 0
 */
 void modulo(Large const& dividend, Large const& modulus, Large& remainder, Count& count)
 {
@@ -159,16 +159,16 @@ addend1 (size)                  : n
 addend2 (size)                  : n
 modulus (size)                  : n
 result (size)                   : n
-Latency                         :
-Operations                      :
-regs                            :
-NOT_gates                       :
-AND_gates                       :
-NAND_gates                      :
-OR_gates                        :
-NOR_gates                       :
-XOR_gates                       :
-XNOR_gates                      :
+Latency                         : n + 2
+Operations                      : 3*n*n + 5*n
+regs                            : 2*n*n + 3*n + 1
+NOT_gates                       : 3*n*n + 5*n + 1
+AND_gates                       : 5*n*n + 9*n
+NAND_gates                      : 0
+OR_gates                        : 3*n*n + 6*n + 1
+NOR_gates                       : 0
+XOR_gates                       : 3*n*n + 5*n
+XNOR_gates                      : 0
 */
 void addition_modulo(Large const& addend1, Large const& addend2, Large const& modulus, Large& result, Count& count)
 {
@@ -186,16 +186,16 @@ minuend (size)                  : n
 substrahend (size)              : n
 modulus (size)                  : n
 result (size)                   : n
-Latency                         :
-Operations                      :
-regs                            :
-NOT_gates                       :
-AND_gates                       :
-NAND_gates                      :
-OR_gates                        :
-NOR_gates                       :
-XOR_gates                       :
-XNOR_gates                      :
+Latency                         : 2*n + 3
+Operations                      : 9*n*n + 8*n
+regs                            : 6*n*n+ 3*n + 1
+NOT_gates                       : 9*n*n + 10*n + 1
+AND_gates                       : 15*n*n + 15*n
+NAND_gates                      : 0
+OR_gates                        : 9*n*n + 11*n + 1
+NOR_gates                       : 0
+XOR_gates                       : 9*n*n + 7*n
+XNOR_gates                      : 0
 */
 void substraction_modulo(Large const& minuend, Large const& substrahend, Large const& modulus, Large& result, Count& count)
 {
@@ -206,7 +206,7 @@ void substraction_modulo(Large const& minuend, Large const& substrahend, Large c
     Large minuend_modulo(n_bits);
     Large substraend_modulo(n_bits);
     modulo(minuend, modulus, minuend_modulo, count);
-    uint16_t freeze_clock_count = count.clock;// division_modulo in parallel
+    uint64_t freeze_clock_count = count.clock;// division_modulo in parallel
     modulo(substrahend, modulus, substraend_modulo, count);
     count.clock = freeze_clock_count;
     substraction(modulus, substraend_modulo, result, count);
@@ -218,16 +218,16 @@ multiplicand (size)             : n
 multiplicator (size)            : n
 modulus (size)                  : n
 result (size)                   : n
-Latency                         :
-Operations                      :
-regs                            :
-NOT_gates                       :
-AND_gates                       :
-NAND_gates                      :
-OR_gates                        :
-NOR_gates                       :
-XOR_gates                       :
-XNOR_gates                      :
+Latency                         : 3*n
+Operations                      : 7*n*n + n
+regs                            : 7*n*n + n
+NOT_gates                       : 6*n*n + 3*n
+AND_gates                       : 12*n*n + 2*n
+NAND_gates                      : 0
+OR_gates                        : 7*n*n + 3*n
+NOR_gates                       : 0
+XOR_gates                       : 8*n*n
+XNOR_gates                      : 0
 */
 void multiplication_modulo(Large const& multiplicand, Large const& multiplicator, Large const& modulus, Large& result, Count& count)
 {
@@ -244,16 +244,16 @@ void multiplication_modulo(Large const& multiplicand, Large const& multiplicator
 multiplicator (size)            : n
 modulus (size)                  : n
 result (size)                   : n
-Latency                         :
-Operations                      :
-regs                            :
-NOT_gates                       :
-AND_gates                       :
-NAND_gates                      :
-OR_gates                        :
-NOR_gates                       :
-XOR_gates                       :
-XNOR_gates                      :
+Latency                         : 3*n
+Operations                      : 7*n*n + n
+regs                            : 7*n*n + n
+NOT_gates                       : 6*n*n + 3*n
+AND_gates                       : 12*n*n + 2*n
+NAND_gates                      : 0
+OR_gates                        : 7*n*n + 3*n
+NOR_gates                       : 0
+XOR_gates                       : 8*n*n
+XNOR_gates                      : 0
 */
 void squaring_modulo(Large const& multiplicator, Large const& modulus, Large& result, Count& count)
 {
@@ -263,20 +263,20 @@ void squaring_modulo(Large const& multiplicator, Large const& modulus, Large& re
 }
 
 /*
-base (size)                     :
-exponent (size)                 :
-modulus (size)                  :
-result (size)                   :
-Latency                         :
-Operations                      :
-regs                            :
-NOT_gates                       :
-AND_gates                       :
-NAND_gates                      :
-OR_gates                        :
-NOR_gates                       :
-XOR_gates                       :
-XNOR_gates                      :
+base (size)                     : n                                 : n
+exponent (size)                 : m                                 : n
+modulus (size)                  : n                                 : n
+result (size)                   : n                                 : n
+Latency                         : (m)*(3*n)                         : 3*n*n
+Operations                      : (2*m - 1)*(7*n*n + n)             : 14*n*n*n - 5*n*n - n
+regs                            : (2*m - 1)*(7*n*n + n) + (m)*(n)   : 14*n*n*n - 4*n*n - n
+NOT_gates                       : (2*m - 1)*(6*n*n + 3*n)           : 12*n*n*n - 3*n
+AND_gates                       : (2*m - 1)*(12*n*n + 2*n)          : 24*n*n*n - 8*n*n - 2*n
+NAND_gates                      : 0                                 : 0
+OR_gates                        : (2*m - 1)*(7*n*n + 3*n)           : 14*n*n*n - n*n -3*n
+NOR_gates                       : 0                                 : 0
+XOR_gates                       : (2*m - 1)*(8*n*n)                 : 16*n*n*n - 8*n*n
+XNOR_gates                      : 0                                 : 0
 */
 void exponentiation_modulo(Large const& base, Large const& exponent, Large const& modulus, Large& result, Count& count)
 {
@@ -285,12 +285,19 @@ void exponentiation_modulo(Large const& base, Large const& exponent, Large const
     uint16_t exponent_size = exponent.get_number_of_bits();
     uint16_t result_size = result.get_number_of_bits();
     Large squared(result_size);
+    Large result_intermediate(result_size);
+    result[0] = true; //init to 1
     squared.insert(base, 0);
-    qDebug() << squared.toHex();
+    uint64_t freeze_clock_count; // operations in parallel
     for(uint16_t i=0; i<exponent_size-1; i++)
     {
+        multiplication_modulo(squared, result, modulus, result_intermediate, count);
+        freeze_clock_count = count.clock;
         squaring_modulo(squared, modulus, squared, count);
-        qDebug() << squared.toHex();
+        count.clock = freeze_clock_count;
+        result.REG(exponent[i], result_intermediate, 0, count);
     }
+    multiplication_modulo(squared, result, modulus, result_intermediate, count);
+    result.REG(exponent[exponent_size - 1], result_intermediate, 0, count);
 }
 

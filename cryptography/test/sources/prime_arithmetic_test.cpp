@@ -95,7 +95,7 @@ void prime_arithmetic_test::Given_5_and_6_on_8_bits_When_testing_multiplication_
     multiplication(a, b, product, count);
     QCOMPARE(count.clock, m);
     QCOMPARE(count.operation, n*m);
-    QCOMPARE(count.regs, (n + 1)*m);
+    QCOMPARE(count.regs, n*m + m);
     QCOMPARE(count.NOT_gates, 0);
     QCOMPARE(count.AND_gates, 2*n*m);
     QCOMPARE(count.NAND_gates, 0);
@@ -145,10 +145,10 @@ void prime_arithmetic_test::Given_17_and_3_on_8_bits_When_testing_division_modul
     Large remainder(m);
     division_modulo(a, b, quotient, remainder, count);
     QCOMPARE(count.clock, n);
-    QCOMPARE(count.operation, m*(3*n + 1));
-    QCOMPARE(count.regs, n*(n + m));
-    QCOMPARE(count.NOT_gates, m*(3*n + 1) + n);
-    QCOMPARE(count.AND_gates, m*(5*n + 2));
+    QCOMPARE(count.operation, 3*n*m + m);
+    QCOMPARE(count.regs, n*n + n*m);
+    QCOMPARE(count.NOT_gates,  3*n*m + n + m);
+    QCOMPARE(count.AND_gates, 5*n*m + 2*m);
     QCOMPARE(count.NAND_gates, 0);
     QCOMPARE(count.OR_gates, 3*m*n + m + n);
     QCOMPARE(count.NOR_gates, 0);
@@ -181,14 +181,14 @@ void prime_arithmetic_test::Given_17_and_3_on_8_bits_When_testing_modulo_Then_ve
     Large remainder(m);
     modulo(a, b, remainder, count);
     QCOMPARE(count.clock, n);
-    QCOMPARE(count.operation, m*(3*n + 1));
-    QCOMPARE(count.regs, n*(n + m));
-    QCOMPARE(count.NOT_gates, m*(3*n + 1) + n);
-    QCOMPARE(count.AND_gates, m*(5*n + 2));
+    QCOMPARE(count.operation, 3*n*m + m);
+    QCOMPARE(count.regs, n*n + n*m);
+    QCOMPARE(count.NOT_gates, 3*n*m + n + m);
+    QCOMPARE(count.AND_gates, 5*n*m + 2*m);
     QCOMPARE(count.NAND_gates, 0);
-    QCOMPARE(count.OR_gates, 3*m*n + m + n);
+    QCOMPARE(count.OR_gates, 3*n*m + n + m);
     QCOMPARE(count.NOR_gates, 0);
-    QCOMPARE(count.XOR_gates, 3*m*n);
+    QCOMPARE(count.XOR_gates, 3*n*m);
     QCOMPARE(count.XNOR_gates, 0);
 }
 
@@ -217,18 +217,18 @@ void prime_arithmetic_test::Given_18_19_and_5_on_5_bits_When_testing_addition_mo
     Large result(n);
     Large expected = create_and_initialize_large(2, 5);
     addition_modulo(a, b, p, result, count);
-    QCOMPARE(count.clock, 0);
-    QCOMPARE(count.operation, 0);
-    QCOMPARE(count.regs, 0);
-    QCOMPARE(count.NOT_gates, 0);
-    QCOMPARE(count.AND_gates, 0);
+    QCOMPARE(count.clock, n + 2);
+    QCOMPARE(count.operation, 3*n*n + 5*n);
+    QCOMPARE(count.regs, 2*n*n + 3*n + 1);
+    QCOMPARE(count.NOT_gates, 3*n*n + 5*n + 1);
+    QCOMPARE(count.AND_gates, 5*n*n + 9*n);
     QCOMPARE(count.NAND_gates, 0);
-    QCOMPARE(count.OR_gates, 0);
+    QCOMPARE(count.OR_gates, 3*n*n + 6*n + 1);
     QCOMPARE(count.NOR_gates, 0);
-    QCOMPARE(count.XOR_gates, 0);
+    QCOMPARE(count.XOR_gates, 3*n*n + 5*n);
     QCOMPARE(count.XNOR_gates, 0);
 }
-/*
+
 void prime_arithmetic_test::Given_18_19_and_5_on_5_bits_When_testing_substraction_modulo_Then_result_is_4()
 {
     uint16_t n = 5;
@@ -254,15 +254,15 @@ void prime_arithmetic_test::Given_18_19_and_5_on_5_bits_When_testing_substractio
     Large result(n);
     Large expected = create_and_initialize_large(4, n);
     substraction_modulo(a, b, p, result, count);
-    QCOMPARE(count.clock, 0);
-    QCOMPARE(count.operation, 0);
-    QCOMPARE(count.regs, 0);
-    QCOMPARE(count.NOT_gates, 0);
-    QCOMPARE(count.AND_gates, 0);
+    QCOMPARE(count.clock, 2*n + 3);
+    QCOMPARE(count.operation, 9*n*n + 8*n);
+    QCOMPARE(count.regs, 6*n*n+ 3*n + 1);
+    QCOMPARE(count.NOT_gates, 9*n*n + 10*n + 1);
+    QCOMPARE(count.AND_gates, 15*n*n + 15*n);
     QCOMPARE(count.NAND_gates, 0);
-    QCOMPARE(count.OR_gates, 0);
+    QCOMPARE(count.OR_gates, 9*n*n + 11*n + 1);
     QCOMPARE(count.NOR_gates, 0);
-    QCOMPARE(count.XOR_gates, 0);
+    QCOMPARE(count.XOR_gates, 9*n*n + 7*n);
     QCOMPARE(count.XNOR_gates, 0);
 }
 
@@ -291,15 +291,15 @@ void prime_arithmetic_test::Given_15_8_and_7_on_4_bits_When_testing_multiplicati
     Large result(n);
     Large expected = create_and_initialize_large(1, n);
     multiplication_modulo(a, b, p, result, count);
-    QCOMPARE(count.clock, 0);
-    QCOMPARE(count.operation, 0);
-    QCOMPARE(count.regs, 0);
-    QCOMPARE(count.NOT_gates, 0);
-    QCOMPARE(count.AND_gates, 0);
+    QCOMPARE(count.clock, 3*n);
+    QCOMPARE(count.operation, 7*n*n + n);
+    QCOMPARE(count.regs, 7*n*n + n);
+    QCOMPARE(count.NOT_gates, 6*n*n + 3*n);
+    QCOMPARE(count.AND_gates, 12*n*n + 2*n);
     QCOMPARE(count.NAND_gates, 0);
-    QCOMPARE(count.OR_gates, 0);
+    QCOMPARE(count.OR_gates, 7*n*n + 3*n);
     QCOMPARE(count.NOR_gates, 0);
-    QCOMPARE(count.XOR_gates, 0);
+    QCOMPARE(count.XOR_gates, 8*n*n);
     QCOMPARE(count.XNOR_gates, 0);
 }
 
@@ -326,25 +326,26 @@ void prime_arithmetic_test::Given_15_8_and_7_on_4_bits_When_testing_squaring_mod
     Large result(n);
     Large expected = create_and_initialize_large(1, n);
     squaring_modulo(a, p, result, count);
-    QCOMPARE(count.clock, 0);
-    QCOMPARE(count.operation, 0);
-    QCOMPARE(count.regs, 0);
-    QCOMPARE(count.NOT_gates, 0);
-    QCOMPARE(count.AND_gates, 0);
+    QCOMPARE(count.clock, 3*n);
+    QCOMPARE(count.operation, 7*n*n + n);
+    QCOMPARE(count.regs, 7*n*n + n);
+    QCOMPARE(count.NOT_gates, 6*n*n + 3*n);
+    QCOMPARE(count.AND_gates, 12*n*n + 2*n);
     QCOMPARE(count.NAND_gates, 0);
-    QCOMPARE(count.OR_gates, 0);
+    QCOMPARE(count.OR_gates, 7*n*n + 3*n);
     QCOMPARE(count.NOR_gates, 0);
-    QCOMPARE(count.XOR_gates, 0);
+    QCOMPARE(count.XOR_gates, 8*n*n);
     QCOMPARE(count.XNOR_gates, 0);
 }
 
 void prime_arithmetic_test::Given_3_5_and_7_on_3_bits_When_testing_exponentiation_modulo_Then_result_is_5()
 {
     uint16_t n = 3;
+    uint16_t m = 4;
     Count count;
     count_initialization(count);
     Large a = create_and_initialize_large(3, n);
-    Large x = create_and_initialize_large(5, n);
+    Large x = create_and_initialize_large(5, m);
     Large p = create_and_initialize_large(7, n);
     Large result(n);
     Large expected = create_and_initialize_large(5, n);
@@ -355,24 +356,25 @@ void prime_arithmetic_test::Given_3_5_and_7_on_3_bits_When_testing_exponentiatio
 void prime_arithmetic_test::Given_3_5_and_7_on_3_bits_When_testing_exponentiation_modulo_Then_verify_count()
 {
     uint16_t n = 3;
+    uint16_t m = 3;
     Count count;
     count_initialization(count);
     Large a = create_and_initialize_large(3, n);
-    Large x = create_and_initialize_large(5, n);
+    Large x = create_and_initialize_large(5, m);
     Large p = create_and_initialize_large(7, n);
     Large result(n);
     Large expected = create_and_initialize_large(5, n);
     exponentiation_modulo(a, x, p, result, count);
-    QCOMPARE(count.clock, 0);
-    QCOMPARE(count.operation, 0);
-    QCOMPARE(count.regs, 0);
-    QCOMPARE(count.NOT_gates, 0);
-    QCOMPARE(count.AND_gates, 0);
+    QCOMPARE(count.clock, (m)*(3*n));
+    QCOMPARE(count.operation, (2*m - 1)*(7*n*n + n));
+    QCOMPARE(count.regs, (2*m - 1)*(7*n*n + n) + (m)*(n));
+    QCOMPARE(count.NOT_gates, (2*m - 1)*(6*n*n + 3*n));
+    QCOMPARE(count.AND_gates, (2*m - 1)*(12*n*n + 2*n));
     QCOMPARE(count.NAND_gates, 0);
-    QCOMPARE(count.OR_gates, 0);
+    QCOMPARE(count.OR_gates, (2*m - 1)*(7*n*n + 3*n));
     QCOMPARE(count.NOR_gates, 0);
-    QCOMPARE(count.XOR_gates, 0);
+    QCOMPARE(count.XOR_gates, (2*m - 1)*(8*n*n));
     QCOMPARE(count.XNOR_gates, 0);
 }
-*/
+
 static prime_arithmetic_test PRIME_ARITHMETIC_TEST;

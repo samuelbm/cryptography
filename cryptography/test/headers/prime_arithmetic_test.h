@@ -27,7 +27,7 @@ private slots:
 
     void Given_18_19_and_5_on_5_bits_When_testing_addition_modulo_Then_result_is_2();
     void Given_18_19_and_5_on_5_bits_When_testing_addition_modulo_Then_verify_count();
-/*
+
     void Given_18_19_and_5_on_5_bits_When_testing_substraction_modulo_Then_result_is_4();
     void Given_18_19_and_5_on_5_bits_When_testing_substraction_modulo_Then_verify_count();
 
@@ -39,7 +39,7 @@ private slots:
 
     void Given_3_5_and_7_on_3_bits_When_testing_exponentiation_modulo_Then_result_is_5();
     void Given_3_5_and_7_on_3_bits_When_testing_exponentiation_modulo_Then_verify_count();
-*/
+
 };
 
 #endif // PRIME_ARITHMETIC_TEST_H
