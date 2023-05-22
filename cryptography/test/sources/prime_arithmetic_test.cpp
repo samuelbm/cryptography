@@ -23,7 +23,7 @@ void prime_arithmetic_test::Given_5_and_4_on_8_bits_When_testing_addition_Then_v
     Large b = create_and_initialize_large(4, n);
     Large sum = create_and_initialize_large(0, n+1);
     addition(a, b, sum, count);
-    QCOMPARE(count.clock, 0);
+    QCOMPARE(count.clock, 1);
     QCOMPARE(count.operation, n);
     QCOMPARE(count.regs, 0);
     QCOMPARE(count.NOT_gates, 0);
@@ -57,7 +57,7 @@ void prime_arithmetic_test::Given_9_and_4_on_8_bits_When_testing_substraction_Th
     Large b = create_and_initialize_large(4, n);
     Large difference = create_and_initialize_large(5, n);
     substraction(a, b, difference, count);
-    QCOMPARE(count.clock, 0);
+    QCOMPARE(count.clock, 1);
     QCOMPARE(count.operation, n);
     QCOMPARE(count.regs, 0);
     QCOMPARE(count.NOT_gates, n);
@@ -155,7 +155,7 @@ void prime_arithmetic_test::Given_17_and_3_on_8_bits_When_testing_division_modul
     QCOMPARE(count.XOR_gates, 3*m*n);
     QCOMPARE(count.XNOR_gates, 0);
 }
-/*
+
 void prime_arithmetic_test::Given_17_and_3_on_8_bits_When_testing_modulo_Then_remainder_is_2()
 {
     uint16_t n = 8;
@@ -173,22 +173,22 @@ void prime_arithmetic_test::Given_17_and_3_on_8_bits_When_testing_modulo_Then_re
 void prime_arithmetic_test::Given_17_and_3_on_8_bits_When_testing_modulo_Then_verify_count()
 {
     uint16_t n = 8;
+    uint16_t m = 6;
     Count count;
     count_initialization(count);
     Large a = create_and_initialize_large(5, n);
-    Large b = create_and_initialize_large(6, n);
-    Large remainder(n);
-    Large quotient(n);
-    division_modulo(a, b, quotient, remainder, count);
-    QCOMPARE(count.clock, 0);
-    QCOMPARE(count.operation, 0);
-    QCOMPARE(count.regs, 0);
-    QCOMPARE(count.NOT_gates, 0);
-    QCOMPARE(count.AND_gates, 0);
+    Large b = create_and_initialize_large(6, m);
+    Large remainder(m);
+    modulo(a, b, remainder, count);
+    QCOMPARE(count.clock, n);
+    QCOMPARE(count.operation, m*(3*n + 1));
+    QCOMPARE(count.regs, n*(n + m));
+    QCOMPARE(count.NOT_gates, m*(3*n + 1) + n);
+    QCOMPARE(count.AND_gates, m*(5*n + 2));
     QCOMPARE(count.NAND_gates, 0);
-    QCOMPARE(count.OR_gates, 0);
+    QCOMPARE(count.OR_gates, 3*m*n + m + n);
     QCOMPARE(count.NOR_gates, 0);
-    QCOMPARE(count.XOR_gates, 0);
+    QCOMPARE(count.XOR_gates, 3*m*n);
     QCOMPARE(count.XNOR_gates, 0);
 }
 
@@ -228,7 +228,7 @@ void prime_arithmetic_test::Given_18_19_and_5_on_5_bits_When_testing_addition_mo
     QCOMPARE(count.XOR_gates, 0);
     QCOMPARE(count.XNOR_gates, 0);
 }
-
+/*
 void prime_arithmetic_test::Given_18_19_and_5_on_5_bits_When_testing_substraction_modulo_Then_result_is_4()
 {
     uint16_t n = 5;

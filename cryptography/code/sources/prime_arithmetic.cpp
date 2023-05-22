@@ -6,7 +6,7 @@
 addend1 (size)                  : n
 addend2 (size)                  : n
 sum (size)                      : n + 1
-Latency                         : 0
+Latency                         : 1
 Operations                      : n
 regs                            : 0
 NOT_gates                       : 0
@@ -21,6 +21,7 @@ void addition(Large const& addend1, Large const& addend2, Large& sum, Count& cou
 {
     assert(addend1.get_number_of_bits() == addend2.get_number_of_bits());
     assert(addend1.get_number_of_bits() + 1 == sum.get_number_of_bits());
+    count.clock++;
     ADDER_n_bits(addend1, addend2, sum, count);
 }
 
@@ -28,7 +29,7 @@ void addition(Large const& addend1, Large const& addend2, Large& sum, Count& cou
 minuend (size)                  : n
 substrahend (size)              : n
 difference (size)               : n
-Latency                         : 0
+Latency                         : 1
 Operations                      : n
 regs                            : 0
 NOT_gates                       : n
@@ -45,6 +46,7 @@ void substraction(Large const& minuend, Large const& substrahend, Large& differe
     assert(minuend.get_number_of_bits() == difference.get_number_of_bits());
     uint16_t size = difference.get_number_of_bits();
     Large difference_intermediate(size);
+    count.clock++;
     SUB_n_bits(minuend, substrahend, difference_intermediate, count);
     difference.insert(difference_intermediate, 0);
 }
@@ -74,7 +76,6 @@ void multiplication(Large const& multiplicand, Large const& multiplicator, Large
     Large product_intermediate(product.get_number_of_bits());
     for(uint16_t i=0; i<multiplicator_length; i++)
     {
-        count.clock++;
         product_intermediate.split(subproduct, i);
         addition(multiplicand, subproduct, sum, count);
         product_intermediate.REG(multiplicator[i], sum, i, count);
@@ -88,15 +89,15 @@ modulus (size)                  : m
 quotient (size)                 : n
 remainder (size)                : m
 Latency                         : n
-Operations                      :
-regs                            :
-NOT_gates                       :
-AND_gates                       :
-NAND_gates                      :
-OR_gates                        :
-NOR_gates                       :
-XOR_gates                       :
-XNOR_gates                      :
+Operations                      : m*(3*n + 1)
+regs                            : n*(n + m)
+NOT_gates                       : m*(3*n + 1) + n
+AND_gates                       : m*(5*n + 2)
+NAND_gates                      : 0
+OR_gates                        : 3*m*n + m + n
+NOR_gates                       : 0
+XOR_gates                       : 3*m*n
+XNOR_gates                      : 0
 */
 void division_modulo(Large const& dividend, Large const& modulus, Large& quotient, Large& remainder, Count& count)
 {
@@ -116,7 +117,6 @@ void division_modulo(Large const& dividend, Large const& modulus, Large& quotien
     bool enable, less_or_equal, carry_out;
     for(uint16_t i=0; i<quotient_size; i++)
     {
-        count.clock++;
         dividend_intermediate.split(minuend_intermediate, quotient_size - 1 - i);
         substraction(minuend_intermediate, modulus, difference_intermediate, count);
         less_or_equal = is_less_or_equal(modulus, minuend_intermediate, count);
@@ -130,20 +130,20 @@ void division_modulo(Large const& dividend, Large const& modulus, Large& quotien
 }
 
 /*
-dividend (size)                 :
-modulus (size)                  :
-quotient (size)                 :
-remainder (size)                :
-Latency                         :
-Operations                      :
-regs                            :
-NOT_gates                       :
-AND_gates                       :
-NAND_gates                      :
-OR_gates                        :
-NOR_gates                       :
-XOR_gates                       :
-XNOR_gates                      :
+dividend (size)                 : n
+modulus (size)                  : m
+quotient (size)                 : n
+remainder (size)                : m
+Latency                         : n
+Operations                      : m*(3*n + 1)
+regs                            : n*(n + m)
+NOT_gates                       : m*(3*n + 1) + n
+AND_gates                       : m*(5*n + 2)
+NAND_gates                      : 0
+OR_gates                        : 3*m*n + m + n
+NOR_gates                       : 0
+XOR_gates                       : 3*m*n
+XNOR_gates                      : 0
 */
 void modulo(Large const& dividend, Large const& modulus, Large& remainder, Count& count)
 {
