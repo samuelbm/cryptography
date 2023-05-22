@@ -138,10 +138,20 @@ void Large::split(Large& subpart, uint16_t start_index)
     }
 }
 
-void Large::REG(bool enable, Large const& D, Count& count)
+void Large::insert(Large const& subpart, uint16_t start_index)
 {
-    assert(this->bits_size == D.bits_size);
-    for(uint16_t i=0; i<this->bits_size; i++)
+    assert(this->bits_size >= subpart.bits_size + start_index);
+    uint16_t size = subpart.get_number_of_bits();
+    for(uint16_t i=0; i<size; i++)
+    {
+        (*this)[i + start_index] = subpart[i];
+    }
+}
+
+void Large::REG(bool enable, Large const& D, uint16_t start_index, Count& count)
+{
+    assert(this->bits_size + start_index >= D.bits_size);
+    for(uint16_t i=0; i<D.bits_size; i++)
     {
         count.regs++;
         (*this)[i] = (enable)?D[i]:(*this)[i];

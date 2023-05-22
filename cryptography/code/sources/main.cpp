@@ -38,16 +38,23 @@ int main(int argc, char *argv[])
 
     Count count;
     count_initialization(count);
-    Large x(4);
+    Large x(5);
+    x[0] = true;
     x[1] = true;
-    qDebug() << x.toHex();
-    x.SHIFT_LEFT(false, false, count);
-    qDebug() << x.toHex();
-    x.SHIFT_LEFT(true, true, count);
-    qDebug() << x.toHex();
-    x.SHIFT_RIGHT(true, true, count);
-    x.SHIFT_RIGHT(true, true, count);
-    qDebug() << x.toHex();
+    x[2] = true;
+    x[3] = true;
+    x[4] = true;
+    Large a(4);
+    a[0] = true;
+    a[1] = true;
+    Large n(4);
+    n[0] = true;
+    n[1] = true;
+    n[2] = true;
+    Large result(4);
+
+    qDebug() << a.toHex() << x.toHex() << n.toHex();
+    exponentiation_modulo(a, x, n, result, count);
     return 0;
 }
 
