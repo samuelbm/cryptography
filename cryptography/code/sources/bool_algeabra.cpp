@@ -1,144 +1,5 @@
 #include "bool_algeabra.h"
-
-/*
-a (size)                        : n
-b (size)                        : n
-Latency                         : 0
-Operations                      : n
-regs                            : n
-NOT_gates                       : n
-AND_gates                       : 2*n
-NAND_gates                      : 0
-OR_gates                        : n
-NOR_gates                       : 0
-XOR_gates                       : 0
-XNOR_gates                      : 0
-*/
-bool is_equal(Large const& a, Large const& b, Count& count)
-{
-    assert(a.get_number_of_bits() == b.get_number_of_bits());
-    uint16_t n_bits = a.get_number_of_bits();
-    bool answer = true;
-    bool enable;
-    for(uint16_t i=0; i<n_bits; i++)
-    {
-        count.operation++;
-        count.regs++;
-        enable = XOR(a[i], b[i], count);
-        answer = (enable)?false:answer;
-    }
-    return answer;
-}
-
-/*
-a (size)                        : n
-b (size)                        : n
-Latency                         : 0
-Operations                      :
-regs                            :
-NOT_gates                       :
-AND_gates                       :
-NAND_gates                      :
-OR_gates                        :
-NOR_gates                       :
-XOR_gates                       :
-XNOR_gates                      :
-*/
-bool is_less_than(Large const& a, Large const& b, Count& count)
-{
-    assert(a.get_number_of_bits() == b.get_number_of_bits());
-    uint16_t size = a.get_number_of_bits();
-    bool answer = false;
-    bool found = false;
-    bool enable, new_answer;
-    for(uint16_t i=0; i<size; i++)
-    {
-        uint16_t index = size - 1 - i;
-        count.operation++;
-        count.regs += 2;
-        enable = XOR(a[index], b[index], count);
-        new_answer = MUX2_bits(found, b[index], answer, count);
-        answer = (enable)?new_answer:answer;
-        found = (enable)?true:found;
-    }
-    return answer;
-}
-
-/*
-a (size)                        : n
-b (size)                        : n
-Latency                         :
-Operations                      :
-regs                            :
-NOT_gates                       :
-AND_gates                       :
-NAND_gates                      :
-OR_gates                        :
-NOR_gates                       :
-XOR_gates                       :
-XNOR_gates                      :
-*/
-bool is_not_equal(Large const& a, Large const& b, Count& count)
-{
-    return !is_equal(a, b, count);
-}
-
-/*
-a (size)                        : n
-b (size)                        : n
-Latency                         :
-Operations                      :
-regs                            :
-NOT_gates                       :
-AND_gates                       :
-NAND_gates                      :
-OR_gates                        :
-NOR_gates                       :
-XOR_gates                       :
-XNOR_gates                      :
-*/
-bool is_greater_than(Large const& a, Large const& b, Count& count)
-{
-    return is_less_than(b, a, count);
-}
-
-/*
-a (size)                        : n
-b (size)                        : n
-Latency                         :
-Operations                      :
-regs                            :
-NOT_gates                       :
-AND_gates                       :
-NAND_gates                      :
-OR_gates                        :
-NOR_gates                       :
-XOR_gates                       :
-XNOR_gates                      :
-*/
-bool is_less_or_equal(Large const& a, Large const& b, Count& count)
-{
-    return !is_less_than(b, a, count);
-}
-
-/*
-a (size)                        : n
-b (size)                        : n
-Latency                         :
-Operations                      :
-regs                            :
-NOT_gates                       :
-AND_gates                       :
-NAND_gates                      :
-OR_gates                        :
-NOR_gates                       :
-XOR_gates                       :
-XNOR_gates                      :
-*/
-bool is_greater_or_equal(Large const& a, Large const& b, Count& count)
-{
-    return !is_less_than(a, b, count);
-}
+#include <QTest>
 
 /*
 Latency                         : 0
@@ -244,7 +105,7 @@ XNOR_gates                      : 0
 */
 bool XOR(bool a, bool b, Count& count)
 {
-    count.XNOR_gates++;
+    count.XOR_gates++;
     return a ^ b;
 }
 
@@ -268,7 +129,7 @@ bool XNOR(bool a, bool b, Count& count)
 
 /*
 Latency                         : 0
-Operations                      : 0
+Operations                      : 1
 regs                            : 0
 NOT_gates                       : 1
 AND_gates                       : 2
@@ -280,12 +141,15 @@ XNOR_gates                      : 0
 */
 bool MUX2_bits(bool select, bool a, bool b, Count& count)
 {
-    return OR(AND(NOT(a, count), select, count), AND(b, select, count), count);
+    count.operation++;
+    return OR(AND(NOT(select, count), a, count), AND(select, b, count), count);
 }
 
 /*
+a (size)                        : n
+b (size)                        : n
 Latency                         : 0
-Operations                      : 0
+Operations                      : n
 regs                            : 0
 NOT_gates                       : n
 AND_gates                       : 2*n
@@ -348,6 +212,8 @@ void ADDER_1_bit(bool a, bool b, bool cin, bool& sum, bool& cout, Count& count)
 }
 
 /*
+a (size)                        : n
+b (size)                        : n
 Latency                         : 0
 Operations                      : n
 regs                            : 0
@@ -359,20 +225,176 @@ NOR_gates                       : 0
 XOR_gates                       : 2*n
 XNOR_gates                      : 0
 */
-void ADDER_n_bits(Large const& a, Large const& b, Large& sum, bool is_substraction, Count& count)
+void ADDER_n_bits(Large const& a, Large const& b, Large& sum, Count& count)
 {
+    assert(a.get_number_of_bits() == b.get_number_of_bits());
+    assert(a.get_number_of_bits() + 1 == sum.get_number_of_bits());
     uint16_t n_bits = a.get_number_of_bits();
-    bool carry_bit = is_substraction;
-    bool a_bit, b_bit, sum_bit;
+    bool carry_bit = false;
     for(uint16_t i=0; i<n_bits; i++)
     {
-        a_bit = a[i];
-        b_bit = MUX2_bits(is_substraction, b[i], NOT(b[i], count), count);
-        ADDER_1_bit(a_bit, b_bit, carry_bit, sum_bit, carry_bit, count);
-        sum[i] = sum_bit;
+        ADDER_1_bit(a[i], b[i], carry_bit, sum[i], carry_bit, count);
     }
-    if(!is_substraction)
+    sum[n_bits] = carry_bit;
+}
+
+/*
+a (size)                        : n
+b (size)                        : n
+Latency                         : 0
+Operations                      : n
+regs                            : 0
+NOT_gates                       : n
+AND_gates                       : 2*n
+NAND_gates                      : 0
+OR_gates                        : n
+NOR_gates                       : 0
+XOR_gates                       : 2*n
+XNOR_gates                      : 0
+*/
+void SUB_n_bits(Large const& a, Large const& b, Large& sum, Count& count)
+{
+    assert(a.get_number_of_bits() == b.get_number_of_bits());
+    assert(a.get_number_of_bits() == sum.get_number_of_bits());
+    uint16_t n_bits = a.get_number_of_bits();
+    bool carry_bit = true;
+    for(uint16_t i=0; i<n_bits; i++)
     {
-        sum[n_bits] = carry_bit;
+        ADDER_1_bit(a[i], NOT(b[i], count), carry_bit, sum[i], carry_bit, count);
     }
+}
+
+/*
+a (size)                        : n
+b (size)                        : n
+Latency                         : 0
+Operations                      : n
+regs                            : 0
+NOT_gates                       : 0
+AND_gates                       : n
+NAND_gates                      : 0
+OR_gates                        : 0
+NOR_gates                       : 0
+XOR_gates                       : 0
+XNOR_gates                      : n
+*/
+bool is_equal(Large const& a, Large const& b, Count& count)
+{
+    assert(a.get_number_of_bits() == b.get_number_of_bits());
+    uint16_t n_bits = a.get_number_of_bits();
+    bool answer = true;
+    for(uint16_t i=0; i<n_bits; i++)
+    {
+        count.operation++;
+        answer = AND(XNOR(a[i], b[i], count), answer, count);
+    }
+    return answer;
+}
+
+/*
+a (size)                        : n
+b (size)                        : n
+Latency                         : 0
+Operations                      : 2*n
+regs                            : 0
+NOT_gates                       : 2*n
+AND_gates                       : 3*n
+NAND_gates                      : 0
+OR_gates                        : 2*n
+NOR_gates                       : 0
+XOR_gates                       : n
+XNOR_gates                      : 0
+*/
+bool is_less_than(Large const& a, Large const& b, Count& count)
+{
+    assert(a.get_number_of_bits() == b.get_number_of_bits());
+    uint16_t size = a.get_number_of_bits();
+    bool answer = false;
+    bool found = false;
+    bool enable;
+    for(uint16_t i=0; i<size; i++)
+    {
+        uint16_t index = size - 1 - i;
+        count.operation++;
+        enable = XOR(a[index], b[index], count);
+        answer = MUX2_bits(AND(NOT(found, count), enable, count), answer, b[index], count);
+        found = OR(enable, found, count);
+    }
+    return answer;
+}
+
+/*
+a (size)                        : n
+b (size)                        : n
+Latency                         : 0
+Operations                      : n
+regs                            : 0
+NOT_gates                       : 1
+AND_gates                       : n
+NAND_gates                      : 0
+OR_gates                        : 0
+NOR_gates                       : 0
+XOR_gates                       : 0
+XNOR_gates                      : n
+*/
+bool is_not_equal(Large const& a, Large const& b, Count& count)
+{
+    return NOT(is_equal(a, b, count), count);
+}
+
+/*
+a (size)                        : n
+b (size)                        : n
+Latency                         : 0
+Operations                      : 2*n
+regs                            : 0
+NOT_gates                       : 2*n
+AND_gates                       : 3*n
+NAND_gates                      : 0
+OR_gates                        : 2*n
+NOR_gates                       : 0
+XOR_gates                       : n
+XNOR_gates                      : 0
+*/
+bool is_greater_than(Large const& a, Large const& b, Count& count)
+{
+    return is_less_than(b, a, count);
+}
+
+/*
+a (size)                        : n
+b (size)                        : n
+Latency                         : 0
+Operations                      : 2*n
+regs                            : 0
+NOT_gates                       : 2*n + 1
+AND_gates                       : 3*n
+NAND_gates                      : 0
+OR_gates                        : 2*n
+NOR_gates                       : 0
+XOR_gates                       : n
+XNOR_gates                      : 0
+*/
+bool is_less_or_equal(Large const& a, Large const& b, Count& count)
+{
+    return NOT(is_less_than(b, a, count), count);
+}
+
+/*
+a (size)                        : n
+b (size)                        : n
+Latency                         : 0
+Operations                      : 2*n
+regs                            : 0
+NOT_gates                       : 2*n + 1
+AND_gates                       : 3*n
+NAND_gates                      : 0
+OR_gates                        : 2*n
+NOR_gates                       : 0
+XOR_gates                       : n
+XNOR_gates                      : 0
+*/
+bool is_greater_or_equal(Large const& a, Large const& b, Count& count)
+{
+    return NOT(is_less_than(a, b, count), count);
 }
