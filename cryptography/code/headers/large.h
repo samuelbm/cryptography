@@ -21,32 +21,32 @@ typedef struct Count
 class Large
 {
 public:
-    Large(uint16_t number_of_bits);
+    Large(uint64_t number_of_bits);
     Large(Large const& large);
     ~Large();
     Large& operator=(Large const& large);
-    bool operator[](uint16_t index) const;
-    bool& operator[](uint16_t index);
-    uint16_t get_number_of_bits() const;
-    void clear(uint16_t start_index, uint16_t length);
+    bool operator[](uint64_t index) const;
+    bool& operator[](uint64_t index);
+    uint64_t get_number_of_bits() const;
+    void clear(uint64_t start_index, uint64_t length);
     bool is_null() const;
     QString toBin() const;
     QString toHex() const;
-    void split(Large& subpart, uint16_t start_index);
-    void insert(Large const& subpart, uint16_t start_index=0);
-    void REG(bool enable, Large const& D, uint16_t start_index, Count& count);
+    void split(Large& subpart, uint64_t start_index);
+    void insert(Large const& subpart, uint64_t start_index=0);
+    void REG(bool enable, Large const& D, uint64_t start_index, Count& count);
     bool SHIFT_LEFT(bool enable, bool insert, Count& count);
     bool SHIFT_RIGHT(bool enable, bool insert, Count& count);
-    void init_with_small_number(uint16_t number);
+    void init_with_small_number(uint64_t number);
 private:    
     void allocate_memory();
     void copy(Large const& large);
 private:
     bool* bits;
-    uint16_t bits_size;
+    uint64_t bits_size;
 };
 
 void count_initialization(Count& count);
-Large& create_and_initialize_large(uint16_t init_value, uint16_t n_bits);
+Large& create_and_initialize_large(uint64_t init_value, uint64_t n_bits);
 
 #endif // LARGE_H

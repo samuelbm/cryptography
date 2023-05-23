@@ -1,7 +1,7 @@
 #include "large.h"
 #include <QDebug>
 
-Large::Large(uint16_t number_of_bits): bits_size(number_of_bits)
+Large::Large(uint64_t number_of_bits): bits_size(number_of_bits)
 {
     this->allocate_memory();
     this->clear(0, this->bits_size);
@@ -35,24 +35,24 @@ Large& Large::operator=(Large const& large)
     return *this;
 }
 
-bool Large::operator[](uint16_t index) const
+bool Large::operator[](uint64_t index) const
 {
     return this->bits[index];
 }
 
-bool& Large::operator[](uint16_t index)
+bool& Large::operator[](uint64_t index)
 {
     return this->bits[index];
 }
 
-uint16_t Large::get_number_of_bits() const
+uint64_t Large::get_number_of_bits() const
 {
     return this->bits_size;
 }
 
-void Large::clear(uint16_t start_index, uint16_t length)
+void Large::clear(uint64_t start_index, uint64_t length)
 {
-    for(uint16_t i=start_index; i<start_index + length; i++)
+    for(uint64_t i=start_index; i<start_index + length; i++)
     {
         this->bits[i] = false;
     }
@@ -60,7 +60,7 @@ void Large::clear(uint16_t start_index, uint16_t length)
 
 bool Large::is_null() const
 {
-    for(uint16_t i=0; i<this->bits_size; i++)
+    for(uint64_t i=0; i<this->bits_size; i++)
     {
         if((*this)[i])
         {
@@ -77,7 +77,7 @@ void Large::allocate_memory()
 
 void Large::copy(Large const& large)
 {
-    for(uint16_t i=0; i<this->bits_size; i++)
+    for(uint64_t i=0; i<this->bits_size; i++)
     {
         (*this)[i] = large[i];
     }
@@ -93,7 +93,7 @@ QString Large::toBin() const
     }
     else
     {
-        for(uint16_t i=0; i<this->bits_size; i++)
+        for(uint64_t i=0; i<this->bits_size; i++)
         {
             str += ((*this)[this->bits_size - i - 1])?"1":"0";
         }
@@ -112,46 +112,46 @@ QString Large::toHex() const
     }
     else
     {
-        uint16_t digits = ((this->bits_size-1)/4)+1;
-        for(uint16_t i=0; i<digits; i++)
+        uint64_t digits = ((this->bits_size-1)/4)+1;
+        for(uint64_t i=0; i<digits; i++)
         {
-            uint16_t minimum = (i==0)?this->bits_size - 4*((int)(this->bits_size/4)):4;
+            int minimum = (i==0)?this->bits_size - 4*((int)(this->bits_size/4)):4;
             minimum = (minimum == 0)?4:minimum;
-            uint16_t digit = 0;
-            for(uint16_t j=0; j<minimum; j++)
+            int digit = 0;
+            for(int j=0; j<minimum; j++)
             {
                 digit += (*this)[4*(digits - i - 1) + j]?1<<j:0;
             }
-            str += symbols[digit];
+            str += symbols.at(digit);
         }
     }
     return str;
 }
 
-void Large::split(Large& subpart, uint16_t start_index)
+void Large::split(Large& subpart, uint64_t start_index)
 {
     assert(this->bits_size >= subpart.bits_size + start_index);
-    uint16_t size = subpart.get_number_of_bits();
-    for(uint16_t i=0; i<size; i++)
+    uint64_t size = subpart.get_number_of_bits();
+    for(uint64_t i=0; i<size; i++)
     {
         subpart[i] = (*this)[i + start_index];
     }
 }
 
-void Large::insert(Large const& subpart, uint16_t start_index)
+void Large::insert(Large const& subpart, uint64_t start_index)
 {
     assert(this->bits_size >= subpart.bits_size + start_index);
-    uint16_t size = subpart.get_number_of_bits();
-    for(uint16_t i=0; i<size; i++)
+    uint64_t size = subpart.get_number_of_bits();
+    for(uint64_t i=0; i<size; i++)
     {
         (*this)[i + start_index] = subpart[i];
     }
 }
 
-void Large::REG(bool enable, Large const& D, uint16_t start_index, Count& count)
+void Large::REG(bool enable, Large const& D, uint64_t start_index, Count& count)
 {
     assert(this->bits_size + start_index >= D.bits_size);
-    for(uint16_t i=0; i<D.bits_size; i++)
+    for(uint64_t i=0; i<D.bits_size; i++)
     {
         count.regs++;
         (*this)[i + start_index] = (enable)?D[i]:(*this)[i + start_index];
@@ -161,8 +161,8 @@ void Large::REG(bool enable, Large const& D, uint16_t start_index, Count& count)
 bool Large::SHIFT_LEFT(bool enable, bool insert, Count& count)
 {
     bool cout = (*this)[this->bits_size-1];
-    uint16_t index = this->bits_size;
-    for(uint16_t i=1; i<this->bits_size; i++)
+    uint64_t index = this->bits_size;
+    for(uint64_t i=1; i<this->bits_size; i++)
     {
         count.regs++;
         index--;
@@ -176,8 +176,8 @@ bool Large::SHIFT_LEFT(bool enable, bool insert, Count& count)
 bool Large::SHIFT_RIGHT(bool enable, bool insert, Count& count)
 {
     bool cout = (*this)[0];
-    uint16_t index = 0;
-    for(uint16_t i=1; i<this->bits_size; i++)
+    uint64_t index = 0;
+    for(uint64_t i=1; i<this->bits_size; i++)
     {
         count.regs++;
         index++;
@@ -201,11 +201,11 @@ void count_initialization(Count& count)
     count.XNOR_gates = 0;
 }
 
-void Large::init_with_small_number(uint16_t number)
+void Large::init_with_small_number(uint64_t number)
 {
-    uint16_t size = (16<this->bits_size)?16:this->bits_size;
+    uint64_t size = (64<this->bits_size)?64:this->bits_size;
     this->clear(0, size);
-    for(uint16_t i=0; i<size; i++)
+    for(uint64_t i=0; i<size; i++)
     {
         (*this)[i] = (number >> i) & 1;
     }

@@ -363,7 +363,7 @@ void bool_algeabra_test::Given_0_1_and_select_1_When_testing_MUX2_bits_Then_veri
 
 void bool_algeabra_test::Given_0_1_on_3_bits_and_select_0_When_testing_MUX2_Large_Then_return_0()
 {
-    uint16_t n = 3;
+    uint64_t n = 3;
     Count count;
     count_initialization(count);
     Large a(n), b(n), expected(n), result(n);
@@ -376,7 +376,7 @@ void bool_algeabra_test::Given_0_1_on_3_bits_and_select_0_When_testing_MUX2_Larg
 
 void bool_algeabra_test::Given_0_1_on_3_bits_and_select_1_When_testing_MUX2_Large_Then_return_1()
 {
-    uint16_t n = 3;
+    uint64_t n = 3;
     Count count;
     count_initialization(count);
     Large a(n), b(n), expected(n), result(n);
@@ -389,7 +389,7 @@ void bool_algeabra_test::Given_0_1_on_3_bits_and_select_1_When_testing_MUX2_Larg
 
 void bool_algeabra_test::Given_0_1_on_3_bits_and_select_1_When_testing_MUX2_Large_Then_verify_count()
 {
-    uint16_t n = 3;
+    uint64_t n = 3;
     Count count;
     count_initialization(count);
     Large a(n), b(n), expected(n), result(n);
@@ -537,7 +537,7 @@ void bool_algeabra_test::Given_1_1_1_When_testing_ADDER_1_bit_Then_verify_count(
 
 void bool_algeabra_test::Given_1_2_on_3_bits_When_testing_ADDER_n_bits_Then_sum_is_3()
 {
-    uint16_t n = 3;
+    uint64_t n = 3;
     Count count;
     count_initialization(count);
     Large a(n), b(n), expected(n+1), sum(n+1);
@@ -550,7 +550,7 @@ void bool_algeabra_test::Given_1_2_on_3_bits_When_testing_ADDER_n_bits_Then_sum_
 
 void bool_algeabra_test::Given_1_2_on_3_bits_When_testing_ADDER_n_bits_Then_verify_count()
 {
-    uint16_t n = 3;
+    uint64_t n = 3;
     Count count;
     count_initialization(count);
     Large a(n), b(n), sum(n+1);
@@ -573,7 +573,7 @@ void bool_algeabra_test::Given_2_1_on_3_bits_When_testing_SUB_n_bits_Then_sum_is
 {
     Count count;
     count_initialization(count);
-    uint16_t n = 3;
+    uint64_t n = 3;
     Large a(n), b(n), expected(n), difference(n);
     a.init_with_small_number(2);
     b.init_with_small_number(1);
@@ -584,7 +584,7 @@ void bool_algeabra_test::Given_2_1_on_3_bits_When_testing_SUB_n_bits_Then_sum_is
 
 void bool_algeabra_test::Given_2_1_on_3_bits_When_testing_SUB_n_bits_Then_verify_count()
 {
-    uint16_t n = 3;
+    uint64_t n = 3;
     Count count;
     count_initialization(count);
     Large a(n), b(n), difference(n);
@@ -605,7 +605,7 @@ void bool_algeabra_test::Given_2_1_on_3_bits_When_testing_SUB_n_bits_Then_verify
 
 void bool_algeabra_test::Given_a_lesser_than_b_When_testing_is_equal_Then_return_false()
 {
-    uint16_t n = 8;
+    uint64_t n = 8;
     Count count;
     count_initialization(count);
     Large a_lesser(n), b(n);
@@ -616,7 +616,7 @@ void bool_algeabra_test::Given_a_lesser_than_b_When_testing_is_equal_Then_return
 
 void bool_algeabra_test::Given_a_greater_than_b_When_testing_is_equal_Then_return_false()
 {
-    uint16_t n = 8;
+    uint64_t n = 8;
     Count count;
     count_initialization(count);
     Large a_greater(n), b(n);
@@ -627,7 +627,7 @@ void bool_algeabra_test::Given_a_greater_than_b_When_testing_is_equal_Then_retur
 
 void bool_algeabra_test::Given_a_equal_b_When_testing_is_equal_Then_return_true()
 {
-    uint16_t n = 8;
+    uint64_t n = 8;
     Count count;
     count_initialization(count);
     Large a_equal(n), b(n);
@@ -638,7 +638,7 @@ void bool_algeabra_test::Given_a_equal_b_When_testing_is_equal_Then_return_true(
 
 void bool_algeabra_test::Given_a_equal_b_When_testing_is_equal_Then_verify_count()
 {
-    uint16_t n = 8;
+    uint64_t n = 8;
     Count count;
     count_initialization(count);
     Large a_equal(n), b(n);
@@ -659,7 +659,7 @@ void bool_algeabra_test::Given_a_equal_b_When_testing_is_equal_Then_verify_count
 
 void bool_algeabra_test::Given_a_equal_b_When_testing_is_less_than_Then_return_false()
 {
-    uint16_t n = 8;
+    uint64_t n = 8;
     Count count;
     count_initialization(count);
     Large a_equal(n), b(n);
@@ -670,7 +670,7 @@ void bool_algeabra_test::Given_a_equal_b_When_testing_is_less_than_Then_return_f
 
 void bool_algeabra_test::Given_a_lesser_than_b_When_testing_is_less_than_Then_return_true()
 {
-    uint16_t n = 8;
+    uint64_t n = 8;
     Count count;
     count_initialization(count);
     Large a_lesser(n), b(n);
@@ -681,7 +681,7 @@ void bool_algeabra_test::Given_a_lesser_than_b_When_testing_is_less_than_Then_re
 
 void bool_algeabra_test::Given_a_greater_than_b_When_testing_is_less_than_Then_return_false()
 {
-    uint16_t n = 8;
+    uint64_t n = 8;
     Count count;
     count_initialization(count);
     Large a_greater(n), b(n);
@@ -692,7 +692,7 @@ void bool_algeabra_test::Given_a_greater_than_b_When_testing_is_less_than_Then_r
 
 void bool_algeabra_test::Given_a_equal_b_When_testing_is_less_than_Then_verify_count()
 {
-    uint16_t n = 8;
+    uint64_t n = 8;
     Count count;
     count_initialization(count);
     Large a_equal(n), b(n);
@@ -713,7 +713,7 @@ void bool_algeabra_test::Given_a_equal_b_When_testing_is_less_than_Then_verify_c
 
 void bool_algeabra_test::Given_a_equal_b_When_testing_is_not_equal_Then_return_false()
 {
-    uint16_t n = 8;
+    uint64_t n = 8;
     Count count;
     count_initialization(count);
     Large a_equal(n), b(n);
@@ -724,7 +724,7 @@ void bool_algeabra_test::Given_a_equal_b_When_testing_is_not_equal_Then_return_f
 
 void bool_algeabra_test::Given_a_lesser_than_b_When_testing_is_not_equal_Then_return_true()
 {
-    uint16_t n = 8;
+    uint64_t n = 8;
     Count count;
     count_initialization(count);
     Large a_lesser(n), b(n);
@@ -735,7 +735,7 @@ void bool_algeabra_test::Given_a_lesser_than_b_When_testing_is_not_equal_Then_re
 
 void bool_algeabra_test::Given_a_greater_than_b_When_testing_is_not_equal_Then_return_true()
 {
-    uint16_t n = 8;
+    uint64_t n = 8;
     Count count;
     count_initialization(count);
     Large a_greater(n), b(n);
@@ -746,7 +746,7 @@ void bool_algeabra_test::Given_a_greater_than_b_When_testing_is_not_equal_Then_r
 
 void bool_algeabra_test::Given_a_equal_b_When_testing_is_not_equal_Then_verify_count()
 {
-    uint16_t n = 8;
+    uint64_t n = 8;
     Count count;
     count_initialization(count);
     Large a_equal(n), b(n);
@@ -767,7 +767,7 @@ void bool_algeabra_test::Given_a_equal_b_When_testing_is_not_equal_Then_verify_c
 
 void bool_algeabra_test::Given_a_equal_b_When_testing_is_greater_than_Then_return_false()
 {
-    uint16_t n = 8;
+    uint64_t n = 8;
     Count count;
     count_initialization(count);
     Large a_equal(n), b(n);
@@ -779,7 +779,7 @@ void bool_algeabra_test::Given_a_equal_b_When_testing_is_greater_than_Then_retur
 
 void bool_algeabra_test::Given_a_greater_than_b_When_testing_is_greater_than_Then_return_true()
 {
-    uint16_t n = 8;
+    uint64_t n = 8;
     Count count;
     count_initialization(count);
     Large a_greater(n), b(n);
@@ -790,7 +790,7 @@ void bool_algeabra_test::Given_a_greater_than_b_When_testing_is_greater_than_The
 
 void bool_algeabra_test::Given_a_lesser_than_b_When_testing_is_greater_than_Then_return_false()
 {
-    uint16_t n = 8;
+    uint64_t n = 8;
     Count count;
     count_initialization(count);
     Large a_lesser(n), b(n);
@@ -801,7 +801,7 @@ void bool_algeabra_test::Given_a_lesser_than_b_When_testing_is_greater_than_Then
 
 void bool_algeabra_test::Given_a_equal_b_When_testing_is_greater_than_Then_verify_count()
 {
-    uint16_t n = 8;
+    uint64_t n = 8;
     Count count;
     count_initialization(count);
     Large a_equal(n), b(n);
@@ -822,7 +822,7 @@ void bool_algeabra_test::Given_a_equal_b_When_testing_is_greater_than_Then_verif
 
 void bool_algeabra_test::Given_a_greater_than_b_When_testing_is_less_or_equal_Then_return_false()
 {
-    uint16_t n = 8;
+    uint64_t n = 8;
     Count count;
     count_initialization(count);
     Large a_greater(n), b(n);
@@ -833,7 +833,7 @@ void bool_algeabra_test::Given_a_greater_than_b_When_testing_is_less_or_equal_Th
 
 void bool_algeabra_test::Given_a_equal_b_When_testing_is_less_or_equal_Then_return_true()
 {
-    uint16_t n = 8;
+    uint64_t n = 8;
     Count count;
     count_initialization(count);
     Large a_equal(n), b(n);
@@ -844,7 +844,7 @@ void bool_algeabra_test::Given_a_equal_b_When_testing_is_less_or_equal_Then_retu
 
 void bool_algeabra_test::Given_a_lesser_than_b_When_testing_is_less_or_equal_Then_return_true()
 {
-    uint16_t n = 8;
+    uint64_t n = 8;
     Count count;
     count_initialization(count);
     Large a_lesser(n), b(n);
@@ -855,7 +855,7 @@ void bool_algeabra_test::Given_a_lesser_than_b_When_testing_is_less_or_equal_The
 
 void bool_algeabra_test::Given_a_equal_b_When_testing_is_less_or_equal_Then_verify_count()
 {
-    uint16_t n = 8;
+    uint64_t n = 8;
     Count count;
     count_initialization(count);
     Large a_equal(n), b(n);
@@ -876,7 +876,7 @@ void bool_algeabra_test::Given_a_equal_b_When_testing_is_less_or_equal_Then_veri
 
 void bool_algeabra_test::Given_a_lesser_than_b_When_testing_is_greater_or_equal_Then_return_false()
 {
-    uint16_t n = 8;
+    uint64_t n = 8;
     Count count;
     count_initialization(count);
     Large a_lesser(n), b(n);
@@ -887,7 +887,7 @@ void bool_algeabra_test::Given_a_lesser_than_b_When_testing_is_greater_or_equal_
 
 void bool_algeabra_test::Given_a_equal_b_When_testing_is_greater_or_equal_Then_return_true()
 {
-    uint16_t n = 8;
+    uint64_t n = 8;
     Count count;
     count_initialization(count);
     Large a_equal(n), b(n);
@@ -898,7 +898,7 @@ void bool_algeabra_test::Given_a_equal_b_When_testing_is_greater_or_equal_Then_r
 
 void bool_algeabra_test::Given_a_grater_than_b_When_testing_is_graeter_or_equal_Then_return_true()
 {
-    uint16_t n = 8;
+    uint64_t n = 8;
     Count count;
     count_initialization(count);
     Large a_greater(n), b(n);
@@ -909,7 +909,7 @@ void bool_algeabra_test::Given_a_grater_than_b_When_testing_is_graeter_or_equal_
 
 void bool_algeabra_test::Given_a_equal_b_When_testing_is_greater_or_equal_Then_verify_count()
 {
-    uint16_t n = 8;
+    uint64_t n = 8;
     Count count;
     count_initialization(count);
     Large a_equal(n), b(n);

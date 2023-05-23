@@ -44,7 +44,7 @@ void substraction(Large const& minuend, Large const& substrahend, Large& differe
 {
     assert(minuend.get_number_of_bits() == substrahend.get_number_of_bits());
     assert(minuend.get_number_of_bits() == difference.get_number_of_bits());
-    uint16_t size = difference.get_number_of_bits();
+    uint64_t size = difference.get_number_of_bits();
     Large difference_intermediate(size);
     count.clock++;
     SUB_n_bits(minuend, substrahend, difference_intermediate, count);
@@ -69,12 +69,12 @@ XNOR_gates                      : 0                                 : 0
 void multiplication(Large const& multiplicand, Large const& multiplicator, Large& product, Count& count)
 {
     assert(multiplicand.get_number_of_bits() + multiplicator.get_number_of_bits() == product.get_number_of_bits());
-    uint16_t multiplicand_length = multiplicand.get_number_of_bits();
-    uint16_t multiplicator_length = multiplicator.get_number_of_bits();
+    uint64_t multiplicand_length = multiplicand.get_number_of_bits();
+    uint64_t multiplicator_length = multiplicator.get_number_of_bits();
     Large subproduct(multiplicand);
     Large sum(multiplicand_length+1);
     Large product_intermediate(product.get_number_of_bits());
-    for(uint16_t i=0; i<multiplicator_length; i++)
+    for(uint64_t i=0; i<multiplicator_length; i++)
     {
         product_intermediate.split(subproduct, i);
         addition(multiplicand, subproduct, sum, count);
@@ -105,9 +105,9 @@ void division_modulo(Large const& dividend, Large const& modulus, Large& quotien
     assert(dividend.get_number_of_bits() == quotient.get_number_of_bits());
     assert(modulus.get_number_of_bits() == remainder.get_number_of_bits());
     assert(quotient.get_number_of_bits() >= remainder.get_number_of_bits());
-    uint16_t quotient_size = quotient.get_number_of_bits();
-    uint16_t remainder_size = remainder.get_number_of_bits();
-    uint16_t full_size = quotient_size + remainder_size;
+    uint64_t quotient_size = quotient.get_number_of_bits();
+    uint64_t remainder_size = remainder.get_number_of_bits();
+    uint64_t full_size = quotient_size + remainder_size;
     quotient.clear(0, quotient_size);
     Large dividend_intermediate(full_size);
     Large minuend_intermediate(remainder_size);
@@ -115,7 +115,7 @@ void division_modulo(Large const& dividend, Large const& modulus, Large& quotien
     Large quotient_intermediate(quotient_size);
     dividend_intermediate.insert(dividend);
     bool enable, less_or_equal, carry_out;
-    for(uint16_t i=0; i<quotient_size; i++)
+    for(uint64_t i=0; i<quotient_size; i++)
     {
         dividend_intermediate.split(minuend_intermediate, quotient_size - 1 - i);
         substraction(minuend_intermediate, modulus, difference_intermediate, count);
@@ -175,7 +175,7 @@ void addition_modulo(Large const& addend1, Large const& addend2, Large const& mo
     assert(addend1.get_number_of_bits() == addend2.get_number_of_bits());
     assert(addend1.get_number_of_bits() == modulus.get_number_of_bits());
     assert(addend1.get_number_of_bits() == result.get_number_of_bits());
-    uint16_t size = result.get_number_of_bits();
+    uint64_t size = result.get_number_of_bits();
     Large sum(size + 1);
     addition(addend1, addend2, sum, count);
     modulo(sum, modulus, result, count);
@@ -202,7 +202,7 @@ void substraction_modulo(Large const& minuend, Large const& substrahend, Large c
     assert(minuend.get_number_of_bits() == substrahend.get_number_of_bits());
     assert(minuend.get_number_of_bits() == modulus.get_number_of_bits());
     assert(minuend.get_number_of_bits() == result.get_number_of_bits());
-    uint16_t n_bits = result.get_number_of_bits();
+    uint64_t n_bits = result.get_number_of_bits();
     Large minuend_modulo(n_bits);
     Large substraend_modulo(n_bits);
     modulo(minuend, modulus, minuend_modulo, count);
@@ -234,7 +234,7 @@ void multiplication_modulo(Large const& multiplicand, Large const& multiplicator
     assert(multiplicand.get_number_of_bits() == multiplicator.get_number_of_bits());
     assert(multiplicand.get_number_of_bits() == multiplicator.get_number_of_bits());
     assert(multiplicand.get_number_of_bits() == result.get_number_of_bits());
-    uint16_t size = result.get_number_of_bits();
+    uint64_t size = result.get_number_of_bits();
     Large product(2*size);
     multiplication(multiplicand, multiplicator, product, count);
     modulo(product, modulus, result, count);
@@ -282,14 +282,14 @@ void exponentiation_modulo(Large const& base, Large const& exponent, Large const
 {
     assert(base.get_number_of_bits() == modulus.get_number_of_bits());
     assert(base.get_number_of_bits() == result.get_number_of_bits());
-    uint16_t exponent_size = exponent.get_number_of_bits();
-    uint16_t result_size = result.get_number_of_bits();
+    uint64_t exponent_size = exponent.get_number_of_bits();
+    uint64_t result_size = result.get_number_of_bits();
     Large squared(result_size);
     Large result_intermediate(result_size);
     result[0] = true; //init to 1
     squared.insert(base);
     uint64_t freeze_clock_count; // operations in parallel
-    for(uint16_t i=0; i<exponent_size-1; i++)
+    for(uint64_t i=0; i<exponent_size-1; i++)
     {
         multiplication_modulo(squared, result, modulus, result_intermediate, count);
         freeze_clock_count = count.clock;
@@ -308,7 +308,7 @@ void greatest_common_divisor(Large const& greatest_number, Large const& smallest
     count_initialization(dummy_count);
     assert(greatest_number.get_number_of_bits() == smallest_number.get_number_of_bits());
     assert(greatest_number.get_number_of_bits() == gcd_number.get_number_of_bits());
-    uint16_t size = gcd_number.get_number_of_bits();
+    uint64_t size = gcd_number.get_number_of_bits();
     Large r1(size), r2(size), r3(size), zero(size);
     bool less_than = is_less_than(smallest_number, greatest_number, dummy_count);
     r1.insert((less_than)?greatest_number:smallest_number);
@@ -345,9 +345,9 @@ void inverse(Large const& a, Large const& n, Large const& phi_n, Large& result, 
     assert(a.get_number_of_bits() == n.get_number_of_bits());
     assert(a.get_number_of_bits() == phi_n.get_number_of_bits());
     assert(a.get_number_of_bits() == result.get_number_of_bits());
-    uint16_t size = result.get_number_of_bits();
+    uint64_t size = result.get_number_of_bits();
     Large one(size), gcd_number(size), exponent(size);
-    one[0] = true;
+    one.init_with_small_number(1);
     greatest_common_divisor(a, n, gcd_number, dummy_count);
     assert(is_greater_than(n, one, dummy_count));
     assert(is_equal(gcd_number, one, dummy_count));
@@ -377,10 +377,10 @@ void inverse_with_prime(Large const& a, Large const& p, Large& result, Count& co
     count_initialization(dummy_count);
     assert(a.get_number_of_bits() == p.get_number_of_bits());
     assert(a.get_number_of_bits() == result.get_number_of_bits());
-    uint16_t size = result.get_number_of_bits();
+    uint64_t size = result.get_number_of_bits();
     Large one(size), two(size), gcd_number(size), exponent(size);
-    one[0] = true;
-    two[1] = true;
+    one.init_with_small_number(1);
+    two.init_with_small_number(2);
     greatest_common_divisor(a, p, gcd_number, dummy_count);
     assert(is_greater_than(p, one, dummy_count));
     assert(is_equal(gcd_number, one, dummy_count));
@@ -390,38 +390,47 @@ void inverse_with_prime(Large const& a, Large const& p, Large& result, Count& co
 }
 
 /*
-a (size)                        : n
-n (size)                        : n
-inverse (size)                  : n
-Latency                         :
-Operations                      :
-regs                            :
-NOT_gates                       :
-AND_gates                       :
-NAND_gates                      :
-OR_gates                        :
-NOR_gates                       :
-XOR_gates                       :
-XNOR_gates                      :
+base (size)                     : 100*(n)
+exponent (size)                 : 100*(n)
+modulus (size)                  : 100*(n)
+result (size)                   : 100*(n)
+Latency                         : 100*(3*n*n) + 1
+Operations                      : 100*(14*n*n*n - 5*n*n) + n
+regs                            : 100*(14*n*n*n - 4*n*n - n)
+NOT_gates                       : 100*(12*n*n*n - 3*n) + n
+AND_gates                       : 100*(24*n*n*n - 8*n*n - n+ 1) + 2*n
+NAND_gates                      : 0
+OR_gates                        : 100*(14*n*n*n - n*n -3*n) + n
+NOR_gates                       : 0
+XOR_gates                       : 100*(16*n*n*n - 8*n*n) + 2*n
+XNOR_gates                      : 100*(n)
 */
-//bool is_prime_with_miller_rabin(Large const& maybe_prime, Count& count)
-//{
-//    Count dummy_count;
-//    count_initialization(dummy_count);
-//    int primes_size = 100;
-//    uint16_t primes[] = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71,
-//              73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157, 163, 167, 173,
-//              179, 181, 191, 193, 197, 199, 211, 223, 227, 229, 233, 239, 241, 251, 257, 263, 269, 271, 277, 281,
-//              283, 293, 307, 311, 313, 317, 331, 337, 347, 349, 353, 359, 367, 373, 379, 383, 389, 397, 401, 409,
-//              419, 421, 431, 433, 439, 443, 449, 457, 461, 463, 467, 479, 487, 491, 499, 503, 509, 521, 523, 541};
-//    int max_prime = primes[primes_size-1];
-//    assert(is_less_than());
-//    Large
-//    for()
-//    {
+bool is_prime_with_fermat_little_theorem(Large const& maybe_prime, Count& count)
+{
+    Count dummy_count;
+    count_initialization(dummy_count);
+    uint64_t primes_size = 100;
+    uint64_t size = maybe_prime.get_number_of_bits();
+    Large threshold(size), base(size), exponent(size), one(size), result(size);
+    one.init_with_small_number(1);
+    threshold.init_with_small_number(1023);
+    assert(is_less_than(threshold, maybe_prime, dummy_count));
+    uint64_t primes[] = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71,
+              73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157, 163, 167, 173,
+              179, 181, 191, 193, 197, 199, 211, 223, 227, 229, 233, 239, 241, 251, 257, 263, 269, 271, 277, 281,
+              283, 293, 307, 311, 313, 317, 331, 337, 347, 349, 353, 359, 367, 373, 379, 383, 389, 397, 401, 409,
+              419, 421, 431, 433, 439, 443, 449, 457, 461, 463, 467, 479, 487, 491, 499, 503, 509, 521, 523, 541};
 
-//    }
-//}
+    substraction(maybe_prime, one, exponent, count);
+    bool is_prime = true; // probably
+    for(uint64_t i=0; i<primes_size; i++)
+    {
+        base.init_with_small_number(primes[i]);
+        exponentiation_modulo(base, exponent, maybe_prime, result, count);
+        is_prime = AND(is_prime, is_equal(result, one, count), count);
+    }
+    return is_prime;
+}
 
 /*
 a (size)                        : n

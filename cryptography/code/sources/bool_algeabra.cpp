@@ -162,9 +162,9 @@ XNOR_gates                      : 0
 Large MUX2_Large(bool select, Large const& a, Large const& b, Count& count)
 {
     assert(a.get_number_of_bits() == b.get_number_of_bits());
-    uint16_t size = a.get_number_of_bits();
+    uint64_t size = a.get_number_of_bits();
     Large* result = new Large(size);
-    for(uint16_t i=0; i < size; i++)
+    for(uint64_t i=0; i < size; i++)
     {
         (*result)[i] = MUX2_bits(select, a[i], b[i], count);
     }
@@ -229,9 +229,9 @@ void ADDER_n_bits(Large const& a, Large const& b, Large& sum, Count& count)
 {
     assert(a.get_number_of_bits() == b.get_number_of_bits());
     assert(a.get_number_of_bits() + 1 == sum.get_number_of_bits());
-    uint16_t n_bits = a.get_number_of_bits();
+    uint64_t n_bits = a.get_number_of_bits();
     bool carry_bit = false;
-    for(uint16_t i=0; i<n_bits; i++)
+    for(uint64_t i=0; i<n_bits; i++)
     {
         ADDER_1_bit(a[i], b[i], carry_bit, sum[i], carry_bit, count);
     }
@@ -256,9 +256,9 @@ void SUB_n_bits(Large const& a, Large const& b, Large& sum, Count& count)
 {
     assert(a.get_number_of_bits() == b.get_number_of_bits());
     assert(a.get_number_of_bits() == sum.get_number_of_bits());
-    uint16_t n_bits = a.get_number_of_bits();
+    uint64_t n_bits = a.get_number_of_bits();
     bool carry_bit = true;
-    for(uint16_t i=0; i<n_bits; i++)
+    for(uint64_t i=0; i<n_bits; i++)
     {
         ADDER_1_bit(a[i], NOT(b[i], count), carry_bit, sum[i], carry_bit, count);
     }
@@ -281,9 +281,9 @@ XNOR_gates                      : n
 bool is_equal(Large const& a, Large const& b, Count& count)
 {
     assert(a.get_number_of_bits() == b.get_number_of_bits());
-    uint16_t n_bits = a.get_number_of_bits();
+    uint64_t n_bits = a.get_number_of_bits();
     bool answer = true;
-    for(uint16_t i=0; i<n_bits; i++)
+    for(uint64_t i=0; i<n_bits; i++)
     {
         count.operation++;
         answer = AND(XNOR(a[i], b[i], count), answer, count);
@@ -308,13 +308,13 @@ XNOR_gates                      : 0
 bool is_less_than(Large const& a, Large const& b, Count& count)
 {
     assert(a.get_number_of_bits() == b.get_number_of_bits());
-    uint16_t size = a.get_number_of_bits();
+    uint64_t size = a.get_number_of_bits();
     bool answer = false;
     bool found = false;
     bool enable;
-    for(uint16_t i=0; i<size; i++)
+    for(uint64_t i=0; i<size; i++)
     {
-        uint16_t index = size - 1 - i;
+        uint64_t index = size - 1 - i;
         count.operation++;
         enable = XOR(a[index], b[index], count);
         answer = MUX2_bits(AND(NOT(found, count), enable, count), answer, b[index], count);

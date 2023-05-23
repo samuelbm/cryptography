@@ -3,7 +3,7 @@
 
 void prime_arithmetic_test::Given_5_and_4_on_8_bits_When_testing_addition_Then_return_9()
 {
-    uint16_t n = 8;
+    uint64_t n = 8;
     Count count;
     count_initialization(count);
     Large a(n), b(n), sum(n+1), expected(n+1);
@@ -16,7 +16,7 @@ void prime_arithmetic_test::Given_5_and_4_on_8_bits_When_testing_addition_Then_r
 
 void prime_arithmetic_test::Given_5_and_4_on_8_bits_When_testing_addition_Then_verify_count()
 {
-    uint16_t n = 8;
+    uint64_t n = 8;
     Count count;
     count_initialization(count);
     Large a(n), b(n), sum(n+1);
@@ -37,7 +37,7 @@ void prime_arithmetic_test::Given_5_and_4_on_8_bits_When_testing_addition_Then_v
 
 void prime_arithmetic_test::Given_9_and_4_on_8_bits_When_testing_substraction_Then_return_5()
 {
-    uint16_t n = 8;
+    uint64_t n = 8;
     Count count;
     count_initialization(count);
     Large a(n), b(n), difference(n), expected(n);
@@ -50,7 +50,7 @@ void prime_arithmetic_test::Given_9_and_4_on_8_bits_When_testing_substraction_Th
 
 void prime_arithmetic_test::Given_9_and_4_on_8_bits_When_testing_substraction_Then_verify_count()
 {
-    uint16_t n = 8;
+    uint64_t n = 8;
     Count count;
     count_initialization(count);
     Large a(n), b(n), difference(n);
@@ -71,7 +71,7 @@ void prime_arithmetic_test::Given_9_and_4_on_8_bits_When_testing_substraction_Th
 
 void prime_arithmetic_test::Given_5_and_6_on_8_bits_When_testing_multiplication_Then_return_30()
 {
-    uint16_t n = 8;
+    uint64_t n = 8;
     Count count;
     count_initialization(count);
     Large a(n), b(n), product(2*n), expected(2*n);
@@ -84,8 +84,8 @@ void prime_arithmetic_test::Given_5_and_6_on_8_bits_When_testing_multiplication_
 
 void prime_arithmetic_test::Given_5_and_6_on_8_bits_When_testing_multiplication_Then_verify_count()
 {
-    uint16_t n = 8;
-    uint16_t m = 6;
+    uint64_t n = 8;
+    uint64_t m = 6;
     Count count;
     count_initialization(count);
     Large a(n), b(m), product(n+m), expected(n+m);
@@ -107,7 +107,7 @@ void prime_arithmetic_test::Given_5_and_6_on_8_bits_When_testing_multiplication_
 
 void prime_arithmetic_test::Given_17_and_3_on_8_bits_When_testing_division_modulo_Then_quotient_is_5()
 {
-    uint16_t n = 8;
+    uint64_t n = 8;
     Count count;
     count_initialization(count);
     Large a(n), b(n), quotient(n), remainder(n), expected(n);
@@ -120,7 +120,7 @@ void prime_arithmetic_test::Given_17_and_3_on_8_bits_When_testing_division_modul
 
 void prime_arithmetic_test::Given_17_and_3_on_8_bits_When_testing_division_modulo_Then_remainder_is_2()
 {
-    uint16_t n = 8;
+    uint64_t n = 8;
     Count count;
     count_initialization(count);
     Large a(n), b(n), quotient(n), remainder(n), expected(n);
@@ -133,8 +133,8 @@ void prime_arithmetic_test::Given_17_and_3_on_8_bits_When_testing_division_modul
 
 void prime_arithmetic_test::Given_17_and_3_on_8_bits_When_testing_division_modulo_Then_verify_count()
 {
-    uint16_t n = 8;
-    uint16_t m = 6;
+    uint64_t n = 8;
+    uint64_t m = 6;
     Count count;
     count_initialization(count);
     Large a(n), b(m), quotient(n), remainder(m);
@@ -155,7 +155,7 @@ void prime_arithmetic_test::Given_17_and_3_on_8_bits_When_testing_division_modul
 
 void prime_arithmetic_test::Given_17_and_3_on_8_bits_When_testing_modulo_Then_remainder_is_2()
 {
-    uint16_t n = 8;
+    uint64_t n = 8;
     Count count;
     count_initialization(count);
     Large a(n), b(n), quotient(n), remainder(n), expected(n);
@@ -168,8 +168,8 @@ void prime_arithmetic_test::Given_17_and_3_on_8_bits_When_testing_modulo_Then_re
 
 void prime_arithmetic_test::Given_17_and_3_on_8_bits_When_testing_modulo_Then_verify_count()
 {
-    uint16_t n = 8;
-    uint16_t m = 6;
+    uint64_t n = 8;
+    uint64_t m = 6;
     Count count;
     count_initialization(count);
     Large a(n), b(m), remainder(m);
@@ -190,7 +190,7 @@ void prime_arithmetic_test::Given_17_and_3_on_8_bits_When_testing_modulo_Then_ve
 
 void prime_arithmetic_test::Given_18_19_and_5_on_5_bits_When_testing_addition_modulo_Then_result_is_2()
 {
-    uint16_t n = 5;
+    uint64_t n = 5;
     Count count;
     count_initialization(count);
     Large a(n), b(n), p(n), result(n), expected(n);
@@ -204,7 +204,7 @@ void prime_arithmetic_test::Given_18_19_and_5_on_5_bits_When_testing_addition_mo
 
 void prime_arithmetic_test::Given_18_19_and_5_on_5_bits_When_testing_addition_modulo_Then_verify_count()
 {
-    uint16_t n = 5;
+    uint64_t n = 5;
     Count count;
     count_initialization(count);
     Large a(n), b(n), p(n), result(n), expected(n);
@@ -227,7 +227,7 @@ void prime_arithmetic_test::Given_18_19_and_5_on_5_bits_When_testing_addition_mo
 
 void prime_arithmetic_test::Given_18_19_and_5_on_5_bits_When_testing_substraction_modulo_Then_result_is_4()
 {
-    uint16_t n = 5;
+    uint64_t n = 5;
     Count count;
     count_initialization(count);
     Large a(n), b(n), p(n), result(n), expected(n);
@@ -241,7 +241,7 @@ void prime_arithmetic_test::Given_18_19_and_5_on_5_bits_When_testing_substractio
 
 void prime_arithmetic_test::Given_18_19_and_5_on_5_bits_When_testing_substraction_modulo_Then_verify_count()
 {
-    uint16_t n = 5;
+    uint64_t n = 5;
     Count count;
     count_initialization(count);
     Large a(n), b(n), p(n), result(n), expected(n);
@@ -264,7 +264,7 @@ void prime_arithmetic_test::Given_18_19_and_5_on_5_bits_When_testing_substractio
 
 void prime_arithmetic_test::Given_15_8_and_7_on_4_bits_When_testing_multiplication_modulo_Then_result_is_1()
 {
-    uint16_t n = 4;
+    uint64_t n = 4;
     Count count;
     count_initialization(count);
     Large a(n), b(n), p(n), result(n), expected(n);
@@ -278,7 +278,7 @@ void prime_arithmetic_test::Given_15_8_and_7_on_4_bits_When_testing_multiplicati
 
 void prime_arithmetic_test::Given_15_8_and_7_on_4_bits_When_testing_multiplication_modulo_Then_verify_count()
 {
-    uint16_t n = 4;
+    uint64_t n = 4;
     Count count;
     count_initialization(count);
     Large a(n), b(n), p(n), result(n), expected(n);
@@ -301,7 +301,7 @@ void prime_arithmetic_test::Given_15_8_and_7_on_4_bits_When_testing_multiplicati
 
 void prime_arithmetic_test::Given_15_8_and_7_on_4_bits_When_testing_squaring_modulo_Then_result_is_1()
 {
-    uint16_t n = 4;
+    uint64_t n = 4;
     Count count;
     count_initialization(count);
     Large a(n), p(n), result(n), expected(n);
@@ -314,7 +314,7 @@ void prime_arithmetic_test::Given_15_8_and_7_on_4_bits_When_testing_squaring_mod
 
 void prime_arithmetic_test::Given_15_8_and_7_on_4_bits_When_testing_squaring_modulo_Then_verify_count()
 {
-    uint16_t n = 4;
+    uint64_t n = 4;
     Count count;
     count_initialization(count);
     Large a(n), p(n), result(n), expected(n);
@@ -336,8 +336,8 @@ void prime_arithmetic_test::Given_15_8_and_7_on_4_bits_When_testing_squaring_mod
 
 void prime_arithmetic_test::Given_3_5_and_7_on_3_bits_When_testing_exponentiation_modulo_Then_result_is_5()
 {
-    uint16_t n = 3;
-    uint16_t m = 4;
+    uint64_t n = 3;
+    uint64_t m = 4;
     Count count;
     count_initialization(count);
     Large a(n), x(m), p(n), result(n), expected(n);
@@ -351,8 +351,8 @@ void prime_arithmetic_test::Given_3_5_and_7_on_3_bits_When_testing_exponentiatio
 
 void prime_arithmetic_test::Given_3_5_and_7_on_3_bits_When_testing_exponentiation_modulo_Then_verify_count()
 {
-    uint16_t n = 3;
-    uint16_t m = 3;
+    uint64_t n = 3;
+    uint64_t m = 3;
     Count count;
     count_initialization(count);
     Large a(n), x(m), p(n), result(n), expected(n);
@@ -375,7 +375,7 @@ void prime_arithmetic_test::Given_3_5_and_7_on_3_bits_When_testing_exponentiatio
 
 void prime_arithmetic_test::Given_6600_and_630_on_16_bits_When_testing_greatest_common_divisor_Then_result_is_30()
 {
-    uint16_t n = 16;
+    uint64_t n = 16;
     Count count;
     count_initialization(count);
     Large greatest_number(n), smallest_number(n), result(n), expected(n);
@@ -388,7 +388,7 @@ void prime_arithmetic_test::Given_6600_and_630_on_16_bits_When_testing_greatest_
 
 void prime_arithmetic_test::Given_5_4_On_10_bits_When_testing_inverse_Then_result_is_1()
 {
-    uint16_t n = 10;
+    uint64_t n = 10;
     Count count;
     count_initialization(count);
     Large a(n), modulus(n), phi_n(n), result(n), expected(n);
@@ -402,7 +402,7 @@ void prime_arithmetic_test::Given_5_4_On_10_bits_When_testing_inverse_Then_resul
 
 void prime_arithmetic_test::Given_5_4_On_10_bits_When_testing_inverse_Then_result_verify_count()
 {
-    uint16_t n = 10;
+    uint64_t n = 10;
     Count count;
     count_initialization(count);
     Large a(n), modulus(n), phi_n(n), result(n), expected(n);
@@ -425,7 +425,7 @@ void prime_arithmetic_test::Given_5_4_On_10_bits_When_testing_inverse_Then_resul
 
 void prime_arithmetic_test::Given_5_7_on_10_bits_When_testing_inverse_with_prime_Then_result_is_3()
 {
-    uint16_t n = 10;
+    uint64_t n = 10;
     Count count;
     count_initialization(count);
     Large a(n), p(n), result(n), expected(n);
@@ -438,7 +438,7 @@ void prime_arithmetic_test::Given_5_7_on_10_bits_When_testing_inverse_with_prime
 
 void prime_arithmetic_test::Given_5_7_on_10_bits_When_testing_inverse_with_prime_Then_verify_count()
 {
-    uint16_t n = 10;
+    uint64_t n = 10;
     Count count;
     count_initialization(count);
     Large a(n), p(n), result(n), expected(n);
@@ -457,6 +457,47 @@ void prime_arithmetic_test::Given_5_7_on_10_bits_When_testing_inverse_with_prime
     QCOMPARE(count.XOR_gates, 16*n*n*n - 8*n*n + 2*n);
     QCOMPARE(count.XNOR_gates, 0);
 }
+
+void prime_arithmetic_test::Given_non_prime_25140187_on_32_bits_When_testing_is_prime_with_fermat_little_theorem_Then_return_false()
+{
+    Count count;
+    count_initialization(count);
+    uint16_t n = 32;
+    Large non_prime(n);
+    non_prime.init_with_small_number(25140187);
+    QVERIFY(!is_prime_with_fermat_little_theorem(non_prime, count));
+}
+
+void prime_arithmetic_test::Given_prime_115249_on_32_bits_When_testing_is_prime_with_fermat_little_theorem_Then_return_true()
+{
+    Count count;
+    count_initialization(count);
+    uint16_t n = 32;
+    Large prime(n);
+    prime.init_with_small_number(115249);
+    QVERIFY(is_prime_with_fermat_little_theorem(prime, count));
+}
+
+void prime_arithmetic_test::Given_prime_115249_on_32_bits_When_testing_is_prime_with_fermat_little_theorem_Then_verify_count()
+{
+    Count count;
+    count_initialization(count);
+    uint16_t n = 32;
+    Large prime(n);
+    prime.init_with_small_number(115249);
+    is_prime_with_fermat_little_theorem(prime, count);
+    QCOMPARE(count.clock, 100*(3*n*n) + 1);
+    QCOMPARE(count.operation, 100*(14*n*n*n - 5*n*n) + n);
+    QCOMPARE(count.regs, 100*(14*n*n*n - 4*n*n - n));
+    QCOMPARE(count.NOT_gates, 100*(12*n*n*n - 3*n) + n);
+    QCOMPARE(count.AND_gates, 100*(24*n*n*n - 8*n*n - n+ 1) + 2*n);
+    QCOMPARE(count.NAND_gates, 0);
+    QCOMPARE(count.OR_gates, 100*(14*n*n*n - n*n -3*n) + n);
+    QCOMPARE(count.NOR_gates, 0);
+    QCOMPARE(count.XOR_gates, 100*(16*n*n*n - 8*n*n) + 2*n);
+    QCOMPARE(count.XNOR_gates, 100*(n));
+}
+
 
 //QCOMPARE(count.clock, 0);
 //QCOMPARE(count.operation, 0);

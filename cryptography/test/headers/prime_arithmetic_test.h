@@ -47,6 +47,10 @@ private slots:
     void Given_5_7_on_10_bits_When_testing_inverse_with_prime_Then_result_is_3();
     void Given_5_7_on_10_bits_When_testing_inverse_with_prime_Then_verify_count();
 
+    void Given_non_prime_25140187_on_32_bits_When_testing_is_prime_with_fermat_little_theorem_Then_return_false();
+    void Given_prime_115249_on_32_bits_When_testing_is_prime_with_fermat_little_theorem_Then_return_true();
+    void Given_prime_115249_on_32_bits_When_testing_is_prime_with_fermat_little_theorem_Then_verify_count();
+
 };
 
 #endif // PRIME_ARITHMETIC_TEST_H
