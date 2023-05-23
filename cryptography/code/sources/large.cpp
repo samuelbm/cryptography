@@ -201,12 +201,12 @@ void count_initialization(Count& count)
     count.XNOR_gates = 0;
 }
 
-Large& create_and_initialize_large(uint16_t init_value, uint16_t n_bits)
+void Large::init_with_small_number(uint16_t number)
 {
-    Large* large = new Large(n_bits);
-    for(uint16_t i=0; i<n_bits; i++)
+    uint16_t size = (16<this->bits_size)?16:this->bits_size;
+    this->clear(0, size);
+    for(uint16_t i=0; i<size; i++)
     {
-        (*large)[i] = (init_value >> i) & 1;
+        (*this)[i] = (number >> i) & 1;
     }
-    return *large;
 };

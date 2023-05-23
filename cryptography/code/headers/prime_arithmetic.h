@@ -18,9 +18,9 @@ void exponentiation_modulo(Large const& base, Large const& exponent, Large const
 void greatest_common_divisor(Large const& greatest_number, Large const& smallest_number, Large& gcd_number, Count& count);
 void inverse(Large const& a, Large const& n, Large const& phi_n, Large& result, Count& count); //assume gcd(a, n) = 1
 void inverse_with_prime(Large const& a, Large const& p, Large& result, Count& count); //assume gcd(a, n) = 1
-/*
 
-bool is_prime_with_miller_rabin();
+//bool is_prime_with_miller_rabin(Large const& maybe_prime, Count& count);
+/*
 void find prime random ???
 bool is prime+1 divisible by 4
 bool is y2 quadratic residue

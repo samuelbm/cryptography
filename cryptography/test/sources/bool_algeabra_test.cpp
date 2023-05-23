@@ -21,7 +21,7 @@ void bool_algeabra_test::Given_1_When_testing_NOT_Then_verify_count()
 {
     Count count;
     count_initialization(count);
-    bool result = NOT(true, count);
+    NOT(true, count);
     QCOMPARE(count.clock, 0);
     QCOMPARE(count.operation, 0);
     QCOMPARE(count.regs, 0);
@@ -70,7 +70,7 @@ void bool_algeabra_test::Given_1_and_1_When_testing_AND_Then_verify_count()
 {
     Count count;
     count_initialization(count);
-    bool result = AND(true, true, count);
+    AND(true, true, count);
     QCOMPARE(count.clock, 0);
     QCOMPARE(count.operation, 0);
     QCOMPARE(count.regs, 0);
@@ -119,7 +119,7 @@ void bool_algeabra_test::Given_1_and_1_When_testing_NAND_Then_verify_count()
 {
     Count count;
     count_initialization(count);
-    bool result = NAND(true, true, count);
+    NAND(true, true, count);
     QCOMPARE(count.clock, 0);
     QCOMPARE(count.operation, 0);
     QCOMPARE(count.regs, 0);
@@ -168,7 +168,7 @@ void bool_algeabra_test::Given_1_and_1_When_testing_OR_Then_verify_count()
 {
     Count count;
     count_initialization(count);
-    bool result = OR(true, true, count);
+    OR(true, true, count);
     QCOMPARE(count.clock, 0);
     QCOMPARE(count.operation, 0);
     QCOMPARE(count.regs, 0);
@@ -217,7 +217,7 @@ void bool_algeabra_test::Given_1_and_1_When_testing_NOR_Then_return_0()
 {
     Count count;
     count_initialization(count);
-    bool result = NOR(true, true, count);
+    NOR(true, true, count);
     QCOMPARE(count.clock, 0);
     QCOMPARE(count.operation, 0);
     QCOMPARE(count.regs, 0);
@@ -266,7 +266,7 @@ void bool_algeabra_test::Given_1_and_1_When_testing_XOR_Then_verify_count()
 {
     Count count;
     count_initialization(count);
-    bool result = XOR(true, true, count);
+    XOR(true, true, count);
     QCOMPARE(count.clock, 0);
     QCOMPARE(count.operation, 0);
     QCOMPARE(count.regs, 0);
@@ -315,7 +315,7 @@ void bool_algeabra_test::Given_1_and_1_When_testing_XNOR_Then_verify_count()
 {
     Count count;
     count_initialization(count);
-    bool result = XNOR(true, true, count);
+    XNOR(true, true, count);
     QCOMPARE(count.clock, 0);
     QCOMPARE(count.operation, 0);
     QCOMPARE(count.regs, 0);
@@ -363,23 +363,27 @@ void bool_algeabra_test::Given_0_1_and_select_1_When_testing_MUX2_bits_Then_veri
 
 void bool_algeabra_test::Given_0_1_on_3_bits_and_select_0_When_testing_MUX2_Large_Then_return_0()
 {
+    uint16_t n = 3;
     Count count;
     count_initialization(count);
-    Large a = create_and_initialize_large(0, 3);
-    Large b = create_and_initialize_large(1, 3);
-    Large expected = create_and_initialize_large(0, 3);
-    Large result = MUX2_Large(false, a, b, count);
+    Large a(n), b(n), expected(n), result(n);
+    a.init_with_small_number(0);
+    b.init_with_small_number(1);
+    expected.init_with_small_number(0);
+    result = MUX2_Large(false, a, b, count);
     QVERIFY(is_equal(result, expected, count));
 }
 
 void bool_algeabra_test::Given_0_1_on_3_bits_and_select_1_When_testing_MUX2_Large_Then_return_1()
 {
+    uint16_t n = 3;
     Count count;
     count_initialization(count);
-    Large a = create_and_initialize_large(0, 3);
-    Large b = create_and_initialize_large(1, 3);
-    Large expected = create_and_initialize_large(1, 3);
-    Large result = MUX2_Large(true, a, b, count);
+    Large a(n), b(n), expected(n), result(n);
+    a.init_with_small_number(0);
+    b.init_with_small_number(1);
+    expected.init_with_small_number(1);
+    result = MUX2_Large(true, a, b, count);
     QVERIFY(is_equal(result, expected, count));
 }
 
@@ -388,10 +392,11 @@ void bool_algeabra_test::Given_0_1_on_3_bits_and_select_1_When_testing_MUX2_Larg
     uint16_t n = 3;
     Count count;
     count_initialization(count);
-    Large a = create_and_initialize_large(0, n);
-    Large b = create_and_initialize_large(1, n);
-    Large expected = create_and_initialize_large(1, n);
-    Large result = MUX2_Large(true, a, b, count);
+    Large a(n), b(n), expected(n), result(n);
+    a.init_with_small_number(0);
+    b.init_with_small_number(1);
+    expected.init_with_small_number(1);
+    result = MUX2_Large(true, a, b, count);
     QCOMPARE(count.clock, 0);
     QCOMPARE(count.operation, n);
     QCOMPARE(count.regs, 0);
@@ -532,12 +537,13 @@ void bool_algeabra_test::Given_1_1_1_When_testing_ADDER_1_bit_Then_verify_count(
 
 void bool_algeabra_test::Given_1_2_on_3_bits_When_testing_ADDER_n_bits_Then_sum_is_3()
 {
+    uint16_t n = 3;
     Count count;
     count_initialization(count);
-    Large a = create_and_initialize_large(1, 3);
-    Large b = create_and_initialize_large(2, 3);
-    Large expected = create_and_initialize_large(3, 4);
-    Large sum(4);
+    Large a(n), b(n), expected(n+1), sum(n+1);
+    a.init_with_small_number(1);
+    b.init_with_small_number(2);
+    expected.init_with_small_number(3);
     ADDER_n_bits(a, b, sum, count);
     QVERIFY(is_equal(sum, expected, count));
 }
@@ -547,9 +553,9 @@ void bool_algeabra_test::Given_1_2_on_3_bits_When_testing_ADDER_n_bits_Then_veri
     uint16_t n = 3;
     Count count;
     count_initialization(count);
-    Large a = create_and_initialize_large(1, n);
-    Large b = create_and_initialize_large(2, n);
-    Large sum(n+1);
+    Large a(n), b(n), sum(n+1);
+    a.init_with_small_number(1);
+    b.init_with_small_number(2);
     ADDER_n_bits(a, b, sum, count);
     QCOMPARE(count.clock, 0);
     QCOMPARE(count.operation, n);
@@ -567,10 +573,11 @@ void bool_algeabra_test::Given_2_1_on_3_bits_When_testing_SUB_n_bits_Then_sum_is
 {
     Count count;
     count_initialization(count);
-    Large a = create_and_initialize_large(2, 3);
-    Large b = create_and_initialize_large(1, 3);
-    Large expected = create_and_initialize_large(1, 3);
-    Large difference(3);
+    uint16_t n = 3;
+    Large a(n), b(n), expected(n), difference(n);
+    a.init_with_small_number(2);
+    b.init_with_small_number(1);
+    expected.init_with_small_number(1);
     SUB_n_bits(a, b, difference, count);
     QVERIFY(is_equal(difference, expected, count));
 }
@@ -580,9 +587,9 @@ void bool_algeabra_test::Given_2_1_on_3_bits_When_testing_SUB_n_bits_Then_verify
     uint16_t n = 3;
     Count count;
     count_initialization(count);
-    Large a = create_and_initialize_large(2, n);
-    Large b = create_and_initialize_large(1, n);
-    Large difference(n);
+    Large a(n), b(n), difference(n);
+    a.init_with_small_number(2);
+    b.init_with_small_number(1);
     SUB_n_bits(a, b, difference, count);
     QCOMPARE(count.clock, 0);
     QCOMPARE(count.operation, n);
@@ -598,28 +605,34 @@ void bool_algeabra_test::Given_2_1_on_3_bits_When_testing_SUB_n_bits_Then_verify
 
 void bool_algeabra_test::Given_a_lesser_than_b_When_testing_is_equal_Then_return_false()
 {
+    uint16_t n = 8;
     Count count;
     count_initialization(count);
-    Large a_lesser = create_and_initialize_large(4, 8);
-    Large b = create_and_initialize_large(5, 8);
+    Large a_lesser(n), b(n);
+    a_lesser.init_with_small_number(4);
+    b.init_with_small_number(5);
     QVERIFY(!is_equal(a_lesser, b, count));
 }
 
 void bool_algeabra_test::Given_a_greater_than_b_When_testing_is_equal_Then_return_false()
 {
+    uint16_t n = 8;
     Count count;
     count_initialization(count);
-    Large a_greater = create_and_initialize_large(6, 8);
-    Large b = create_and_initialize_large(5, 8);
+    Large a_greater(n), b(n);
+    a_greater.init_with_small_number(6);
+    b.init_with_small_number(5);
     QVERIFY(!is_equal(a_greater, b, count));
 }
 
 void bool_algeabra_test::Given_a_equal_b_When_testing_is_equal_Then_return_true()
 {
+    uint16_t n = 8;
     Count count;
     count_initialization(count);
-    Large a_equal = create_and_initialize_large(5, 8);
-    Large b = create_and_initialize_large(5, 8);
+    Large a_equal(n), b(n);
+    a_equal.init_with_small_number(5);
+    b.init_with_small_number(5);
     QVERIFY(is_equal(a_equal, b, count));
 }
 
@@ -628,8 +641,9 @@ void bool_algeabra_test::Given_a_equal_b_When_testing_is_equal_Then_verify_count
     uint16_t n = 8;
     Count count;
     count_initialization(count);
-    Large a_equal = create_and_initialize_large(5, n);
-    Large b = create_and_initialize_large(5, n);
+    Large a_equal(n), b(n);
+    a_equal.init_with_small_number(5);
+    b.init_with_small_number(5);
     is_equal(a_equal, b, count);
     QCOMPARE(count.clock, 0);
     QCOMPARE(count.operation, n);
@@ -645,28 +659,34 @@ void bool_algeabra_test::Given_a_equal_b_When_testing_is_equal_Then_verify_count
 
 void bool_algeabra_test::Given_a_equal_b_When_testing_is_less_than_Then_return_false()
 {
+    uint16_t n = 8;
     Count count;
     count_initialization(count);
-    Large a_equal = create_and_initialize_large(5, 8);
-    Large b = create_and_initialize_large(5, 8);
+    Large a_equal(n), b(n);
+    a_equal.init_with_small_number(5);
+    b.init_with_small_number(5);
     QVERIFY(!is_less_than(a_equal, b, count));
 }
 
 void bool_algeabra_test::Given_a_lesser_than_b_When_testing_is_less_than_Then_return_true()
 {
+    uint16_t n = 8;
     Count count;
     count_initialization(count);
-    Large a_lesser = create_and_initialize_large(4, 8);
-    Large b = create_and_initialize_large(5, 8);
+    Large a_lesser(n), b(n);
+    a_lesser.init_with_small_number(4);
+    b.init_with_small_number(5);
     QVERIFY(is_less_than(a_lesser, b, count));
 }
 
 void bool_algeabra_test::Given_a_greater_than_b_When_testing_is_less_than_Then_return_false()
 {
+    uint16_t n = 8;
     Count count;
     count_initialization(count);
-    Large a_greater = create_and_initialize_large(6, 8);
-    Large b = create_and_initialize_large(5, 8);
+    Large a_greater(n), b(n);
+    a_greater.init_with_small_number(6);
+    b.init_with_small_number(5);
     QVERIFY(!is_less_than(a_greater, b, count));
 }
 
@@ -675,8 +695,9 @@ void bool_algeabra_test::Given_a_equal_b_When_testing_is_less_than_Then_verify_c
     uint16_t n = 8;
     Count count;
     count_initialization(count);
-    Large a_equal = create_and_initialize_large(5, n);
-    Large b = create_and_initialize_large(5, n);
+    Large a_equal(n), b(n);
+    a_equal.init_with_small_number(5);
+    b.init_with_small_number(5);
     is_less_than(a_equal, b, count);
     QCOMPARE(count.clock, 0);
     QCOMPARE(count.operation, 2*n);
@@ -692,28 +713,34 @@ void bool_algeabra_test::Given_a_equal_b_When_testing_is_less_than_Then_verify_c
 
 void bool_algeabra_test::Given_a_equal_b_When_testing_is_not_equal_Then_return_false()
 {
+    uint16_t n = 8;
     Count count;
     count_initialization(count);
-    Large a_equal = create_and_initialize_large(5, 8);
-    Large b = create_and_initialize_large(5, 8);
+    Large a_equal(n), b(n);
+    a_equal.init_with_small_number(5);
+    b.init_with_small_number(5);
     QVERIFY(!is_not_equal(a_equal, b, count));
 }
 
 void bool_algeabra_test::Given_a_lesser_than_b_When_testing_is_not_equal_Then_return_true()
 {
+    uint16_t n = 8;
     Count count;
     count_initialization(count);
-    Large a_lesser = create_and_initialize_large(4, 8);
-    Large b = create_and_initialize_large(5, 8);
+    Large a_lesser(n), b(n);
+    a_lesser.init_with_small_number(4);
+    b.init_with_small_number(5);
     QVERIFY(is_not_equal(a_lesser, b, count));
 }
 
 void bool_algeabra_test::Given_a_greater_than_b_When_testing_is_not_equal_Then_return_true()
 {
+    uint16_t n = 8;
     Count count;
     count_initialization(count);
-    Large a_greater = create_and_initialize_large(6, 8);
-    Large b = create_and_initialize_large(5, 8);
+    Large a_greater(n), b(n);
+    a_greater.init_with_small_number(6);
+    b.init_with_small_number(5);
     QVERIFY(is_not_equal(a_greater, b, count));
 }
 
@@ -722,8 +749,9 @@ void bool_algeabra_test::Given_a_equal_b_When_testing_is_not_equal_Then_verify_c
     uint16_t n = 8;
     Count count;
     count_initialization(count);
-    Large a_equal = create_and_initialize_large(5, n);
-    Large b = create_and_initialize_large(5, n);
+    Large a_equal(n), b(n);
+    a_equal.init_with_small_number(5);
+    b.init_with_small_number(5);
     is_not_equal(a_equal, b, count);
     QCOMPARE(count.clock, 0);
     QCOMPARE(count.operation, n);
@@ -739,29 +767,35 @@ void bool_algeabra_test::Given_a_equal_b_When_testing_is_not_equal_Then_verify_c
 
 void bool_algeabra_test::Given_a_equal_b_When_testing_is_greater_than_Then_return_false()
 {
+    uint16_t n = 8;
     Count count;
     count_initialization(count);
-    Large a_equal = create_and_initialize_large(5, 8);
-    Large b = create_and_initialize_large(5, 8);
+    Large a_equal(n), b(n);
+    a_equal.init_with_small_number(5);
+    b.init_with_small_number(5);
     is_greater_than(a_equal, b, count);
     QVERIFY(!is_greater_than(a_equal, b, count));
 }
 
 void bool_algeabra_test::Given_a_greater_than_b_When_testing_is_greater_than_Then_return_true()
 {
+    uint16_t n = 8;
     Count count;
     count_initialization(count);
-    Large a_greater = create_and_initialize_large(6, 8);
-    Large b = create_and_initialize_large(5, 8);
+    Large a_greater(n), b(n);
+    a_greater.init_with_small_number(6);
+    b.init_with_small_number(5);
     QVERIFY(is_greater_than(a_greater, b, count));
 }
 
 void bool_algeabra_test::Given_a_lesser_than_b_When_testing_is_greater_than_Then_return_false()
 {
+    uint16_t n = 8;
     Count count;
     count_initialization(count);
-    Large a_lesser = create_and_initialize_large(4, 8);
-    Large b = create_and_initialize_large(5, 8);
+    Large a_lesser(n), b(n);
+    a_lesser.init_with_small_number(4);
+    b.init_with_small_number(5);
     QVERIFY(!is_greater_than(a_lesser, b, count));
 }
 
@@ -770,8 +804,9 @@ void bool_algeabra_test::Given_a_equal_b_When_testing_is_greater_than_Then_verif
     uint16_t n = 8;
     Count count;
     count_initialization(count);
-    Large a_equal = create_and_initialize_large(5, n);
-    Large b = create_and_initialize_large(5, n);
+    Large a_equal(n), b(n);
+    a_equal.init_with_small_number(5);
+    b.init_with_small_number(5);
     is_greater_than(a_equal, b, count);
     QCOMPARE(count.clock, 0);
     QCOMPARE(count.operation, 2*n);
@@ -787,28 +822,34 @@ void bool_algeabra_test::Given_a_equal_b_When_testing_is_greater_than_Then_verif
 
 void bool_algeabra_test::Given_a_greater_than_b_When_testing_is_less_or_equal_Then_return_false()
 {
+    uint16_t n = 8;
     Count count;
     count_initialization(count);
-    Large a_greater = create_and_initialize_large(6, 8);
-    Large b = create_and_initialize_large(5, 8);
+    Large a_greater(n), b(n);
+    a_greater.init_with_small_number(6);
+    b.init_with_small_number(5);
     QVERIFY(!is_less_or_equal(a_greater, b, count));
 }
 
 void bool_algeabra_test::Given_a_equal_b_When_testing_is_less_or_equal_Then_return_true()
 {
+    uint16_t n = 8;
     Count count;
     count_initialization(count);
-    Large a_equal = create_and_initialize_large(5, 8);
-    Large b = create_and_initialize_large(5, 8);
+    Large a_equal(n), b(n);
+    a_equal.init_with_small_number(5);
+    b.init_with_small_number(5);
     QVERIFY(is_less_or_equal(a_equal, b, count));
 }
 
 void bool_algeabra_test::Given_a_lesser_than_b_When_testing_is_less_or_equal_Then_return_true()
 {
+    uint16_t n = 8;
     Count count;
     count_initialization(count);
-    Large a_lesser = create_and_initialize_large(4, 8);
-    Large b = create_and_initialize_large(5, 8);
+    Large a_lesser(n), b(n);
+    a_lesser.init_with_small_number(4);
+    b.init_with_small_number(5);
     QVERIFY(is_less_or_equal(a_lesser, b, count));
 }
 
@@ -817,8 +858,9 @@ void bool_algeabra_test::Given_a_equal_b_When_testing_is_less_or_equal_Then_veri
     uint16_t n = 8;
     Count count;
     count_initialization(count);
-    Large a_equal = create_and_initialize_large(5, n);
-    Large b = create_and_initialize_large(5, n);
+    Large a_equal(n), b(n);
+    a_equal.init_with_small_number(5);
+    b.init_with_small_number(5);
     is_less_or_equal(a_equal, b, count);
     QCOMPARE(count.clock, 0);
     QCOMPARE(count.operation, 2*n);
@@ -834,28 +876,34 @@ void bool_algeabra_test::Given_a_equal_b_When_testing_is_less_or_equal_Then_veri
 
 void bool_algeabra_test::Given_a_lesser_than_b_When_testing_is_greater_or_equal_Then_return_false()
 {
+    uint16_t n = 8;
     Count count;
     count_initialization(count);
-    Large a_lesser = create_and_initialize_large(4, 8);
-    Large b = create_and_initialize_large(5, 8);
+    Large a_lesser(n), b(n);
+    a_lesser.init_with_small_number(4);
+    b.init_with_small_number(5);
     QVERIFY(!is_greater_or_equal(a_lesser, b, count));
 }
 
 void bool_algeabra_test::Given_a_equal_b_When_testing_is_greater_or_equal_Then_return_true()
 {
+    uint16_t n = 8;
     Count count;
     count_initialization(count);
-    Large a_equal = create_and_initialize_large(5, 8);
-    Large b = create_and_initialize_large(5, 8);
+    Large a_equal(n), b(n);
+    a_equal.init_with_small_number(5);
+    b.init_with_small_number(5);
     QVERIFY(is_greater_or_equal(a_equal, b, count));
 }
 
 void bool_algeabra_test::Given_a_grater_than_b_When_testing_is_graeter_or_equal_Then_return_true()
 {
+    uint16_t n = 8;
     Count count;
     count_initialization(count);
-    Large a_greater = create_and_initialize_large(6, 8);
-    Large b = create_and_initialize_large(5, 8);
+    Large a_greater(n), b(n);
+    a_greater.init_with_small_number(6);
+    b.init_with_small_number(5);
     QVERIFY(is_greater_or_equal(a_greater, b, count));
 }
 
@@ -864,8 +912,9 @@ void bool_algeabra_test::Given_a_equal_b_When_testing_is_greater_or_equal_Then_v
     uint16_t n = 8;
     Count count;
     count_initialization(count);
-    Large a_equal = create_and_initialize_large(5, n);
-    Large b = create_and_initialize_large(5, n);
+    Large a_equal(n), b(n);
+    a_equal.init_with_small_number(5);
+    b.init_with_small_number(5);
     is_greater_or_equal(a_equal, b, count);
     QCOMPARE(count.clock, 0);
     QCOMPARE(count.operation, 2*n);

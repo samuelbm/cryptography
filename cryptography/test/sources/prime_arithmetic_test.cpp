@@ -6,10 +6,10 @@ void prime_arithmetic_test::Given_5_and_4_on_8_bits_When_testing_addition_Then_r
     uint16_t n = 8;
     Count count;
     count_initialization(count);
-    Large a = create_and_initialize_large(5, n);
-    Large b = create_and_initialize_large(4, n);
-    Large sum = create_and_initialize_large(0, n+1);
-    Large expected = create_and_initialize_large(9, n+1);
+    Large a(n), b(n), sum(n+1), expected(n+1);
+    a.init_with_small_number(5);
+    b.init_with_small_number(4);
+    expected.init_with_small_number(9);
     addition(a, b, sum, count);
     QVERIFY(is_equal(sum, expected, count));
 }
@@ -19,9 +19,9 @@ void prime_arithmetic_test::Given_5_and_4_on_8_bits_When_testing_addition_Then_v
     uint16_t n = 8;
     Count count;
     count_initialization(count);
-    Large a = create_and_initialize_large(5, n);
-    Large b = create_and_initialize_large(4, n);
-    Large sum = create_and_initialize_large(0, n+1);
+    Large a(n), b(n), sum(n+1);
+    a.init_with_small_number(5);
+    b.init_with_small_number(4);
     addition(a, b, sum, count);
     QCOMPARE(count.clock, 1);
     QCOMPARE(count.operation, n);
@@ -40,10 +40,10 @@ void prime_arithmetic_test::Given_9_and_4_on_8_bits_When_testing_substraction_Th
     uint16_t n = 8;
     Count count;
     count_initialization(count);
-    Large a = create_and_initialize_large(9, n);
-    Large b = create_and_initialize_large(4, n);
-    Large difference = create_and_initialize_large(0, n);
-    Large expected = create_and_initialize_large(5, n);
+    Large a(n), b(n), difference(n), expected(n);
+    a.init_with_small_number(9);
+    b.init_with_small_number(4);
+    expected.init_with_small_number(5);
     substraction(a, b, difference, count);
     QVERIFY(is_equal(difference, expected, count));
 }
@@ -53,9 +53,9 @@ void prime_arithmetic_test::Given_9_and_4_on_8_bits_When_testing_substraction_Th
     uint16_t n = 8;
     Count count;
     count_initialization(count);
-    Large a = create_and_initialize_large(9, n);
-    Large b = create_and_initialize_large(4, n);
-    Large difference = create_and_initialize_large(5, n);
+    Large a(n), b(n), difference(n);
+    a.init_with_small_number(9);
+    b.init_with_small_number(4);
     substraction(a, b, difference, count);
     QCOMPARE(count.clock, 1);
     QCOMPARE(count.operation, n);
@@ -74,10 +74,10 @@ void prime_arithmetic_test::Given_5_and_6_on_8_bits_When_testing_multiplication_
     uint16_t n = 8;
     Count count;
     count_initialization(count);
-    Large a = create_and_initialize_large(5, n);
-    Large b = create_and_initialize_large(6, n);
-    Large product(2*n);
-    Large expected = create_and_initialize_large(30, 2*n);
+    Large a(n), b(n), product(2*n), expected(2*n);
+    a.init_with_small_number(5);
+    b.init_with_small_number(6);
+    expected.init_with_small_number(30);
     multiplication(a, b, product, count);
     QVERIFY(is_equal(product, expected, count));
 }
@@ -88,10 +88,10 @@ void prime_arithmetic_test::Given_5_and_6_on_8_bits_When_testing_multiplication_
     uint16_t m = 6;
     Count count;
     count_initialization(count);
-    Large a = create_and_initialize_large(5, n);
-    Large b = create_and_initialize_large(6, m);
-    Large product(n + m);
-    Large expected = create_and_initialize_large(30, n + m);
+    Large a(n), b(m), product(n+m), expected(n+m);
+    a.init_with_small_number(5);
+    b.init_with_small_number(6);
+    expected.init_with_small_number(30);
     multiplication(a, b, product, count);
     QCOMPARE(count.clock, m);
     QCOMPARE(count.operation, n*m);
@@ -110,11 +110,10 @@ void prime_arithmetic_test::Given_17_and_3_on_8_bits_When_testing_division_modul
     uint16_t n = 8;
     Count count;
     count_initialization(count);
-    Large a = create_and_initialize_large(17, n);
-    Large b = create_and_initialize_large(3, n);
-    Large quotient(n);
-    Large remainder(n);
-    Large expected = create_and_initialize_large(5, n);
+    Large a(n), b(n), quotient(n), remainder(n), expected(n);
+    a.init_with_small_number(17);
+    b.init_with_small_number(3);
+    expected.init_with_small_number(5);
     division_modulo(a, b, quotient, remainder, count);
     QVERIFY(is_equal(quotient, expected, count));
 }
@@ -124,11 +123,10 @@ void prime_arithmetic_test::Given_17_and_3_on_8_bits_When_testing_division_modul
     uint16_t n = 8;
     Count count;
     count_initialization(count);
-    Large a = create_and_initialize_large(17, n);
-    Large b = create_and_initialize_large(3, n);
-    Large quotient(n);
-    Large remainder(n);
-    Large expected = create_and_initialize_large(2, n);
+    Large a(n), b(n), quotient(n), remainder(n), expected(n);
+    a.init_with_small_number(17);
+    b.init_with_small_number(3);
+    expected.init_with_small_number(2);
     division_modulo(a, b, quotient, remainder, count);
     QVERIFY(is_equal(remainder, expected, count));
 }
@@ -139,10 +137,9 @@ void prime_arithmetic_test::Given_17_and_3_on_8_bits_When_testing_division_modul
     uint16_t m = 6;
     Count count;
     count_initialization(count);
-    Large a = create_and_initialize_large(5, n);
-    Large b = create_and_initialize_large(6, m);
-    Large quotient(n);
-    Large remainder(m);
+    Large a(n), b(m), quotient(n), remainder(m);
+    a.init_with_small_number(5);
+    b.init_with_small_number(6);
     division_modulo(a, b, quotient, remainder, count);
     QCOMPARE(count.clock, n);
     QCOMPARE(count.operation, 3*n*m + m);
@@ -161,11 +158,10 @@ void prime_arithmetic_test::Given_17_and_3_on_8_bits_When_testing_modulo_Then_re
     uint16_t n = 8;
     Count count;
     count_initialization(count);
-    Large a = create_and_initialize_large(17, n);
-    Large b = create_and_initialize_large(3, n);
-    Large quotient(n);
-    Large remainder(n);
-    Large expected = create_and_initialize_large(2, n);
+    Large a(n), b(n), quotient(n), remainder(n), expected(n);
+    a.init_with_small_number(17);
+    b.init_with_small_number(3);
+    expected.init_with_small_number(2);
     division_modulo(a, b, quotient, remainder, count);
     QVERIFY(is_equal(remainder, expected, count));
 }
@@ -176,9 +172,9 @@ void prime_arithmetic_test::Given_17_and_3_on_8_bits_When_testing_modulo_Then_ve
     uint16_t m = 6;
     Count count;
     count_initialization(count);
-    Large a = create_and_initialize_large(5, n);
-    Large b = create_and_initialize_large(6, m);
-    Large remainder(m);
+    Large a(n), b(m), remainder(m);
+    a.init_with_small_number(5);
+    b.init_with_small_number(6);
     modulo(a, b, remainder, count);
     QCOMPARE(count.clock, n);
     QCOMPARE(count.operation, 3*n*m + m);
@@ -197,11 +193,11 @@ void prime_arithmetic_test::Given_18_19_and_5_on_5_bits_When_testing_addition_mo
     uint16_t n = 5;
     Count count;
     count_initialization(count);
-    Large a = create_and_initialize_large(18, n);
-    Large b = create_and_initialize_large(19, n);
-    Large p = create_and_initialize_large(5, n);
-    Large result(n);
-    Large expected = create_and_initialize_large(2, n);
+    Large a(n), b(n), p(n), result(n), expected(n);
+    a.init_with_small_number(18);
+    b.init_with_small_number(19);
+    p.init_with_small_number(5);
+    expected.init_with_small_number(2);
     addition_modulo(a, b, p, result, count);
     QVERIFY(is_equal(result, expected, count));
 }
@@ -211,11 +207,11 @@ void prime_arithmetic_test::Given_18_19_and_5_on_5_bits_When_testing_addition_mo
     uint16_t n = 5;
     Count count;
     count_initialization(count);
-    Large a = create_and_initialize_large(18, n);
-    Large b = create_and_initialize_large(19, n);
-    Large p = create_and_initialize_large(5, n);
-    Large result(n);
-    Large expected = create_and_initialize_large(2, 5);
+    Large a(n), b(n), p(n), result(n), expected(n);
+    a.init_with_small_number(18);
+    b.init_with_small_number(19);
+    p.init_with_small_number(5);
+    expected.init_with_small_number(2);
     addition_modulo(a, b, p, result, count);
     QCOMPARE(count.clock, n + 2);
     QCOMPARE(count.operation, 3*n*n + 5*n);
@@ -234,11 +230,11 @@ void prime_arithmetic_test::Given_18_19_and_5_on_5_bits_When_testing_substractio
     uint16_t n = 5;
     Count count;
     count_initialization(count);
-    Large a = create_and_initialize_large(18, n);
-    Large b = create_and_initialize_large(19, n);
-    Large p = create_and_initialize_large(5, n);
-    Large result(5);
-    Large expected = create_and_initialize_large(4, n);
+    Large a(n), b(n), p(n), result(n), expected(n);
+    a.init_with_small_number(18);
+    b.init_with_small_number(19);
+    p.init_with_small_number(5);
+    expected.init_with_small_number(4);
     substraction_modulo(a, b, p, result, count);
     QVERIFY(is_equal(result, expected, count));
 }
@@ -248,11 +244,11 @@ void prime_arithmetic_test::Given_18_19_and_5_on_5_bits_When_testing_substractio
     uint16_t n = 5;
     Count count;
     count_initialization(count);
-    Large a = create_and_initialize_large(18, n);
-    Large b = create_and_initialize_large(19, n);
-    Large p = create_and_initialize_large(5, n);
-    Large result(n);
-    Large expected = create_and_initialize_large(4, n);
+    Large a(n), b(n), p(n), result(n), expected(n);
+    a.init_with_small_number(18);
+    b.init_with_small_number(19);
+    p.init_with_small_number(5);
+    expected.init_with_small_number(4);
     substraction_modulo(a, b, p, result, count);
     QCOMPARE(count.clock, 2*n + 3);
     QCOMPARE(count.operation, 9*n*n + 8*n);
@@ -271,11 +267,11 @@ void prime_arithmetic_test::Given_15_8_and_7_on_4_bits_When_testing_multiplicati
     uint16_t n = 4;
     Count count;
     count_initialization(count);
-    Large a = create_and_initialize_large(15, n);
-    Large b = create_and_initialize_large(8, n);
-    Large p = create_and_initialize_large(7, n);
-    Large result(n);
-    Large expected = create_and_initialize_large(1, n);
+    Large a(n), b(n), p(n), result(n), expected(n);
+    a.init_with_small_number(15);
+    b.init_with_small_number(8);
+    p.init_with_small_number(7);
+    expected.init_with_small_number(1);
     multiplication_modulo(a, b, p, result, count);
     QVERIFY(is_equal(result, expected, count));
 }
@@ -285,11 +281,11 @@ void prime_arithmetic_test::Given_15_8_and_7_on_4_bits_When_testing_multiplicati
     uint16_t n = 4;
     Count count;
     count_initialization(count);
-    Large a = create_and_initialize_large(15, n);
-    Large b = create_and_initialize_large(8, n);
-    Large p = create_and_initialize_large(7, n);
-    Large result(n);
-    Large expected = create_and_initialize_large(1, n);
+    Large a(n), b(n), p(n), result(n), expected(n);
+    a.init_with_small_number(15);
+    b.init_with_small_number(8);
+    p.init_with_small_number(7);
+    expected.init_with_small_number(1);
     multiplication_modulo(a, b, p, result, count);
     QCOMPARE(count.clock, 3*n);
     QCOMPARE(count.operation, 7*n*n + n);
@@ -308,10 +304,10 @@ void prime_arithmetic_test::Given_15_8_and_7_on_4_bits_When_testing_squaring_mod
     uint16_t n = 4;
     Count count;
     count_initialization(count);
-    Large a = create_and_initialize_large(15, n);
-    Large p = create_and_initialize_large(7, n);
-    Large result(n);
-    Large expected = create_and_initialize_large(1, n);
+    Large a(n), p(n), result(n), expected(n);
+    a.init_with_small_number(15);
+    p.init_with_small_number(7);
+    expected.init_with_small_number(1);
     squaring_modulo(a, p, result, count);
     QVERIFY(is_equal(result, expected, count));
 }
@@ -321,10 +317,10 @@ void prime_arithmetic_test::Given_15_8_and_7_on_4_bits_When_testing_squaring_mod
     uint16_t n = 4;
     Count count;
     count_initialization(count);
-    Large a = create_and_initialize_large(15, n);
-    Large p = create_and_initialize_large(7, n);
-    Large result(n);
-    Large expected = create_and_initialize_large(1, n);
+    Large a(n), p(n), result(n), expected(n);
+    a.init_with_small_number(15);
+    p.init_with_small_number(7);
+    expected.init_with_small_number(1);
     squaring_modulo(a, p, result, count);
     QCOMPARE(count.clock, 3*n);
     QCOMPARE(count.operation, 7*n*n + n);
@@ -344,11 +340,11 @@ void prime_arithmetic_test::Given_3_5_and_7_on_3_bits_When_testing_exponentiatio
     uint16_t m = 4;
     Count count;
     count_initialization(count);
-    Large a = create_and_initialize_large(3, n);
-    Large x = create_and_initialize_large(5, m);
-    Large p = create_and_initialize_large(7, n);
-    Large result(n);
-    Large expected = create_and_initialize_large(5, n);
+    Large a(n), x(m), p(n), result(n), expected(n);
+    a.init_with_small_number(3);
+    x.init_with_small_number(5);
+    p.init_with_small_number(7);
+    expected.init_with_small_number(5);
     exponentiation_modulo(a, x, p, result, count);
     QVERIFY(is_equal(result, expected, count));
 }
@@ -359,11 +355,11 @@ void prime_arithmetic_test::Given_3_5_and_7_on_3_bits_When_testing_exponentiatio
     uint16_t m = 3;
     Count count;
     count_initialization(count);
-    Large a = create_and_initialize_large(3, n);
-    Large x = create_and_initialize_large(5, m);
-    Large p = create_and_initialize_large(7, n);
-    Large result(n);
-    Large expected = create_and_initialize_large(5, n);
+    Large a(n), x(m), p(n), result(n), expected(n);
+    a.init_with_small_number(3);
+    x.init_with_small_number(5);
+    p.init_with_small_number(7);
+    expected.init_with_small_number(5);
     exponentiation_modulo(a, x, p, result, count);
     QCOMPARE(count.clock, (m)*(3*n));
     QCOMPARE(count.operation, (2*m - 1)*(7*n*n + n));
@@ -379,13 +375,13 @@ void prime_arithmetic_test::Given_3_5_and_7_on_3_bits_When_testing_exponentiatio
 
 void prime_arithmetic_test::Given_6600_and_630_on_16_bits_When_testing_greatest_common_divisor_Then_result_is_30()
 {
+    uint16_t n = 16;
     Count count;
     count_initialization(count);
-    uint16_t n = 16;
-    Large greatest_number = create_and_initialize_large(6600, n);
-    Large smallest_number = create_and_initialize_large(630, n);
-    Large result(n);
-    Large expected = create_and_initialize_large(30, n);
+    Large greatest_number(n), smallest_number(n), result(n), expected(n);
+    greatest_number.init_with_small_number(6600);
+    smallest_number.init_with_small_number(630);
+    expected.init_with_small_number(30);
     greatest_common_divisor(greatest_number, smallest_number, result, count);
     QVERIFY(is_equal(result, expected, count));
 }
@@ -395,11 +391,11 @@ void prime_arithmetic_test::Given_5_4_On_10_bits_When_testing_inverse_Then_resul
     uint16_t n = 10;
     Count count;
     count_initialization(count);
-    Large a = create_and_initialize_large(5, n);
-    Large modulus = create_and_initialize_large(4, n);
-    Large phi_n = create_and_initialize_large(2, n);
-    Large result(n);
-    Large expected = create_and_initialize_large(1, n);
+    Large a(n), modulus(n), phi_n(n), result(n), expected(n);
+    a.init_with_small_number(5);
+    modulus.init_with_small_number(4);
+    phi_n.init_with_small_number(2);
+    expected.init_with_small_number(1);
     inverse(a, modulus, phi_n, result, count);
     QVERIFY(is_equal(result, expected, count));
 }
@@ -409,11 +405,11 @@ void prime_arithmetic_test::Given_5_4_On_10_bits_When_testing_inverse_Then_resul
     uint16_t n = 10;
     Count count;
     count_initialization(count);
-    Large a = create_and_initialize_large(3, n);
-    Large modulus = create_and_initialize_large(5, n);
-    Large phi_n = create_and_initialize_large(2, n);
-    Large result(n);
-    Large expected = create_and_initialize_large(1, n);
+    Large a(n), modulus(n), phi_n(n), result(n), expected(n);
+    a.init_with_small_number(3);
+    modulus.init_with_small_number(5);
+    phi_n.init_with_small_number(2);
+    expected.init_with_small_number(1);
     inverse(a, modulus, phi_n, result, count);
     QCOMPARE(count.clock, 3*n*n + 1);
     QCOMPARE(count.operation, 14*n*n*n - 5*n*n);
@@ -432,10 +428,10 @@ void prime_arithmetic_test::Given_5_7_on_10_bits_When_testing_inverse_with_prime
     uint16_t n = 10;
     Count count;
     count_initialization(count);
-    Large a = create_and_initialize_large(5, n);
-    Large p = create_and_initialize_large(7, n);
-    Large result(n);
-    Large expected = create_and_initialize_large(3, n);
+    Large a(n), p(n), result(n), expected(n);
+    a.init_with_small_number(5);
+    p.init_with_small_number(7);
+    expected.init_with_small_number(3);
     inverse_with_prime(a, p, result, count);
     QVERIFY(is_equal(result, expected, count));
 }
@@ -445,10 +441,10 @@ void prime_arithmetic_test::Given_5_7_on_10_bits_When_testing_inverse_with_prime
     uint16_t n = 10;
     Count count;
     count_initialization(count);
-    Large a = create_and_initialize_large(5, n);
-    Large p = create_and_initialize_large(7, n);
-    Large result(n);
-    Large expected = create_and_initialize_large(3, n);
+    Large a(n), p(n), result(n), expected(n);
+    a.init_with_small_number(5);
+    p.init_with_small_number(7);
+    expected.init_with_small_number(3);
     inverse_with_prime(a, p, result, count);
     QCOMPARE(count.clock, 3*n*n + 1);
     QCOMPARE(count.operation, 14*n*n*n - 5*n*n);

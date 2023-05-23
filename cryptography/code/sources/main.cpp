@@ -8,6 +8,7 @@
 #include "testsuite.hpp"
 #include "large.h"
 #include "prime_arithmetic.h"
+#include "utils.h"
 
 
 int main(int argc, char *argv[])
@@ -55,6 +56,11 @@ int main(int argc, char *argv[])
 
     qDebug() << a.toHex() << x.toHex() << n.toHex();
     exponentiation_modulo(a, x, n, result, count);
+
+
+    bool tab[1024];
+    find_primes(tab, 1024);
+    display_primes(tab, 100);
     return 0;
 }
 

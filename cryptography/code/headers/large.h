@@ -37,6 +37,7 @@ public:
     void REG(bool enable, Large const& D, uint16_t start_index, Count& count);
     bool SHIFT_LEFT(bool enable, bool insert, Count& count);
     bool SHIFT_RIGHT(bool enable, bool insert, Count& count);
+    void init_with_small_number(uint16_t number);
 private:    
     void allocate_memory();
     void copy(Large const& large);

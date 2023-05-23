@@ -24,6 +24,7 @@ SOURCES += \
     code/sources/bool_algeabra.cpp \
     code/sources/prime_arithmetic.cpp \
     code/sources/galois.cpp \
+    code/sources/utils.cpp \
     test/sources/testsuite.cpp \
     test/sources/des_test.cpp \
     test/sources/rsa_test.cpp \
@@ -41,6 +42,7 @@ HEADERS += \
     code/headers/bool_algeabra.h \
     code/headers/prime_arithmetic.h \
     code/headers/galois.h \
+    code/headers/utils.h \
     test/headers/testsuite.hpp \
     test/headers/des_test.h \
     test/headers/rsa_test.h \
