@@ -51,8 +51,10 @@ if __name__ == "__main__":
     ax.plot(np.log2(key_length), np.log2(symmetric_security), linewidth=3, label='Symétrique')
     ax.plot(np.log2(key_length), np.log2(RSA_security), linewidth=3, label='RSA')
     ax.plot(np.log2(key_length), np.log2(ECC_security), linewidth=3, label='ECC')
-    ax.plot(np.log2(56), np.log2(56), 'o', label="DES", markersize=10)
-    ax.plot(np.log2(128), np.log2(128), 's', label="AES", markersize=10)
+    ax.plot(np.log2(56), np.log2(56), 'ro', label="DES", markersize=10)
+    ax.plot(np.log2(128), np.log2(128), 'rs', label="AES-128", markersize=10)
+    ax.plot(np.log2(192), np.log2(192), 'gs', label="AES-192", markersize=10)
+    ax.plot(np.log2(256), np.log2(256), 'bs', label="AES-256", markersize=10)
     ax.legend(fontsize=fontsize)
     #ax.set_title(str(curve), fontsize=fontsize)
 
