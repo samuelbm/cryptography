@@ -23,6 +23,7 @@ bool is_prime_with_fermat_little_theorem(Large const& maybe_prime, Count& count)
 
 Large string2Large(QString number_string, uint16_t size);
 QString Large2String(Large const& number);
+Large string2Hex(QString number_string, uint16_t size);
 /*
 void find prime random ???
 bool is prime+1 divisible by 4

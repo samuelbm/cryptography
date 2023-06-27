@@ -519,3 +519,18 @@ QString Large2String(Large const& number)
     }
     return string_number;
 }
+
+Large string2Hex(QString number_string, uint16_t size)
+{
+    Large result(size);
+    result.clear(0, size);
+    for(uint16_t i=0; i<size; i++)
+    {
+        uint16_t index = number_string.length() -1 -(int)(i/4);
+        uint16_t remainder = i &  3;
+        char chr = number_string.at(index).toLatin1();
+        uint64_t current_digit = (uint64_t)(('0' <= chr && chr <= '9')?chr - '0':(('a' <= chr && chr <= 'f')?chr-'a' + 10:chr-'A'+ 10));
+        result[i] = (current_digit >> remainder);
+    }
+    return result;
+}
