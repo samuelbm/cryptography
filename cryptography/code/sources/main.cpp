@@ -39,17 +39,7 @@ int main(int argc, char *argv[])
 //    }
 
 
-    Count count;
-    count_initialization(count);
-
-    Large x = string2Large("123", 8);
-    qDebug() << x.toHex();
-
-    QString y = Large2String(x);
-    qDebug() << y;
-
-    Large z = string2Hex("7B", 8);
-    qDebug() << Large2String(z);
+    rsa_dummy1();
 
     return 0;
 }

@@ -286,6 +286,7 @@ void exponentiation_modulo(Large const& base, Large const& exponent, Large const
     uint64_t result_size = result.get_number_of_bits();
     Large squared(result_size);
     Large result_intermediate(result_size);
+    result.clear(0, result.get_number_of_bits());
     result[0] = true; //init to 1
     squared.insert(base);
     uint64_t freeze_clock_count; // operations in parallel
@@ -516,6 +517,10 @@ QString Large2String(Large const& number)
         }
         division_modulo(power, base, quotient, dummy, count);
         power = quotient;
+    }
+    if(string_number.length() == 0)
+    {
+        string_number += "0";
     }
     return string_number;
 }
