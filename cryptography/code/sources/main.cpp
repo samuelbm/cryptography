@@ -10,57 +10,44 @@
 #include "prime_arithmetic.h"
 #include "utils.h"
 
+#include "rsa.h"
+
 
 int main(int argc, char *argv[])
 {
 
-    // setup lambda
-    int status = 0;
-    auto runTest = [&status, argc, argv](QObject* obj) {
-        status |= QTest::qExec(obj, argc, argv);
-    };
+//    // setup lambda
+//    int status = 0;
+//    auto runTest = [&status, argc, argv](QObject* obj) {
+//        status |= QTest::qExec(obj, argc, argv);
+//    };
 
-    // run suite
-    auto &suite = TestSuite::suite();
-    for (auto it = suite.begin(); it != suite.end(); ++it) {
-        runTest(*it);
-    }
+//    // run suite
+//    auto &suite = TestSuite::suite();
+//    for (auto it = suite.begin(); it != suite.end(); ++it) {
+//        runTest(*it);
+//    }
 
-    if(status)
-    {
-        qDebug() << "Test Failed";// << Qt::endl;
-        return 0;
-    }
-    else
-    {
-        qDebug() << "Test Successful";// << Qt::endl;
-    }
+//    if(status)
+//    {
+//        qDebug() << "Test Failed";// << Qt::endl;
+//        return 0;
+//    }
+//    else
+//    {
+//        qDebug() << "Test Successful";// << Qt::endl;
+//    }
 
 
     Count count;
     count_initialization(count);
-    Large x(5);
-    x[0] = true;
-    x[1] = true;
-    x[2] = true;
-    x[3] = true;
-    x[4] = true;
-    Large a(4);
-    a[0] = true;
-    a[1] = true;
-    Large n(4);
-    n[0] = true;
-    n[1] = true;
-    n[2] = true;
-    Large result(4);
 
-    qDebug() << a.toHex() << x.toHex() << n.toHex();
-    exponentiation_modulo(a, x, n, result, count);
+    Large x = string2Large("10000000000000000000000000000000000000000", 200);
+    qDebug() << x.toHex();
 
+    QString y = Large2String(x);
+    qDebug() << y;
 
-    bool tab[1024];
-    find_primes(tab, 1024);
-    display_primes(tab, 100);
     return 0;
 }
 

@@ -203,7 +203,8 @@ void count_initialization(Count& count)
 
 void Large::init_with_small_number(uint64_t number)
 {
-    uint64_t size = (64<this->bits_size)?64:this->bits_size;
+    uint64_t target_size = 64;
+    uint64_t size = (target_size<this->bits_size)?target_size:this->bits_size;
     this->clear(0, size);
     for(uint64_t i=0; i<size; i++)
     {

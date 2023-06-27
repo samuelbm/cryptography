@@ -5,9 +5,9 @@
 /*
 addend1 (size)                  : n
 addend2 (size)                  : n
-sum (size)                      : n + 1
-Latency                         : 1
-Operations                      : n
+sum (size)                           : n + 1
+Latency                               : 1
+Operations                       : n
 regs                            : 0
 NOT_gates                       : 0
 AND_gates                       : 2*n
@@ -447,3 +447,75 @@ NOR_gates                       :
 XOR_gates                       :
 XNOR_gates                      :
 */
+
+
+//-----------------------------
+
+
+Large string2Large(QString number_string, uint16_t size)
+{
+    Count count;
+    count_initialization(count);
+    Large digit(4);
+    Large power(size);
+    Large product(size+4);
+    Large result_intermediate(size+5);
+    Large sub_result_intermediate(size+4);
+    Large power_intermediate(size+4);
+    Large base(4);
+    Large result(size);
+    power.init_with_small_number(1);
+    sub_result_intermediate.clear(0, sub_result_intermediate.get_number_of_bits());
+    base.init_with_small_number(10);
+    for(uint16_t i=0; i<number_string.length(); i++)
+    {
+        char chr = number_string.at(number_string.length() - i - 1).toLatin1() - '0';
+        uint64_t current_digit = (uint64_t)(chr);
+        digit.init_with_small_number(current_digit);
+        multiplication(digit, power, product, count);
+        result_intermediate.split(sub_result_intermediate, 0);
+        addition(product,  sub_result_intermediate, result_intermediate, count);
+        multiplication(base, power, power_intermediate, count);
+        power_intermediate.split(power, 0);
+   }
+    result_intermediate.split(result, 0);
+    return result;
+}
+
+QString Large2String(Large const& number)
+{
+    Count count;
+    count_initialization(count);
+    QString string_number = "";
+    Large base(4);
+    Large dummy(4);
+    Large power(number.get_number_of_bits());
+    Large power_intermediate(number.get_number_of_bits() + 4);
+    Large quotient(number.get_number_of_bits());
+    Large remainder(number.get_number_of_bits());
+    uint16_t exponent = (uint16_t)(0.302*number.get_number_of_bits());
+    base.init_with_small_number(10);
+    power.init_with_small_number(1);
+    remainder = number;
+    for(uint16_t i=0; i<exponent; i++)
+    {
+        multiplication(base, power, power_intermediate, count);
+        power_intermediate.split(power, 0);
+    }
+
+
+    for(uint16_t i=0; i<exponent + 1; i++)
+    {
+        division_modulo(remainder, power, quotient, remainder, count );
+        QString digits = "0123456789";
+        int index = 8*quotient[3] + 4*quotient[2] + 2*quotient[1] + 1*quotient[0];
+        assert(index < 10);
+        if(index >  0 || string_number.length() != 0)
+        {
+            string_number += digits[index] ;
+        }
+        division_modulo(power, base, quotient, dummy, count);
+        power = quotient;
+    }
+    return string_number;
+}
