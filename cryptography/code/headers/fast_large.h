@@ -13,12 +13,16 @@ bool fast_is_less_than(uint64_t a[], uint64_t b[], uint16_t size_a);
 bool fast_is_less_or_equal_than(uint64_t a[], uint64_t b[], uint16_t size_a);
 void fast_addition(uint64_t a[], uint64_t b[], uint64_t sum[], uint16_t size_a); //same size as b, sum must be larger
 void fast_substraction(uint64_t a[], uint64_t b[], uint64_t difference[], uint16_t size_a); //a must be greater than b but of same size
-//void fast_multiplication(Large const& multiplicand, Large const& multiplicator, Large& product, Count& count);
-//void fast_division_modulo(Large const& dividend, Large const& modulus, Large& quotient, Large& remainder, Count& count);
-//void fast_addition_modulo(Large const& addend1, Large const& addend2, Large const& modulus, Large& result, Count& count);
-//void fast_squaring_modulo(Large const& multiplicator, Large const& modulus, Large& result, Count& count);
-//void fast_exponentiation_modulo(Large const& base, Large const& exponent, Large const& modulus, Large& result, Count& count);
-//bool fast_is_prime_with_fermat_little_theorem(Large const& maybe_prime, Count& count, uint16_t nb_round=100);
+
+
+void fast_addition_mono( uint64_t b, uint64_t sum[], uint16_t size_a);
+void fast_multiplication(uint64_t  a[], uint64_t b[], uint64_t product[], uint16_t size_a, uint16_t size_b);
+//void fast_division_modulo(uint64_t  a[], uint64_t b[], uint64_t quotient[], uint64_t remainder[], uint16_t size_a, uint16_t size_b);
+//void fast_addition_modulo(uint64_t a[], uint64_t b[], uint64_t n[], uint64_t result[], uint16_t size_a, uint16_);
+//void fast_squaring_modulo(uint64_t const& multiplicator, uint64_t const& modulus, Large& result, Count& count);
+//void fast_exponentiation_modulo(uint64_t const& base, uint64_t const& exponent, Large const& modulus, Large& result, Count& count);
+//bool fast_is_prime_with_fermat_little_theorem(uint64_t const& maybe_prime, Count& count, uint16_t nb_round=100);
+
 //uint16_t fast_find_prime_equiv_3_mod_4(uint16_t size, QRandomGenerator& prng, Count& count);
 
 #endif // FAST_LARGE_H

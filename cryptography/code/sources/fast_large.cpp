@@ -1,4 +1,5 @@
 #include "fast_large.h"
+#include <QDebug>
 
 Large fast_large2Large(uint64_t fast_large[], uint16_t nb_bits)
 {
@@ -108,4 +109,38 @@ void fast_substraction(uint64_t a[], uint64_t b[], uint64_t difference[], uint16
         difference[i+1] = (carry)?1:0;
     }
     difference[size_a] = 0;
+}
+
+void fast_addition_mono(uint64_t b, uint64_t sum[], uint16_t size_a)
+{
+    uint64_t mask = 1;
+    mask <<= 32;
+    sum[0] += b;
+    for(uint16_t i=0; i<size_a; i++)
+    {
+        uint64_t carry = sum[i] & mask;
+        sum[i] ^= carry;
+        sum[i+1] += (carry)?1:0;
+    }
+}
+
+void fast_multiplication(uint64_t  a[], uint64_t b[], uint64_t product[], uint16_t size_a, uint16_t size_b)
+{
+    uint64_t storage;
+    uint64_t storage_low;
+    uint64_t storage_high;
+    uint64_t mask_low = 4294967295;
+    uint64_t mask_high = 18446744069414584320 ;
+    fast_clear(product, size_a + size_b);
+    for(uint16_t i=0; i<size_b; i++)
+    {
+        for(uint16_t j=0; j<size_a; j++)
+        {
+            storage = a[j] * b[i];
+            storage_low = storage & mask_low;
+            storage_high = (storage & mask_high) >> 32;
+            fast_addition_mono(storage_low, product+i+j, size_a + size_b -i -j);
+            fast_addition_mono(storage_high, product+i+j+1, size_a + size_b -i -j-1);
+        }
+    }
 }

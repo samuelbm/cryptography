@@ -45,19 +45,25 @@ int main(int argc, char *argv[])
 
 uint64_t a[2];
 uint64_t b[2];
-uint64_t c[3];
+uint64_t c[4];
 uint16_t a_size = 2;
-a[1] = 3;
-a[0] = 4;
-b[1] = 3;
-b[0] = 5;
+uint16_t b_size = 2;
+a[1] = 1234567890;
+a[0] = 1234567890;
+b[1] = 1234567890;
+b[0] = 1234567890;
+fast_multiplication(a, b, c, a_size, b_size);
+Large test = fast_large2Large(c, 4*32);
+qDebug() << test.toBin();
 
+//uint64_t d[3];
+//d[2] = 1;
+//d[1] = 4294967295;
+//d[0] = 4294967290;
+//fast_addition_mono(6, d, 3);
+//Large test2 = fast_large2Large(d, 70);
+//qDebug() << test2.toHex();
 
-fast_substraction(a, b, c, a_size);
-Large x = fast_large2Large(a, 64);
-Large y = fast_large2Large(b, 64);
-Large z = fast_large2Large(c, 64);
-qDebug() << x.toHex() << y.toHex() << z.toHex();
 
 //    qDebug() << "start";
 //    Count count;
