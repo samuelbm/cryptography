@@ -144,3 +144,41 @@ void fast_multiplication(uint64_t  a[], uint64_t b[], uint64_t product[], uint16
         }
     }
 }
+
+
+void fast_shift_left(uint64_t number[], uint16_t size, bool carry)
+{
+    uint64_t mask = 1;
+    mask <<= 32;
+    for(uint16_t i=0; i<size-1; i++)
+    {
+        number[i] <<= 1;
+        number[i] += (carry)?1:0;
+        carry = number[i] & mask;
+        number[i] ^= number[i] & mask;
+    }
+    number[size-1] <<= 1;
+    number[size-1] += (carry)?1:0;
+    number[size-1] ^= (number[size-1] & mask);
+}
+
+void fast_division_modulo(uint64_t  a[], uint64_t b[], uint64_t quotient[], uint64_t remainder[], uint16_t size_a, uint16_t size_b)
+{
+//    uint64_t storage;
+//    uint64_t storage_low;
+//    uint64_t storage_high;
+//    uint64_t mask_low = 4294967295;
+//    uint64_t mask_high = 18446744069414584320 ;
+//    fast_clear(product, size_a + size_b);
+//    for(uint16_t i=0; i<size_b; i++)
+//    {
+//        for(uint16_t j=0; j<size_a; j++)
+//        {
+//            storage = a[j] * b[i];
+//            storage_low = storage & mask_low;
+//            storage_high = (storage & mask_high) >> 32;
+//            fast_addition_mono(storage_low, product+i+j, size_a + size_b -i -j);
+//            fast_addition_mono(storage_high, product+i+j+1, size_a + size_b -i -j-1);
+//        }
+//    }
+}

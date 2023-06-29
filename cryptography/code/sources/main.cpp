@@ -48,8 +48,8 @@ uint64_t b[2];
 uint64_t c[4];
 uint16_t a_size = 2;
 uint16_t b_size = 2;
-a[1] = 1234567890;
-a[0] = 1234567890;
+a[1] = 0;
+a[0] = 1;
 b[1] = 1234567890;
 b[0] = 1234567890;
 fast_multiplication(a, b, c, a_size, b_size);
@@ -64,6 +64,14 @@ qDebug() << test.toBin();
 //Large test2 = fast_large2Large(d, 70);
 //qDebug() << test2.toHex();
 
+
+for(uint64_t i=0; i<64; i++)
+{
+    qDebug() << i << a[1] << a[0];
+    fast_shift_left(a, 2, 0);
+
+}
+    qDebug() << 64 << a[1] << a[0];
 
 //    qDebug() << "start";
 //    Count count;

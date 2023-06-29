@@ -17,7 +17,8 @@ void fast_substraction(uint64_t a[], uint64_t b[], uint64_t difference[], uint16
 
 void fast_addition_mono( uint64_t b, uint64_t sum[], uint16_t size_a);
 void fast_multiplication(uint64_t  a[], uint64_t b[], uint64_t product[], uint16_t size_a, uint16_t size_b);
-//void fast_division_modulo(uint64_t  a[], uint64_t b[], uint64_t quotient[], uint64_t remainder[], uint16_t size_a, uint16_t size_b);
+void fast_shift_left(uint64_t number[], uint16_t size, bool carry);
+void fast_division_modulo(uint64_t  a[], uint64_t b[], uint64_t quotient[], uint64_t remainder[], uint16_t size_a, uint16_t size_b);
 //void fast_addition_modulo(uint64_t a[], uint64_t b[], uint64_t n[], uint64_t result[], uint16_t size_a, uint16_);
 //void fast_squaring_modulo(uint64_t const& multiplicator, uint64_t const& modulus, Large& result, Count& count);
 //void fast_exponentiation_modulo(uint64_t const& base, uint64_t const& exponent, Large const& modulus, Large& result, Count& count);
