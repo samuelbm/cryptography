@@ -10,8 +10,8 @@
 #include "prime_arithmetic.h"
 #include "utils.h"
 
+#include "miller-rabin-gmp.h"
 #include "rsa.h"
-
 
 int main(int argc, char *argv[])
 {
@@ -38,18 +38,23 @@ int main(int argc, char *argv[])
 //        qDebug() << "Test Successful";// << Qt::endl;
 //    }
 
+    //int NB_ROUNDS = 40;
+    //mpz_class my_mpz();
+    //bool is_prime = prob_prime(my_mpz, NB_ROUNDS) >= 0.5;
+
+
+//    qDebug() << "start";
+//    Count count;
+//    count_initialization(count);
+//    QRandomGenerator prng(1234);
+
+//    for(uint16_t i=0; i<10; i++)
+//    {
+//        Large x = find_prime_equiv_3_mod_4(100, prng, count);
+//        qDebug() << i << Large2String(x);
+//    }
 
     rsa_dummy1();
-
+    qDebug() << "finished";
     return 0;
 }
-
-
-
-
-
-
-
-
-
-

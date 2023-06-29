@@ -5,9 +5,9 @@
 /*
 addend1 (size)                  : n
 addend2 (size)                  : n
-sum (size)                           : n + 1
-Latency                               : 1
-Operations                       : n
+sum (size)                      : n + 1
+Latency                         : 1
+Operations                      : n
 regs                            : 0
 NOT_gates                       : 0
 AND_gates                       : 2*n
@@ -410,7 +410,7 @@ bool is_prime_with_fermat_little_theorem(Large const& maybe_prime, Count& count)
 {
     Count dummy_count;
     count_initialization(dummy_count);
-    uint64_t primes_size = 100;
+    uint64_t primes_size = 30;//100;
     uint64_t size = maybe_prime.get_number_of_bits();
     Large threshold(size), base(size), exponent(size), one(size), result(size);
     one.init_with_small_number(1);
@@ -431,6 +431,28 @@ bool is_prime_with_fermat_little_theorem(Large const& maybe_prime, Count& count)
         is_prime = AND(is_prime, is_equal(result, one, count), count);
     }
     return is_prime;
+}
+
+//cannot determine stats as it will vary with the number of attempt to find prime
+Large find_prime_equiv_3_mod_4(uint16_t size, QRandomGenerator& prng, Count& count)
+{
+    Large prime_under_test(size);
+    prime_under_test.clear(0, size);
+    prime_under_test[0] = true;
+    prime_under_test[1] = true;
+    prime_under_test[size-1] = true;
+    count.regs += 3;
+    uint64_t total = 0;
+    do
+    {
+        qDebug() << total++;
+        for(uint16_t i=2; i<size-1; i++)
+        {
+            prime_under_test[i] = prng.generate() & 1;//prng.generate64() & 1;
+            count.regs++;
+        }
+    } while(!is_prime_with_fermat_little_theorem(prime_under_test, count));
+    return prime_under_test;
 }
 
 /*
@@ -537,5 +559,18 @@ Large string2Hex(QString number_string, uint16_t size)
         uint64_t current_digit = (uint64_t)(('0' <= chr && chr <= '9')?chr - '0':(('a' <= chr && chr <= 'f')?chr-'a' + 10:chr-'A'+ 10));
         result[i] = (current_digit >> remainder);
     }
+    return result;
+}
+
+QString count2string(Count const& count)
+{
+    QString result="";
+    //latence-regs-gates
+    uint64_t latency_count = count.clock;
+    uint64_t regs_count = count.regs;
+    uint64_t gates_count = count.AND_gates + count.NAND_gates + count.OR_gates + count.NOR_gates + count.XNOR_gates + count.XNOR_gates;
+    result += QString::number(latency_count) + ","; // latency
+    result += QString::number(regs_count) + ","; // regs
+    result += QString::number(gates_count) + ","; // gates
     return result;
 }

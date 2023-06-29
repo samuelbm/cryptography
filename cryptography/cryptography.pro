@@ -25,6 +25,7 @@ SOURCES += \
     code/sources/prime_arithmetic.cpp \
     code/sources/galois.cpp \
     code/sources/utils.cpp \
+    code/sources/miller-rabin-gmp.cpp\
     test/sources/testsuite.cpp \
     test/sources/des_test.cpp \
     test/sources/rsa_test.cpp \
@@ -43,6 +44,7 @@ HEADERS += \
     code/headers/prime_arithmetic.h \
     code/headers/galois.h \
     code/headers/utils.h \
+    code/headers/miller-rabin-gmp.h\
     test/headers/testsuite.hpp \
     test/headers/des_test.h \
     test/headers/rsa_test.h \
