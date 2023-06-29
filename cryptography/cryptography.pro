@@ -26,6 +26,7 @@ SOURCES += \
     code/sources/galois.cpp \
     code/sources/utils.cpp \
     code/sources/miller-rabin-gmp.cpp\
+    code/sources/fast_large.cpp \
     test/sources/testsuite.cpp \
     test/sources/des_test.cpp \
     test/sources/rsa_test.cpp \
@@ -45,6 +46,7 @@ HEADERS += \
     code/headers/galois.h \
     code/headers/utils.h \
     code/headers/miller-rabin-gmp.h\
+    code/headers/fast_large.h \
     test/headers/testsuite.hpp \
     test/headers/des_test.h \
     test/headers/rsa_test.h \

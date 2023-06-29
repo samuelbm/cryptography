@@ -445,7 +445,6 @@ Large find_prime_equiv_3_mod_4(uint16_t size, QRandomGenerator& prng, Count& cou
     uint64_t total = 0;
     do
     {
-        qDebug() << total++;
         for(uint16_t i=2; i<size-1; i++)
         {
             prime_under_test[i] = prng.generate() & 1;//prng.generate64() & 1;

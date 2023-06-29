@@ -12,6 +12,7 @@
 
 #include "miller-rabin-gmp.h"
 #include "rsa.h"
+#include "fast_large.h"
 
 int main(int argc, char *argv[])
 {
@@ -42,6 +43,21 @@ int main(int argc, char *argv[])
     //mpz_class my_mpz();
     //bool is_prime = prob_prime(my_mpz, NB_ROUNDS) >= 0.5;
 
+uint64_t a[2];
+uint64_t b[2];
+uint64_t c[3];
+uint16_t a_size = 2;
+a[1] = 3;
+a[0] = 4;
+b[1] = 3;
+b[0] = 5;
+
+
+fast_substraction(a, b, c, a_size);
+Large x = fast_large2Large(a, 64);
+Large y = fast_large2Large(b, 64);
+Large z = fast_large2Large(c, 64);
+qDebug() << x.toHex() << y.toHex() << z.toHex();
 
 //    qDebug() << "start";
 //    Count count;
