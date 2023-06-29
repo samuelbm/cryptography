@@ -406,11 +406,11 @@ NOR_gates                       : 0
 XOR_gates                       : 100*(16*n*n*n - 8*n*n) + 2*n
 XNOR_gates                      : 100*(n)
 */
-bool is_prime_with_fermat_little_theorem(Large const& maybe_prime, Count& count)
+bool is_prime_with_fermat_little_theorem(Large const& maybe_prime, Count& count, uint16_t nb_round)
 {
     Count dummy_count;
     count_initialization(dummy_count);
-    uint64_t primes_size = 30;//100;
+    uint64_t primes_size = nb_round;
     uint64_t size = maybe_prime.get_number_of_bits();
     Large threshold(size), base(size), exponent(size), one(size), result(size);
     one.init_with_small_number(1);
