@@ -25,7 +25,6 @@ SOURCES += \
     code/sources/prime_arithmetic.cpp \
     code/sources/galois.cpp \
     code/sources/utils.cpp \
-    code/sources/miller-rabin-gmp.cpp\
     code/sources/fast_large.cpp \
     test/sources/testsuite.cpp \
     test/sources/des_test.cpp \
@@ -35,6 +34,7 @@ SOURCES += \
     test/sources/bool_algeabra_test.cpp \
     test/sources/prime_arithmetic_test.cpp \
     test/sources/galois_test.cpp \
+    test/sources/fast_large_test.cpp \
 
 HEADERS += \
     code/headers/des.h \
@@ -45,7 +45,6 @@ HEADERS += \
     code/headers/prime_arithmetic.h \
     code/headers/galois.h \
     code/headers/utils.h \
-    code/headers/miller-rabin-gmp.h\
     code/headers/fast_large.h \
     test/headers/testsuite.hpp \
     test/headers/des_test.h \
@@ -55,8 +54,7 @@ HEADERS += \
     test/headers/bool_algeabra_test.h \
     test/headers/prime_arithmetic_test.h \
     test/headers/galois_test.h \
-
-
+    test/headers/fast_large_test.h \
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
