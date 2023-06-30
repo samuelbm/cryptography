@@ -79,7 +79,7 @@ bool fast_is_less_or_equal_than(uint64_t a[], uint64_t b[], uint16_t size_a)
     return true;
 }
 
-void fast_addition(uint64_t a[], uint64_t b[], uint64_t sum[], uint16_t size_a) //same size as b, sum must be large
+void fast_addition(uint64_t a[], uint64_t b[], uint64_t sum[], uint16_t size_a)
 {
     uint64_t mask = 1;
     mask <<= 32;
@@ -93,7 +93,7 @@ void fast_addition(uint64_t a[], uint64_t b[], uint64_t sum[], uint16_t size_a) 
     }
 }
 
-void fast_substraction(uint64_t a[], uint64_t b[], uint64_t difference[], uint16_t size_a) //a must be greater than b but of same size
+void fast_substraction(uint64_t a[], uint64_t b[], uint64_t difference[], uint16_t size_a)
 {
     uint64_t mask_inverse = 4294967295;
     uint64_t inverse;
@@ -188,4 +188,10 @@ void fast_division_modulo(uint64_t  a[], uint64_t b[], uint64_t quotient[], uint
             }
         }
     }
+}
+
+void fast_multiplication_modulo(uint64_t a[], uint64_t b[], uint64_t n[], uint64_t result[], uint16_t size, uint64_t storage[], uint64_t dummy_quotient[], uint64_t difference[])
+{
+    fast_multiplication(a, b, storage, size, size);
+    fast_division_modulo(storage, n, dummy_quotient, result, 2*size, size, difference);
 }

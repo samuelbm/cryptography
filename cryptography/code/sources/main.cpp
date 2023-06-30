@@ -43,25 +43,28 @@ int main(int argc, char *argv[])
     //mpz_class my_mpz();
     //bool is_prime = prob_prime(my_mpz, NB_ROUNDS) >= 0.5;
 
-uint64_t a[4];
-uint64_t b[2];
-uint64_t quotient[4];
-uint64_t remainder[2];
-uint64_t difference[3];
-uint16_t size_a = 4;
-uint16_t size_b = 2;
-a[3] = 0;
-a[2] = 0;
-a[1] = 1234567890;
-a[0] = 13;
+
+    //a_size = b_size = n_size = result_size = size
+    //storage_size = dummy_quotient_size = 2*size
+    //difference_size = size + 1
+
+uint16_t size = 2;
+uint64_t a[size];
+uint64_t b[size];
+uint64_t n[size];
+uint64_t result[size];
+uint64_t storage[2*size];
+uint64_t dummy_quotient[2*size];
+uint64_t difference[size + 1];
+a[1] = 1;
+a[0] = 1;
 b[1] = 1;
 b[0] = 1;
-fast_division_modulo(a, b, quotient, remainder, size_a, size_b, difference);
-Large la = fast_large2Large(a, 4*32);
-Large lb = fast_large2Large(b, 2*32);
-Large lq = fast_large2Large(quotient, 4*32);
-Large lr = fast_large2Large(remainder, 2*32);
-qDebug() << Large2String(lq) << Large2String(lr);
+n[1] = 0;
+n[0] = 1000001;
+fast_multiplication_modulo(a, b, n, result, size, storage, dummy_quotient, difference);
+Large test = fast_large2Large(result, 32*size);
+qDebug() << Large2String(test);
 
 //uint64_t d[3];
 //d[2] = 1;
