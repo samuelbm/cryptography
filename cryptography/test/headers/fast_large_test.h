@@ -23,6 +23,7 @@ private slots:
 
     void Given_a_2_2_and_b_1_1_When_testing_fast_substraction_Then_difference_is_1_1();
     void Given_b_1_FFFFFFFF_and_sum_1_When_testing_fast_addition_mono_Then_sum_is_2_00000000();
+    void Given_a_1_1_b_1_1_When_testing_fast_multiplication_Then_product_is_0_1_2_1();
 };
 
 #endif // FAST_LARGE_TEST_H
