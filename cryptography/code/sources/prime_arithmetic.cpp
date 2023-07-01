@@ -522,7 +522,7 @@ QString Large2String(Large const& number)
     Large power_intermediate(number.get_number_of_bits() + 4);
     Large quotient(number.get_number_of_bits());
     Large remainder(number.get_number_of_bits());
-    uint16_t exponent = (uint16_t)(0.302*number.get_number_of_bits());
+    uint16_t exponent = (uint16_t)(0.30103*number.get_number_of_bits());
     base.init_with_small_number(10);
     power.init_with_small_number(1);
     remainder = number;
@@ -531,8 +531,6 @@ QString Large2String(Large const& number)
         multiplication(base, power, power_intermediate, count);
         power_intermediate.split(power, 0);
     }
-
-
     for(uint16_t i=0; i<exponent + 1; i++)
     {
         division_modulo(remainder, power, quotient, remainder, count );

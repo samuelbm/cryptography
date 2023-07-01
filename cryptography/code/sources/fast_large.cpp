@@ -1,6 +1,6 @@
 #include "fast_large.h"
 #include <QDebug>
-#include "prime_arithmetic.h"
+#include <QElapsedTimer>
 
 void new_storage(Storage& storage, uint16_t size)
 {
@@ -316,11 +316,13 @@ bool fast_is_prime_with_fermat_little_theorem(uint64_t maybe_prime[], uint16_t s
 
 uint16_t fast_find_prime_equiv_3_mod_4(uint64_t prime[], uint16_t size, QRandomGenerator& prng, Storage& storage, uint16_t nb_round, uint16_t nb_bits)
 {
+    QElapsedTimer timer;
     uint64_t one = 1;
     uint64_t all_one_32 = 4294967295;
     uint16_t tries = 0;
     uint16_t mask = 31;
     uint16_t index;
+    timer.start();
     do
     {
         tries++;
@@ -347,8 +349,7 @@ uint16_t fast_find_prime_equiv_3_mod_4(uint64_t prime[], uint16_t size, QRandomG
                 }
             }
         }
-        qDebug() << tries;
-        Large test = fast_large2Large(prime, nb_bits);
+      qDebug() << tries;
     } while(!fast_is_prime_with_fermat_little_theorem(prime, size, nb_round, storage));
     return tries;
 }

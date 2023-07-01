@@ -45,18 +45,18 @@ int main(int argc, char *argv[])
     qDebug() << "-----------------------------";
     qDebug() << "start";
     QRandomGenerator prng(1234);
-    uint16_t size = 32;
+    uint16_t size = 48;
     Storage storage;
     new_storage(storage, size);
-    uint16_t nb_bits = 1024;
-    uint16_t nb_round = 100;
+    uint16_t nb_bits = 1536;
+    uint16_t nb_round = 20;
     uint64_t prime[size];
     uint16_t tries;
     for(int i = 0; i<10; i++)
     {
         tries = fast_find_prime_equiv_3_mod_4(prime, size, prng, storage, nb_round, nb_bits);
         Large lprime = fast_large2Large(prime, nb_bits);
-        qDebug() << i << tries << Large2String(lprime);
+        qDebug() <<"prime found" << i << tries << Large2String(lprime);
     }
 
     delete_storage(storage);
