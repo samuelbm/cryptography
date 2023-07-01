@@ -162,9 +162,123 @@ void Fast_large_test::Given_a_1_1_b_1_1_When_testing_fast_multiplication_Then_pr
     expected[0] = 1;
     fast_multiplication(a, b, product, size, size, storage);
     delete_storage(storage);
-    qDebug() << product[3] << product[2] << product[1] << product[0];
-    qDebug() << expected[3] << expected[2] << expected[1] << expected[0];
     QVERIFY(fast_is_equal(product, expected, size));
+}
+
+void Fast_large_test::Given_number_number_1_1_carry_0_When_fast_shift_left_Then_number_is_2_2()
+{
+    uint16_t size = 2;
+    uint64_t number[size];
+    uint64_t expected[size];
+    number[1] = 1;
+    number[0] = 1;
+    expected[1] = 2;
+    expected[0] = 2;
+    fast_shift_left(number, size, false);
+    QVERIFY(fast_is_equal(number, expected, size));
+}
+
+void Fast_large_test::Given_number_number_1_1_carry_1_When_fast_shift_left_Then_number_is_2_3()
+{
+    uint16_t size = 2;
+    uint64_t number[size];
+    uint64_t expected[size];
+    number[1] = 1;
+    number[0] = 1;
+    expected[1] = 2;
+    expected[0] = 3;
+    fast_shift_left(number, size, true);
+    QVERIFY(fast_is_equal(number, expected, size));
+}
+
+void Fast_large_test::Given_a_1234567890_1234567890_b_1000000_When_testing_fast_division_modulo_Then_quotient_is_5302428713476()
+{
+    uint16_t size = 2;
+    uint64_t a[size];
+    uint64_t b[size];
+    uint64_t quotient[size];
+    uint64_t remainder[size];
+    uint64_t expected[size];
+    Storage storage;
+    new_storage(storage, size);
+    a[1] = 1234567890;
+    a[0] = 1234567890;
+    b[1] = 0;
+    b[0] = 1000000;
+    expected[1] = 1234;
+    expected[0] = 2439070212;
+    fast_division_modulo(a, b, quotient, remainder, size, size, storage);
+    delete_storage(storage);
+    QVERIFY(fast_is_equal(quotient, expected, size));
+}
+
+void Fast_large_test::Given_a_1234567890_1234567890_b_1000000_When_testing_fast_division_modulo_Then_remainder_is_293330()
+{
+    uint16_t size = 2;
+    uint64_t a[size];
+    uint64_t b[size];
+    uint64_t quotient[size];
+    uint64_t remainder[size];
+    uint64_t expected[size];
+    Storage storage;
+    new_storage(storage, size);
+    a[1] = 1234567890;
+    a[0] = 1234567890;
+    b[1] = 0;
+    b[0] = 1000000;
+    expected[1] = 0;
+    expected[0] = 293330;
+    fast_division_modulo(a, b, quotient, remainder, size, size, storage);
+    delete_storage(storage);
+    QVERIFY(fast_is_equal(remainder, expected, size));
+}
+
+void Fast_large_test::Given_a_1_1_b_1_1_n_1000000_When_testing_fast_multiplication_modulo_Then_result_is_486209()
+{
+    uint16_t size = 2;
+    uint64_t a[size];
+    uint64_t b[size];
+    uint64_t n[size];
+    uint64_t result[size];
+    uint64_t expected[size];
+    Storage storage;
+    new_storage(storage, size);
+    a[1] = 1;
+    a[0] = 1;
+    b[1] = 1;
+    b[0] = 1;
+    n[1] = 0;
+    n[0] = 1000000;
+    expected[1] = 0;
+    expected[0] = 486209;
+    fast_multiplication_modulo(a, b, n, result, size, storage);
+    delete_storage(storage);
+    QVERIFY(fast_is_equal(result, expected, size));
+}
+
+void Fast_large_test::Given_base_1_1_exponent_1_1_modulus_1000000_When_testing_fast_exponentiation_modulo_Then_result_is_259137()
+{
+//    uint16_t size = 2;
+//    uint16_t size_exponent = 3;
+//    uint64_t base[size];
+//    uint64_t exponent[size];
+//    uint64_t modulus[size];
+//    uint64_t result[size];
+//    uint64_t expected[size];
+//    Storage storage;
+//    new_storage(storage, size);
+//    base[1] = 1234567890;
+//    base[0] = 1234567890;
+//    exponent[2] = 0;
+//    exponent[1] = 0;
+//    exponent[0] = 1000000;
+//    modulus[1] = 1;
+//    modulus[0] = 1;
+//    expected[1] = 0;
+//    expected[0] = 293330;
+//    fast_exponentiation_modulo(base, exponent, modulus, result, size, size_exponent, storage);
+//    delete_storage(storage);
+//    QVERIFY(fast_is_equal(result, expected, size));
 }
 
 static Fast_large_test FAST_LARGE_TEST;

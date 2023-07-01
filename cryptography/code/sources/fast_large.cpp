@@ -170,52 +170,51 @@ void fast_multiplication(uint64_t  a[], uint64_t b[], uint64_t product[], uint16
 
 void fast_shift_left(uint64_t number[], uint16_t size, bool carry)
 {
-//    uint64_t mask = 1;
-//    mask <<= 32;
-//    for(uint16_t i=0; i<size-1; i++)
-//    {
-//        number[i] <<= 1;
-//        number[i] += (carry)?1:0;
-//        carry = number[i] & mask;
-//        number[i] ^= number[i] & mask;
-//    }
-//    number[size-1] <<= 1;
-//    number[size-1] += (carry)?1:0;
-//    number[size-1] ^= (number[size-1] & mask);
+    uint64_t mask = 1;
+    mask <<= 32;
+    for(uint16_t i=0; i<size-1; i++)
+    {
+        number[i] <<= 1;
+        number[i] += (carry)?1:0;
+        carry = number[i] & mask;
+        number[i] ^= number[i] & mask;
+    }
+    number[size-1] <<= 1;
+    number[size-1] += (carry)?1:0;
+    number[size-1] ^= (number[size-1] & mask);
 }
 
 void fast_division_modulo(uint64_t  a[], uint64_t b[], uint64_t quotient[], uint64_t remainder[], uint16_t size_a, uint16_t size_b, Storage& storage)
 {
-//    fast_clear(quotient, size_a);
-//    fast_clear(remainder, size_b);
-//    fast_clear(difference, size_b+1);
-//    uint16_t index = size_a;
-//    uint16_t bit;
-//    bool carry;
-//    for(uint16_t i=0; i<size_a; i++)
-//    {
-//        index--;
-//        bit = 32;
-//        for(uint16_t j=0; j<32; j++)
-//        {
-//            bit--;
-//            carry = (a[index] >> bit) & 1;
-//            fast_shift_left(remainder, size_b, carry);
-//            fast_shift_left(quotient, size_a, false);
-//            if(fast_is_less_or_equal_than(b, remainder, size_b))
-//            {
-//                fast_substraction(remainder, b, difference, size_b);
-//                fast_copy(difference, remainder,  size_b);
-//                quotient[0] += 1;
-//            }
-//        }
-//    }
+    fast_clear(quotient, size_a);
+    fast_clear(remainder, size_b);
+    fast_clear(storage.difference_s1, size_b+1);
+    uint16_t index = size_a;
+    uint16_t bit;
+    bool carry;
+    for(uint16_t i=0; i<size_a; i++)
+    {
+        index--;
+        bit = 32;
+        for(uint16_t j=0; j<32; j++)
+        {
+            bit--;
+            carry = (a[index] >> bit) & 1;
+            fast_shift_left(remainder, size_b, carry);
+            fast_shift_left(quotient, size_a, false);
+            if(fast_is_less_or_equal_than(b, remainder, size_b))
+            {
+                fast_substraction(remainder, b, remainder, size_b, storage);
+                quotient[0] += 1;
+            }
+        }
+    }
 }
 
 void fast_multiplication_modulo(uint64_t a[], uint64_t b[], uint64_t n[], uint64_t result[], uint16_t size, Storage& storage)
 {
-//    fast_multiplication(a, b, storage, size, size);
-//    fast_division_modulo(storage, n, dummy_quotient, result, 2*size, size, difference);
+    fast_multiplication(a, b, storage.product_2s, size, size, storage);
+    fast_division_modulo(storage.product_2s, n, storage.dummy_quotient_2s, result, 2*size, size, storage);
 }
 
 void fast_exponentiation_modulo(uint64_t base[], uint64_t exponent[], uint64_t modulus[], uint64_t result[], uint16_t size, uint16_t size_exponent, Storage& storage)
