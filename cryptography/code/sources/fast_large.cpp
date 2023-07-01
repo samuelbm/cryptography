@@ -7,6 +7,7 @@ void new_storage(Storage& storage, uint16_t size)
     storage.product_2s = new uint64_t[2*size];
     storage.quotient_s = new uint64_t[size];
     storage.dummy_quotient_2s = new uint64_t[2*size];
+    storage.squared_s = new uint64_t[size];
 }
 
 void delete_storage(Storage& storage)
@@ -15,10 +16,12 @@ void delete_storage(Storage& storage)
     delete[] storage.product_2s;
     delete[] storage.quotient_s;
     delete[] storage.dummy_quotient_2s;
+    delete[] storage.squared_s;
     storage.difference_s1 = nullptr;
     storage.product_2s = nullptr;
     storage.quotient_s = nullptr;
     storage.dummy_quotient_2s = nullptr;
+    storage.squared_s = nullptr;
 }
 
 Large fast_large2Large(uint64_t fast_large[], uint16_t nb_bits)
@@ -219,21 +222,19 @@ void fast_multiplication_modulo(uint64_t a[], uint64_t b[], uint64_t n[], uint64
 
 void fast_exponentiation_modulo(uint64_t base[], uint64_t exponent[], uint64_t modulus[], uint64_t result[], uint16_t size, uint16_t size_exponent, Storage& storage)
 {
-//    fast_clear(result, size);
-//    result[0] += 1;
-//    copy(base, squared, size);
-//    for(uint16_t i=0; i<size_exponent; i++)
-//    {
-//        for(uint16_t j=0; j<32; j++)
-//        {
-//            if((exponent[i] >> j) & 1)
-//            {
-//                fast_multiplication_modulo(result, squared, modulus, result_storage, size, storage, dummy_quotient, difference);
-//                copy(result_storage, result, size);
-//            }
-//            fast_multiplication_modulo(squared, squared, modulus, squared_storage, size, storage, dummy_quotient, difference);
-//            copy(squared_storage, squared, size);
-//        }
-//    }
+    fast_clear(result, size);
+    result[0] += 1;
+    fast_copy(base, storage.squared_s, size);
+    for(uint16_t i=0; i<size_exponent; i++)
+    {
+        for(uint16_t j=0; j<32; j++)
+        {
+            if((exponent[i] >> j) & 1)
+            {
+                fast_multiplication_modulo(result, storage.squared_s, modulus, result, size, storage);
+            }
+            fast_multiplication_modulo(storage.squared_s, storage.squared_s, modulus, storage.squared_s, size, storage);
+        }
+    }
 }
 

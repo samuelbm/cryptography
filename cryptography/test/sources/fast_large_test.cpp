@@ -258,27 +258,28 @@ void Fast_large_test::Given_a_1_1_b_1_1_n_1000000_When_testing_fast_multiplicati
 
 void Fast_large_test::Given_base_1_1_exponent_1_1_modulus_1000000_When_testing_fast_exponentiation_modulo_Then_result_is_259137()
 {
-//    uint16_t size = 2;
-//    uint16_t size_exponent = 3;
-//    uint64_t base[size];
-//    uint64_t exponent[size];
-//    uint64_t modulus[size];
-//    uint64_t result[size];
-//    uint64_t expected[size];
-//    Storage storage;
-//    new_storage(storage, size);
-//    base[1] = 1234567890;
-//    base[0] = 1234567890;
-//    exponent[2] = 0;
-//    exponent[1] = 0;
-//    exponent[0] = 1000000;
-//    modulus[1] = 1;
-//    modulus[0] = 1;
-//    expected[1] = 0;
-//    expected[0] = 293330;
-//    fast_exponentiation_modulo(base, exponent, modulus, result, size, size_exponent, storage);
-//    delete_storage(storage);
-//    QVERIFY(fast_is_equal(result, expected, size));
+    uint16_t size = 2;
+    uint16_t size_exponent = 3;
+    uint64_t base[size];
+    uint64_t exponent[size_exponent];
+    uint64_t modulus[size];
+    uint64_t result[size];
+    uint64_t expected[size];
+    Storage storage;
+    new_storage(storage, size);
+    base[1] = 1234567890;
+    base[0] = 1234567891;
+    exponent[2] = 0;
+    exponent[1] = 1234567890;
+    exponent[0] = 1234567890;
+    modulus[1] = 0;
+    modulus[0] = 1000000;
+    expected[1] = 0;
+    expected[0] = 95401;
+    fast_exponentiation_modulo(base, exponent, modulus, result, size, size_exponent, storage);
+    delete_storage(storage);
+    qDebug() << result[1] << result[0] << expected[1] << expected[0];
+    QVERIFY(fast_is_equal(result, expected, size));
 }
 
 static Fast_large_test FAST_LARGE_TEST;

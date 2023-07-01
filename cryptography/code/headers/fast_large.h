@@ -10,6 +10,7 @@ typedef struct Storage
     uint64_t* product_2s;
     uint64_t* quotient_s;
     uint64_t* dummy_quotient_2s;
+    uint64_t* squared_s;
 } Storage;
 
 void new_storage(Storage& storage, uint16_t size);
