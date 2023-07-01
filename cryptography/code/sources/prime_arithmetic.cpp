@@ -1,6 +1,7 @@
 #include "prime_arithmetic.h"
 #include <QDebug>
 #include <QTest>
+#include "fast_large.h"
 
 /*
 addend1 (size)                  : n
@@ -433,25 +434,31 @@ bool is_prime_with_fermat_little_theorem(Large const& maybe_prime, Count& count,
     return is_prime;
 }
 
-//cannot determine stats as it will vary with the number of attempt to find prime
+////cannot determine stats as it will vary with the number of attempt to find prime
+//Large find_prime_equiv_3_mod_4(uint16_t size, QRandomGenerator& prng, Count& count)
+//{
+//    Large prime_under_test(size);
+//    prime_under_test.clear(0, size);
+//    prime_under_test[0] = true;
+//    prime_under_test[1] = true;
+//    prime_under_test[size-1] = true;
+//    count.regs += 3;
+//    uint64_t total = 0;
+//    do
+//    {
+//        for(uint16_t i=2; i<size-1; i++)
+//        {
+//            prime_under_test[i] = prng.generate() & 1;//prng.generate64() & 1;
+//            count.regs++;
+//        }
+//    } while(!is_prime_with_fermat_little_theorem(prime_under_test, count));
+//    return prime_under_test;
+//}
+
+//second attemp
 Large find_prime_equiv_3_mod_4(uint16_t size, QRandomGenerator& prng, Count& count)
 {
-    Large prime_under_test(size);
-    prime_under_test.clear(0, size);
-    prime_under_test[0] = true;
-    prime_under_test[1] = true;
-    prime_under_test[size-1] = true;
-    count.regs += 3;
-    uint64_t total = 0;
-    do
-    {
-        for(uint16_t i=2; i<size-1; i++)
-        {
-            prime_under_test[i] = prng.generate() & 1;//prng.generate64() & 1;
-            count.regs++;
-        }
-    } while(!is_prime_with_fermat_little_theorem(prime_under_test, count));
-    return prime_under_test;
+    // a compléter
 }
 
 /*

@@ -1,9 +1,11 @@
 #include "fast_large.h"
 #include <QDebug>
+#include "prime_arithmetic.h"
 
 void new_storage(Storage& storage, uint16_t size)
 {
     storage.difference_s1 = new uint64_t[size + 1];
+    storage.difference_s2 = new uint64_t[size + 1];
     storage.product_2s = new uint64_t[2*size];
     storage.quotient_s = new uint64_t[size];
     storage.dummy_quotient_2s = new uint64_t[2*size];
@@ -18,6 +20,7 @@ void new_storage(Storage& storage, uint16_t size)
 void delete_storage(Storage& storage)
 {
     delete[] storage.difference_s1;
+    delete[] storage.difference_s2;
     delete[] storage.product_2s;
     delete[] storage.quotient_s;
     delete[] storage.dummy_quotient_2s;
@@ -27,6 +30,7 @@ void delete_storage(Storage& storage)
     delete[] storage.base_s;
     delete[] storage.result_s;
     storage.difference_s1 = nullptr;
+    storage.difference_s2 = nullptr;
     storage.product_2s = nullptr;
     storage.quotient_s = nullptr;
     storage.dummy_quotient_2s = nullptr;
@@ -101,15 +105,19 @@ bool fast_is_less_than(uint64_t a[], uint64_t b[], uint16_t size_a)
     return false;
 }
 
-bool fast_is_less_or_equal_than(uint64_t a[], uint64_t b[], uint16_t size_a)
+bool fast_is_less_or_equal_than(uint64_t a[], uint64_t b[], uint16_t size)
 {
-    uint16_t index = size_a;
-    for(uint16_t i=0; i<size_a; i++)
+    uint16_t index = size;
+    for(uint16_t i=0; i<size; i++)
     {
        index--;
        if(a[index] > b[index])
        {
            return false;
+       }
+       else if(a[index] < b[index])
+       {
+            return true;
        }
     }
     return true;
@@ -184,8 +192,9 @@ void fast_multiplication(uint64_t  a[], uint64_t b[], uint64_t product[], uint16
 }
 
 
-void fast_shift_left(uint64_t number[], uint16_t size, bool carry)
+bool fast_shift_left(uint64_t number[], uint16_t size, bool carry)
 {
+    bool super_carry = (number[size-1] >> 31) & 1;
     uint64_t mask = 1;
     mask <<= 32;
     for(uint16_t i=0; i<size-1; i++)
@@ -198,16 +207,18 @@ void fast_shift_left(uint64_t number[], uint16_t size, bool carry)
     number[size-1] <<= 1;
     number[size-1] += (carry)?1:0;
     number[size-1] ^= (number[size-1] & mask);
+    return super_carry;
 }
 
 void fast_division_modulo(uint64_t  a[], uint64_t b[], uint64_t quotient[], uint64_t remainder[], uint16_t size_a, uint16_t size_b, Storage& storage)
 {
+    Large la = fast_large2Large(a, 256);
     fast_clear(quotient, size_a);
     fast_clear(remainder, size_b);
-    fast_clear(storage.difference_s1, size_b+1);
     uint16_t index = size_a;
     uint16_t bit;
     bool carry;
+    bool super_carry;
     for(uint16_t i=0; i<size_a; i++)
     {
         index--;
@@ -216,9 +227,9 @@ void fast_division_modulo(uint64_t  a[], uint64_t b[], uint64_t quotient[], uint
         {
             bit--;
             carry = (a[index] >> bit) & 1;
-            fast_shift_left(remainder, size_b, carry);
+            super_carry = fast_shift_left(remainder, size_b, carry);
             fast_shift_left(quotient, size_a, false);
-            if(fast_is_less_or_equal_than(b, remainder, size_b))
+            if(super_carry || fast_is_less_or_equal_than(b, remainder, size_b))
             {
                 fast_substraction(remainder, b, remainder, size_b, storage);
                 quotient[0] += 1;
@@ -264,5 +275,81 @@ bool fast_is_prime_with_fermat_little_theorem(uint64_t maybe_prime[], uint16_t s
         }
     }
     return true; //probably
+}
+
+// cette implémentation semble ne pas etre assez aléatoire.
+//uint16_t fast_find_prime_equiv_3_mod_4(uint64_t prime[], uint16_t size, QRandomGenerator& prng, Storage& storage, uint16_t nb_round, uint16_t nb_bits)
+//{
+//    uint64_t one = 1;
+//    uint64_t all_one_32 = 4294967295;
+//    uint16_t tries = 0;
+//    uint16_t mask = 31;
+//    do
+//    {
+//        tries++;
+//        for(uint16_t i=0; i<size; i++)
+//        {
+//            prime[i] = prng.generate64();
+//        }
+//        for(uint16_t i=0; i<32*size; i++)
+//        {
+//            uint64_t index_word = i >> 5;
+//            uint64_t index_bit = i & mask;
+//            if(i == 0 || i == 1)
+//            {
+//                prime[index_word] |= (one << index_bit);
+//            }
+//            else if(i == nb_bits - 1)
+//            {
+//                prime[index_word] |= (one << index_bit);
+//            }
+//            else if(i >= nb_bits)
+//            {
+//                prime[index_word] &= ((one << index_bit) ^ all_one_32);
+//            }
+//        }
+//        Large test = fast_large2Large(prime, nb_bits);
+//        qDebug() << tries << test.toHex() << Large2String(test);
+//    } while(!fast_is_prime_with_fermat_little_theorem(prime, size, nb_round, storage));
+//    return tries;
+//}
+
+uint16_t fast_find_prime_equiv_3_mod_4(uint64_t prime[], uint16_t size, QRandomGenerator& prng, Storage& storage, uint16_t nb_round, uint16_t nb_bits)
+{
+    uint64_t one = 1;
+    uint64_t all_one_32 = 4294967295;
+    uint16_t tries = 0;
+    uint16_t mask = 31;
+    uint16_t index;
+    do
+    {
+        tries++;
+        for(uint16_t i=0; i < size; i++)
+        {
+            for(uint16_t j=0; j < 32; j++)
+            {
+                index = 32*i + j;
+                if(index == 0 || index == 1)
+                {
+                    prime[i] |= (one << j);
+                }
+                else if(index == nb_bits - 1)
+                {
+                    prime[i] |= (one << j);
+                }
+                else if(index >= nb_bits)
+                {
+                    prime[i] &= ((one << j) ^ all_one_32);
+                }
+                else
+                {
+                    prime[i] = (prng.generate64() & 1)? prime[i] | (one << j): prime[i] & ((one << j) ^ all_one_32);
+                }
+            }
+        }
+        qDebug() << tries;
+        Large test = fast_large2Large(prime, nb_bits);
+    } while(!fast_is_prime_with_fermat_little_theorem(prime, size, nb_round, storage));
+    return tries;
 }
 

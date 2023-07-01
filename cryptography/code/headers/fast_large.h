@@ -3,10 +3,12 @@
 
 #include <stdint.h>
 #include "large.h"
+#include <QRandomGenerator>
 
 typedef struct Storage
 {
     uint64_t* difference_s1;
+    uint64_t* difference_s2;
     uint64_t* product_2s;
     uint64_t* quotient_s;
     uint64_t* dummy_quotient_2s;
@@ -60,7 +62,7 @@ void fast_addition_mono( uint64_t b, uint64_t sum[], uint16_t size);
 void fast_multiplication(uint64_t  a[], uint64_t b[], uint64_t product[], uint16_t size_a, uint16_t size_b, Storage& storage);
 
 //
-void fast_shift_left(uint64_t number[], uint16_t size, bool carry);
+bool fast_shift_left(uint64_t number[], uint16_t size, bool carry);
 
 //quotient_size = a_size
 //remainder_size = b_size
@@ -80,6 +82,8 @@ void fast_exponentiation_modulo(uint64_t base[], uint64_t exponent[], uint64_t m
 
 //maybe_prime should be > 1000
 bool fast_is_prime_with_fermat_little_theorem(uint64_t maybe_prime[], uint16_t size, uint16_t nb_round, Storage& storage);
-//uint16_t fast_find_prime_equiv_3_mod_4(uint16_t size, QRandomGenerator& prng, Count& count);
+
+//return the number of try
+uint16_t fast_find_prime_equiv_3_mod_4(uint64_t prime[], uint16_t size, QRandomGenerator& prng, Storage& storage, uint16_t nb_round, uint16_t nb_bits);
 
 #endif // FAST_LARGE_H

@@ -14,54 +14,62 @@
 #include <QDebug>
 #include "rsa.h"
 #include "fast_large.h"
+#include <QRandomGenerator>
 
 int main(int argc, char *argv[])
 {
     qDebug() << argc << argv[0][0];
 
-    // setup lambda
-    int status = 0;
-    auto runTest = [&status, argc, argv](QObject* obj) {
-        status |= QTest::qExec(obj, argc, argv);
-    };
+//    // setup lambda
+//    int status = 0;
+//    auto runTest = [&status, argc, argv](QObject* obj) {
+//        status |= QTest::qExec(obj, argc, argv);
+//    };
 
-    // run suite
-    auto &suite = TestSuite::suite();
-    for (auto it = suite.begin(); it != suite.end(); ++it) {
-        runTest(*it);
-    }
+//    // run suite
+//    auto &suite = TestSuite::suite();
+//    for (auto it = suite.begin(); it != suite.end(); ++it) {
+//        runTest(*it);
+//    }
 
-    if(status)
+//    if(status)
+//    {
+//        qDebug() << "Test Failed";// << Qt::endl;
+//        return 0;
+//    }
+//    else
+//    {
+//        qDebug() << "Test Successful";// << Qt::endl;
+//    }
+
+    qDebug() << "-----------------------------";
+    qDebug() << "start";
+    QRandomGenerator prng(1234);
+    uint16_t size = 32;
+    Storage storage;
+    new_storage(storage, size);
+    uint16_t nb_bits = 1024;
+    uint16_t nb_round = 100;
+    uint64_t prime[size];
+    uint16_t tries;
+    for(int i = 0; i<10; i++)
     {
-        qDebug() << "Test Failed";// << Qt::endl;
-        return 0;
-    }
-    else
-    {
-        qDebug() << "Test Successful";// << Qt::endl;
+        tries = fast_find_prime_equiv_3_mod_4(prime, size, prng, storage, nb_round, nb_bits);
+        Large lprime = fast_large2Large(prime, nb_bits);
+        qDebug() << i << tries << Large2String(lprime);
     }
 
-//    uint16_t size = 2;
-//    Storage storage;
-//    new_storage(storage, size);
-//    uint64_t base[size];
-//    uint64_t exponent[size + 1];
-//    uint64_t modulus[size];
-//    uint64_t result[size];
-//    uint64_t squared[size];
+    delete_storage(storage);
+    qDebug() << "done";
 
-//    base[1] = 1;
-//    base[0] = 1;
-//    modulus[1] = 0;
-//    modulus[0] = 1000000;
-//    exponent[2] = 0;
-//    exponent[1] = 1;
-//    exponent[0] = 1;
-//    //fast_exponentiation_modulo(base, exponent, modulus, result, size, size+1, squared, storage, dummy_quotient, difference, result_storage, squared_storage);
-//    Large test = fast_large2Large(result, 32*size);
-//    qDebug() << Large2String(test);
 
-//    delete_storage(storage);
-//    //rsa_dummy1();
-    return 0;
+//    rsa_dummy1();
+//    return 0;
 }
+//816983375325856467272146355509
+//816983375325856467272146355509
+//1010 = 10
+//01001111110100001100111100010000 = 1339084560
+//10100100010001011110110111110111 = 2756046327
+//10010011010111000000010100110101 = 2472281397
+//816983375325856467272146355509
