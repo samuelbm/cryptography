@@ -278,8 +278,35 @@ void Fast_large_test::Given_base_1_1_exponent_1_1_modulus_1000000_When_testing_f
     expected[0] = 95401;
     fast_exponentiation_modulo(base, exponent, modulus, result, size, size_exponent, storage);
     delete_storage(storage);
-    qDebug() << result[1] << result[0] << expected[1] << expected[0];
     QVERIFY(fast_is_equal(result, expected, size));
+}
+
+void Fast_large_test::Given_non_prime_25140187_on_32_bits_When_testing_fast_is_prime_with_fermat_little_theorem_Then_return_false()
+{
+    uint16_t size = 2;
+    uint16_t nb_round = 100;
+    uint64_t maybe_prime[size];
+    Storage storage;
+    new_storage(storage, size);
+    maybe_prime[1] = 0;
+    maybe_prime[0] = 25140187;
+    bool is_prime = fast_is_prime_with_fermat_little_theorem(maybe_prime, size, nb_round, storage);
+    delete_storage(storage);
+    QVERIFY(!is_prime);
+}
+
+void Fast_large_test::Given_prime_115249_on_32_bits_When_testing_fast_is_prime_with_fermat_little_theorem_Then_return_true()
+{
+    uint16_t size = 2;
+    uint16_t nb_round = 100;
+    uint64_t maybe_prime[size];
+    Storage storage;
+    new_storage(storage, size);
+    maybe_prime[1] = 0;
+    maybe_prime[0] = 115249;
+    bool is_prime = fast_is_prime_with_fermat_little_theorem(maybe_prime, size, nb_round, storage);
+    delete_storage(storage);
+    QVERIFY(is_prime);
 }
 
 static Fast_large_test FAST_LARGE_TEST;

@@ -8,6 +8,11 @@ void new_storage(Storage& storage, uint16_t size)
     storage.quotient_s = new uint64_t[size];
     storage.dummy_quotient_2s = new uint64_t[2*size];
     storage.squared_s = new uint64_t[size];
+    storage.phi_n_s = new uint64_t[size];
+    storage.one_s = new uint64_t[size];
+    storage.base_s = new uint64_t[size];
+    storage.result_s = new uint64_t[size];
+    fast_init_with_small_number(1, storage.one_s, size);
 }
 
 void delete_storage(Storage& storage)
@@ -17,11 +22,19 @@ void delete_storage(Storage& storage)
     delete[] storage.quotient_s;
     delete[] storage.dummy_quotient_2s;
     delete[] storage.squared_s;
+    delete[] storage.phi_n_s;
+    delete[] storage.one_s;
+    delete[] storage.base_s;
+    delete[] storage.result_s;
     storage.difference_s1 = nullptr;
     storage.product_2s = nullptr;
     storage.quotient_s = nullptr;
     storage.dummy_quotient_2s = nullptr;
     storage.squared_s = nullptr;
+    storage.phi_n_s = nullptr;
+    storage.one_s = nullptr;
+    storage.base_s = nullptr;
+    storage.result_s = nullptr;
 }
 
 Large fast_large2Large(uint64_t fast_large[], uint16_t nb_bits)
@@ -36,9 +49,9 @@ Large fast_large2Large(uint64_t fast_large[], uint16_t nb_bits)
     return number;
 }
 
-void fast_copy(uint64_t source[], uint64_t destination[], uint16_t size_a)
+void fast_copy(uint64_t source[], uint64_t destination[], uint16_t size)
 {
-    for(uint16_t i=0; i<size_a; i++)
+    for(uint16_t i=0; i<size; i++)
     {
         destination[i] = source[i];
     }
@@ -236,5 +249,20 @@ void fast_exponentiation_modulo(uint64_t base[], uint64_t exponent[], uint64_t m
             fast_multiplication_modulo(storage.squared_s, storage.squared_s, modulus, storage.squared_s, size, storage);
         }
     }
+}
+
+bool fast_is_prime_with_fermat_little_theorem(uint64_t maybe_prime[], uint16_t size, uint16_t nb_round, Storage& storage)
+{
+    fast_substraction(maybe_prime, storage.one_s, storage.phi_n_s, size, storage);
+    for(uint64_t i = 0; i < nb_round; i++)
+    {
+        fast_init_with_small_number(storage.primes[i], storage.base_s, size);
+        fast_exponentiation_modulo(storage.base_s, storage.phi_n_s, maybe_prime, storage.result_s, size, size, storage);
+        if(!fast_is_equal(storage.result_s, storage.one_s, size))
+        {
+            return false; //certainly;
+        }
+    }
+    return true; //probably
 }
 

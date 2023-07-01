@@ -30,6 +30,8 @@ private slots:
     void Given_a_1234567890_1234567890_b_1000000_When_testing_fast_division_modulo_Then_remainder_is_293330();
     void Given_a_1_1_b_1_1_n_1000000_When_testing_fast_multiplication_modulo_Then_result_is_486209();
     void Given_base_1_1_exponent_1_1_modulus_1000000_When_testing_fast_exponentiation_modulo_Then_result_is_259137();
+    void Given_non_prime_25140187_on_32_bits_When_testing_fast_is_prime_with_fermat_little_theorem_Then_return_false();
+    void Given_prime_115249_on_32_bits_When_testing_fast_is_prime_with_fermat_little_theorem_Then_return_true();
 };
 
 #endif // FAST_LARGE_TEST_H

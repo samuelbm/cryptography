@@ -11,6 +11,15 @@ typedef struct Storage
     uint64_t* quotient_s;
     uint64_t* dummy_quotient_2s;
     uint64_t* squared_s;
+    uint64_t* phi_n_s;
+    uint64_t* one_s;
+    uint64_t* base_s;
+    uint64_t* result_s;
+    uint64_t primes[100] = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71,
+              73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157, 163, 167, 173,
+              179, 181, 191, 193, 197, 199, 211, 223, 227, 229, 233, 239, 241, 251, 257, 263, 269, 271, 277, 281,
+              283, 293, 307, 311, 313, 317, 331, 337, 347, 349, 353, 359, 367, 373, 379, 383, 389, 397, 401, 409,
+              419, 421, 431, 433, 439, 443, 449, 457, 461, 463, 467, 479, 487, 491, 499, 503, 509, 521, 523, 541};
 } Storage;
 
 void new_storage(Storage& storage, uint16_t size);
@@ -69,7 +78,8 @@ void fast_multiplication_modulo(uint64_t a[], uint64_t b[], uint64_t n[], uint64
 //exponent_size
 void fast_exponentiation_modulo(uint64_t base[], uint64_t exponent[], uint64_t modulus[], uint64_t result[], uint16_t size, uint16_t size_exponent, Storage& storage);
 
-//bool fast_is_prime_with_fermat_little_theorem(uint64_t const& maybe_prime, Count& count, uint16_t nb_round=100);
+//maybe_prime should be > 1000
+bool fast_is_prime_with_fermat_little_theorem(uint64_t maybe_prime[], uint16_t size, uint16_t nb_round, Storage& storage);
 //uint16_t fast_find_prime_equiv_3_mod_4(uint16_t size, QRandomGenerator& prng, Count& count);
 
 #endif // FAST_LARGE_H
