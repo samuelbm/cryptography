@@ -161,7 +161,9 @@ def compute_a_power_x_mod_n_performance(a, x, n, count):
     if x == 0:
         return np.mod(1, n)
     count1 = 0
-    x_binary = [(x >> i) & 1 for i in range(0, 1 + int(np.floor(np.log2(x))))]
+    #x_binary = [(x >> i) & 1 for i in range(0, 1 + int(np.floor(np.log2(x))))]
+    upper = shift_right_to_null(x)
+    x_binary = [(x >> i) & 1 for i in range(0, upper)]
     a_power_x_mod_n = 1
     squaring = np.mod(a, n)
     count1 += 32
@@ -171,6 +173,12 @@ def compute_a_power_x_mod_n_performance(a, x, n, count):
         squaring = np.mod(squaring ** 2, n)
     return a_power_x_mod_n, count+count1
 
+def shift_right_to_null(x):
+    total = 0
+    while x != 0:
+        total = total + 1
+        x = x >> 1
+    return total
 
 def compute_inverse_performance(a, n, count):
     count1 = 0

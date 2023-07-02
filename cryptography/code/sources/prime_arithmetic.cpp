@@ -679,8 +679,8 @@ QString count2string(Count const& count)
     uint64_t latency_count = count.clock;
     uint64_t regs_count = count.regs;
     uint64_t gates_count = count.AND_gates + count.NAND_gates + count.OR_gates + count.NOR_gates + count.XNOR_gates + count.XNOR_gates;
-    result += QString::number(latency_count) + ","; // latency
-    result += QString::number(regs_count) + ","; // regs
-    result += QString::number(gates_count) + ","; // gates
+    result += "clock: " + QString::number(latency_count) + ","; // latency
+    result += "regs: " + QString::number(regs_count) + ","; // regs
+    result += "gates: " + QString::number(gates_count); // gates
     return result;
 }

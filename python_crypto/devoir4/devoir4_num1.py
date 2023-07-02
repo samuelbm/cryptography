@@ -111,22 +111,27 @@ def is_prime_with_millerrabin_performance(n, count):
     return True, count  # probably
 
 
-print("Numéro 1A")
-test(1548)
-print()
+# print("Numéro 1A")
+# test(1548)
+# print()
+#
+# print("Numéro 1B")
+# test(9763)
+# print()
+#
+# print("Numéro 1C")
+# test(3110657)
+# print()
+#
+# print("Numéro 1D")
+# test(5167849)
+# print()
+#
+# print("Numéro 1E")
+# test(10444817)
+# print()
 
-print("Numéro 1B")
-test(9763)
-print()
+x = 272215255892494994533594579140612895860
+factors, count = method_pollard(x, 1)
+print(factors)
 
-print("Numéro 1C")
-test(3110657)
-print()
-
-print("Numéro 1D")
-test(5167849)
-print()
-
-print("Numéro 1E")
-test(10444817)
-print()
