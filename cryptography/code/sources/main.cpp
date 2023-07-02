@@ -42,6 +42,8 @@ int main(int argc, char *argv[])
 //        qDebug() << "Test Successful";// << Qt::endl;
 //    }
 
+
+    //regarder si ca me prend le meme temps pour encryption et decryption si oui on va le faire juste une fois.
     rsa_128(10);
     return 0;
 }
