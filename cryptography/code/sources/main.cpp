@@ -42,26 +42,24 @@ int main(int argc, char *argv[])
 //        qDebug() << "Test Successful";// << Qt::endl;
 //    }
 
-    qDebug() << "-----------------------------";
-    qDebug() << "start";
+    Count count;
+    count_initialization(count);
     QRandomGenerator prng(1234);
-    uint16_t size = 48;
+    uint16_t nb_bits = 100;
+    uint16_t size = 4;
     Storage storage;
-    new_storage(storage, size);
-    uint16_t nb_bits = 1536;
+    uint16_t nb_primes_to_find = 10;
     uint16_t nb_round = 20;
-    uint64_t prime[size];
     uint16_t tries;
-    for(int i = 0; i<10; i++)
+    Large prime(nb_bits);
+    new_storage(storage, size);
+    for(uint64_t i=0; i<nb_primes_to_find; i++)
     {
-        tries = fast_find_prime_equiv_3_mod_4(prime, size, prng, storage, nb_round, nb_bits);
-        Large lprime = fast_large2Large(prime, nb_bits);
-        qDebug() <<"prime found" << i << tries << Large2String(lprime);
+        tries = 0;
+        prime = find_prime_equiv_3_mod_4(size, prng, nb_bits, nb_round, tries, storage, count);
+        qDebug() << i << tries << Large2String(prime);
     }
-
     delete_storage(storage);
-    qDebug() << "done";
-
 
 //    rsa_dummy1();
 //    return 0;

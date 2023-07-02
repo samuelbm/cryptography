@@ -434,31 +434,37 @@ bool is_prime_with_fermat_little_theorem(Large const& maybe_prime, Count& count,
     return is_prime;
 }
 
-////cannot determine stats as it will vary with the number of attempt to find prime
-//Large find_prime_equiv_3_mod_4(uint16_t size, QRandomGenerator& prng, Count& count)
-//{
-//    Large prime_under_test(size);
-//    prime_under_test.clear(0, size);
-//    prime_under_test[0] = true;
-//    prime_under_test[1] = true;
-//    prime_under_test[size-1] = true;
-//    count.regs += 3;
-//    uint64_t total = 0;
-//    do
-//    {
-//        for(uint16_t i=2; i<size-1; i++)
-//        {
-//            prime_under_test[i] = prng.generate() & 1;//prng.generate64() & 1;
-//            count.regs++;
-//        }
-//    } while(!is_prime_with_fermat_little_theorem(prime_under_test, count));
-//    return prime_under_test;
-//}
-
-//second attemp
-Large find_prime_equiv_3_mod_4(uint16_t size, QRandomGenerator& prng, Count& count)
+/*
+base (size)                     : 100*(n)
+exponent (size)                 : 100*(n)
+modulus (size)                  : 100*(n)
+result (size)                   : 100*(n)
+Latency                         : 100*(3*n*n) + 1
+Operations                      : 100*(14*n*n*n - 5*n*n) + n
+regs                            : 100*(14*n*n*n - 4*n*n)
+NOT_gates                       : 100*(12*n*n*n - 3*n) + n
+AND_gates                       : 100*(24*n*n*n - 8*n*n - n+ 1) + 2*n
+NAND_gates                      : 0
+OR_gates                        : 100*(14*n*n*n - n*n -3*n) + n
+NOR_gates                       : 0
+XOR_gates                       : 100*(16*n*n*n - 8*n*n) + 2*n
+XNOR_gates                      : 100*(n)
+*/
+Large find_prime_equiv_3_mod_4(uint16_t size, QRandomGenerator& prng, uint16_t nb_bits, uint16_t nb_round, uint16_t& tries, Storage& storage, Count& count)
 {
-    // a compléter
+    uint64_t n = nb_bits;
+    tries = fast_find_prime_equiv_3_mod_4(storage.prime_s, size, prng, storage, nb_round, nb_bits);
+    count.clock += (3*n*n*nb_round + 1)*tries;
+    count.operation += ((14*n*n*n - 5*n*n)*nb_round + n)*tries;
+    count.regs += ((14*n*n*n - 4*n*n)*nb_round)*tries;
+    count.NOT_gates += ((12*n*n*n - 3*n)*nb_round + n)*tries;
+    count.AND_gates += ((24*n*n*n - 8*n*n - n+ 1)*nb_round + 2*n)*tries;
+    count.NAND_gates += 0;
+    count.OR_gates += ((14*n*n*n - n*n -3*n)*nb_round + n)*tries;
+    count.NOR_gates += 0;
+    count.XOR_gates += ((16*n*n*n - 8*n*n)*nb_round + 2*n)*tries;
+    count.XNOR_gates += (n*nb_round)*tries;
+    return fast_large2Large(storage.prime_s, nb_bits);
 }
 
 /*

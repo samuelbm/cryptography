@@ -1,6 +1,5 @@
 #include "fast_large.h"
 #include <QDebug>
-#include <QElapsedTimer>
 
 void new_storage(Storage& storage, uint16_t size)
 {
@@ -14,6 +13,7 @@ void new_storage(Storage& storage, uint16_t size)
     storage.one_s = new uint64_t[size];
     storage.base_s = new uint64_t[size];
     storage.result_s = new uint64_t[size];
+    storage.prime_s = new uint64_t[size];
     fast_init_with_small_number(1, storage.one_s, size);
 }
 
@@ -29,6 +29,7 @@ void delete_storage(Storage& storage)
     delete[] storage.one_s;
     delete[] storage.base_s;
     delete[] storage.result_s;
+    delete[] storage.prime_s;
     storage.difference_s1 = nullptr;
     storage.difference_s2 = nullptr;
     storage.product_2s = nullptr;
@@ -38,6 +39,7 @@ void delete_storage(Storage& storage)
     storage.phi_n_s = nullptr;
     storage.one_s = nullptr;
     storage.base_s = nullptr;
+    storage.result_s = nullptr;
     storage.result_s = nullptr;
 }
 
@@ -316,13 +318,11 @@ bool fast_is_prime_with_fermat_little_theorem(uint64_t maybe_prime[], uint16_t s
 
 uint16_t fast_find_prime_equiv_3_mod_4(uint64_t prime[], uint16_t size, QRandomGenerator& prng, Storage& storage, uint16_t nb_round, uint16_t nb_bits)
 {
-    QElapsedTimer timer;
     uint64_t one = 1;
     uint64_t all_one_32 = 4294967295;
     uint16_t tries = 0;
     uint16_t mask = 31;
     uint16_t index;
-    timer.start();
     do
     {
         tries++;
@@ -349,7 +349,6 @@ uint16_t fast_find_prime_equiv_3_mod_4(uint64_t prime[], uint16_t size, QRandomG
                 }
             }
         }
-      qDebug() << tries;
     } while(!fast_is_prime_with_fermat_little_theorem(prime, size, nb_round, storage));
     return tries;
 }

@@ -3,6 +3,7 @@
 
 #include <QRandomGenerator>
 #include "bool_algeabra.h"
+#include "fast_large.h"
 
 void addition(Large const& addend1, Large const& addend2, Large& sum, Count& count);
 void substraction(Large const& minuend, Large const& substrahend, Large& difference, Count& count);
@@ -21,7 +22,7 @@ void inverse(Large const& a, Large const& n, Large const& phi_n, Large& result, 
 void inverse_with_prime(Large const& a, Large const& p, Large& result, Count& count); //assume gcd(a, n) = 1
 
 bool is_prime_with_fermat_little_theorem(Large const& maybe_prime, Count& count, uint16_t nb_round=100);
-Large find_prime_equiv_3_mod_4(uint16_t size, QRandomGenerator& prng, Count& count);
+Large find_prime_equiv_3_mod_4(uint16_t size, QRandomGenerator& prng, uint16_t nb_bits, uint16_t nb_round, uint16_t& tries, Storage& storage, Count& count);
 //bool is_prime_equiv_3_mod_4(Large const& prime, Count& count);
 //bool is_y_squared_a_quadratic_residue(Large const& y_squared, Count& count);
 //Large determine_y_knowing_y_squared_is_a_quadratic_residue(Large const& y_squared, Count& count);
