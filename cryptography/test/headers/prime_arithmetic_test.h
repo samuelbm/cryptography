@@ -51,6 +51,8 @@ private slots:
     void Given_prime_115249_on_32_bits_When_testing_is_prime_with_fermat_little_theorem_Then_return_true();
     void Given_prime_115249_on_32_bits_When_testing_is_prime_with_fermat_little_theorem_Then_verify_count();
 
+    void Given_p_13_q_29_When_testing_find_phi_phi_n_Then_phi_phi_n_is_96();
+
 };
 
 #endif // PRIME_ARITHMETIC_TEST_H

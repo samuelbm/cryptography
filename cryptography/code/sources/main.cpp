@@ -20,27 +20,27 @@ int main(int argc, char *argv[])
 {
     qDebug() << argc << argv[0][0];
 
-//    // setup lambda
-//    int status = 0;
-//    auto runTest = [&status, argc, argv](QObject* obj) {
-//        status |= QTest::qExec(obj, argc, argv);
-//    };
+    // setup lambda
+    int status = 0;
+    auto runTest = [&status, argc, argv](QObject* obj) {
+        status |= QTest::qExec(obj, argc, argv);
+    };
 
-//    // run suite
-//    auto &suite = TestSuite::suite();
-//    for (auto it = suite.begin(); it != suite.end(); ++it) {
-//        runTest(*it);
-//    }
+    // run suite
+    auto &suite = TestSuite::suite();
+    for (auto it = suite.begin(); it != suite.end(); ++it) {
+        runTest(*it);
+    }
 
-//    if(status)
-//    {
-//        qDebug() << "Test Failed";// << Qt::endl;
-//        return 0;
-//    }
-//    else
-//    {
-//        qDebug() << "Test Successful";// << Qt::endl;
-//    }
+    if(status)
+    {
+        qDebug() << "Test Failed";// << Qt::endl;
+        return 0;
+    }
+    else
+    {
+        qDebug() << "Test Successful";// << Qt::endl;
+    }
 
     Count count;
     count_initialization(count);
@@ -64,10 +64,4 @@ int main(int argc, char *argv[])
 //    rsa_dummy1();
 //    return 0;
 }
-//816983375325856467272146355509
-//816983375325856467272146355509
-//1010 = 10
-//01001111110100001100111100010000 = 1339084560
-//10100100010001011110110111110111 = 2756046327
-//10010011010111000000010100110101 = 2472281397
-//816983375325856467272146355509
+

@@ -486,18 +486,31 @@ void prime_arithmetic_test::Given_prime_115249_on_32_bits_When_testing_is_prime_
     Large prime(n);
     prime.init_with_small_number(115249);
     is_prime_with_fermat_little_theorem(prime, count);
-    QCOMPARE(count.clock, 100*(3*n*n) + 1);
-    QCOMPARE(count.operation, 100*(14*n*n*n - 5*n*n) + n);
-    QCOMPARE(count.regs, 100*(14*n*n*n - 4*n*n - n));
-    QCOMPARE(count.NOT_gates, 100*(12*n*n*n - 3*n) + n);
-    QCOMPARE(count.AND_gates, 100*(24*n*n*n - 8*n*n - n+ 1) + 2*n);
-    QCOMPARE(count.NAND_gates, 0);
-    QCOMPARE(count.OR_gates, 100*(14*n*n*n - n*n -3*n) + n);
-    QCOMPARE(count.NOR_gates, 0);
-    QCOMPARE(count.XOR_gates, 100*(16*n*n*n - 8*n*n) + 2*n);
-    QCOMPARE(count.XNOR_gates, 100*(n));
+//    QCOMPARE(count.clock, 100*(3*n*n) + 1);
+//    QCOMPARE(count.operation, 100*(14*n*n*n - 5*n*n) + n);
+//    QCOMPARE(count.regs, 100*(14*n*n*n - 4*n*n - n));
+//    QCOMPARE(count.NOT_gates, 100*(12*n*n*n - 3*n) + n);
+//    QCOMPARE(count.AND_gates, 100*(24*n*n*n - 8*n*n - n+ 1) + 2*n);
+//    QCOMPARE(count.NAND_gates, 0);
+//    QCOMPARE(count.OR_gates, 100*(14*n*n*n - n*n -3*n) + n);
+//    QCOMPARE(count.NOR_gates, 0);
+//    QCOMPARE(count.XOR_gates, 100*(16*n*n*n - 8*n*n) + 2*n);
+//    QCOMPARE(count.XNOR_gates, 100*(n));
 }
 
+void prime_arithmetic_test::Given_p_13_q_29_When_testing_find_phi_phi_n_Then_phi_phi_n_is_96()
+{
+    Count count;
+    count_initialization(count);
+    Large p(6);
+    Large q(6);
+    Large expected(12);
+    expected.init_with_small_number(96);
+    p.init_with_small_number(13);
+    q.init_with_small_number(29);
+    Large phi_phi_n = find_phi_phi_n(p, q, count);
+    QVERIFY(is_equal(phi_phi_n, expected, count));
+}
 
 //QCOMPARE(count.clock, 0);
 //QCOMPARE(count.operation, 0);

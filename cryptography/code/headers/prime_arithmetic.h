@@ -23,7 +23,8 @@ void inverse_with_prime(Large const& a, Large const& p, Large& result, Count& co
 
 bool is_prime_with_fermat_little_theorem(Large const& maybe_prime, Count& count, uint16_t nb_round=100);
 Large find_prime_equiv_3_mod_4(uint16_t size, QRandomGenerator& prng, uint16_t nb_bits, uint16_t nb_round, uint16_t& tries, Storage& storage, Count& count);
-//bool is_prime_equiv_3_mod_4(Large const& prime, Count& count);
+Large find_phi_phi_n(Large const& p, Large const& q, Count& count);
+
 //bool is_y_squared_a_quadratic_residue(Large const& y_squared, Count& count);
 //Large determine_y_knowing_y_squared_is_a_quadratic_residue(Large const& y_squared, Count& count);
 

@@ -415,14 +415,25 @@ bool is_prime_with_fermat_little_theorem(Large const& maybe_prime, Count& count,
     uint64_t size = maybe_prime.get_number_of_bits();
     Large threshold(size), base(size), exponent(size), one(size), result(size);
     one.init_with_small_number(1);
-    threshold.init_with_small_number(1023);
-    assert(is_less_than(threshold, maybe_prime, dummy_count));
+    threshold.init_with_small_number(542);
     uint64_t primes[] = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71,
               73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157, 163, 167, 173,
               179, 181, 191, 193, 197, 199, 211, 223, 227, 229, 233, 239, 241, 251, 257, 263, 269, 271, 277, 281,
               283, 293, 307, 311, 313, 317, 331, 337, 347, 349, 353, 359, 367, 373, 379, 383, 389, 397, 401, 409,
               419, 421, 431, 433, 439, 443, 449, 457, 461, 463, 467, 479, 487, 491, 499, 503, 509, 521, 523, 541};
-
+    Large small_prime(maybe_prime.get_number_of_bits());
+    if(is_less_than(maybe_prime, threshold, count))
+    {
+        for(uint16_t i=0; i<100 ;i++)
+        {
+            small_prime.init_with_small_number(primes[i]);
+            if(is_equal(maybe_prime, small_prime, count))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
     substraction(maybe_prime, one, exponent, count);
     bool is_prime = true; // probably
     for(uint64_t i=0; i<primes_size; i++)
@@ -465,6 +476,92 @@ Large find_prime_equiv_3_mod_4(uint16_t size, QRandomGenerator& prng, uint16_t n
     count.XOR_gates += ((16*n*n*n - 8*n*n)*nb_round + 2*n)*tries;
     count.XNOR_gates += (n*nb_round)*tries;
     return fast_large2Large(storage.prime_s, nb_bits);
+}
+
+Large find_phi_phi_n(Large const& p, Large const& q, Count& count)
+{
+    uint16_t p_size = p.get_number_of_bits();
+    uint16_t q_size = q.get_number_of_bits();
+    uint16_t n_size = p_size + q_size;
+    Large zero(p_size);
+    Large one(p_size);
+    Large two(p_size);
+    Large p_minus_one(p_size);
+    Large q_minus_one(q_size);
+    Large remainder(p_size);
+    Large factor(p_size);
+    Large factor_minus_one(p_size);
+    Large factor_sum(p_size + 1);
+    Large quotient(n_size);
+    Large phi_n(n_size);
+    Large phi_phi_n(n_size);
+    Large phi_phi_n_intermediate(n_size + p_size);
+
+    zero.init_with_small_number(0);
+    one.init_with_small_number(1);
+    two.init_with_small_number(2);
+    substraction(p, one, p_minus_one, count);
+    substraction(q, one, q_minus_one, count);
+    multiplication(p_minus_one, q_minus_one, phi_n, count);
+    factor.init_with_small_number(3);
+    phi_phi_n.init_with_small_number(1);
+    uint16_t exponent = 0;
+    while(phi_n[0] == 0)
+    {
+        phi_n.SHIFT_RIGHT(true, false, count);
+        if(exponent != 0)
+        {
+            exponent++;
+            phi_phi_n.SHIFT_LEFT(true, false, count);
+            qDebug()  << 0 << Large2String(phi_phi_n);
+        }
+        exponent++;
+    }
+    exponent = 0;
+
+    do
+    {
+        division_modulo(phi_n, factor, quotient, remainder, count);
+        if(is_equal(remainder, zero, count))
+        {
+            quotient.split(phi_n, 0);
+            if(exponent == 0)
+            {
+                substraction(factor, one, factor_minus_one, count);
+                multiplication(phi_phi_n, factor_minus_one, phi_phi_n_intermediate, count);
+                phi_phi_n_intermediate.split(phi_phi_n, 0);
+                qDebug()  << 1 << Large2String(phi_phi_n);
+            }
+            else
+            {
+                multiplication(phi_phi_n, factor, phi_phi_n_intermediate, count);
+                phi_phi_n_intermediate.split(phi_phi_n, 0);
+                qDebug()  << 2 << Large2String(phi_phi_n);
+            }
+            exponent++;
+        }
+        else
+        {
+            exponent = 0;
+            addition(factor, two, factor_sum, count);
+            factor_sum.split(factor, 0);
+        }
+    }while(!is_prime_with_fermat_little_theorem(phi_n, count, 20));
+    phi_n.split(factor, 0);
+    if(exponent == 1)
+    {
+        substraction(factor, one, factor_minus_one, count);
+        multiplication(phi_phi_n, factor_minus_one, phi_phi_n_intermediate, count);
+        phi_phi_n_intermediate.split(phi_phi_n, 0);
+        qDebug()  << 3 << Large2String(phi_phi_n);
+    }
+    else
+    {
+        multiplication(phi_phi_n, factor, phi_phi_n_intermediate, count);
+        phi_phi_n_intermediate.split(phi_phi_n, 0);
+        qDebug() << 4 << Large2String(phi_phi_n);
+    }
+    return phi_phi_n;
 }
 
 /*
