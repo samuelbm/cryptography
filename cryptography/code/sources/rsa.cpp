@@ -31,7 +31,7 @@ void rsa_decryption(Large const& C, Large const& d, Large const& n, Large& m, Co
     qDebug() << "RSA decryption, " << "C: " << Large2String(C) << "m: " << Large2String(m) << count2string(count);
 }
 
-void rsa_128(uint16_t nb_tries)
+void rsa_keygen_128(uint16_t nb_tries)
 {
     uint16_t pq_bits = 64;
     QRandomGenerator prng(1234);
@@ -60,32 +60,102 @@ void rsa_128(uint16_t nb_tries)
     delete_storage(storage);
 }
 
-void rsa_400(uint16_t nb_tries)
+void rsa_keygen_400(uint16_t nb_tries)
 {
 
 }
 
-void rsa_1024(uint16_t nb_tries)
+void rsa_keygen_1024(uint16_t nb_tries)
 {
 
 }
 
-void rsa_2044(uint16_t nb_tries)
+void rsa_keygen_2044(uint16_t nb_tries)
 {
 
 }
 
-void rsa_3072(uint16_t nb_tries)
+void rsa_keygen_3072(uint16_t nb_tries)
 {
 
 }
 
-void rsa_7680(uint16_t nb_tries)
+void rsa_keygen_7680(uint16_t nb_tries)
 {
 
 }
 
-//void rsa_15360(uint16_t nb_tries)
+//void rsa_keygen_15360(uint16_t nb_tries)
+//{
+//
+//}
+
+void rsa_encryption_128(uint16_t nb_tries)
+{
+
+}
+
+void rsa_encryption_400(uint16_t nb_tries)
+{
+
+}
+
+void rsa_encryption_1024(uint16_t nb_tries)
+{
+
+}
+
+void rsa_encryption_2044(uint16_t nb_tries)
+{
+
+}
+
+void rsa_encryption_3072(uint16_t nb_tries)
+{
+
+}
+
+void rsa_encryption_7680(uint16_t nb_tries)
+{
+
+}
+
+//void rsa_encryption_15360(uint16_t nb_tries)
+//{
+//
+//}
+
+void rsa_decryption_128(uint16_t nb_tries)
+{
+
+}
+
+void rsa_decryption_400(uint16_t nb_tries)
+{
+
+}
+
+void rsa_decryption_1024(uint16_t nb_tries)
+{
+
+}
+
+void rsa_decryption_2044(uint16_t nb_tries)
+{
+
+}
+
+void rsa_decryption_3072(uint16_t nb_tries)
+{
+
+}
+
+void rsa_decryption_7680(uint16_t nb_tries)
+{
+
+}
+
+//void rsa_decryption_15360(uint16_t nb_tries)
 //{
 //
 //}
