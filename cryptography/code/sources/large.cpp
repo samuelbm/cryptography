@@ -128,7 +128,7 @@ QString Large::toHex() const
     return str;
 }
 
-void Large::split(Large& subpart, uint64_t start_index)
+void Large::split(Large& subpart, uint64_t start_index) const
 {
     assert(this->bits_size >= subpart.bits_size + start_index);
     uint64_t size = subpart.get_number_of_bits();

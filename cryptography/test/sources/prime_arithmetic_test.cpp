@@ -497,18 +497,29 @@ void prime_arithmetic_test::Given_prime_115249_on_32_bits_When_testing_is_prime_
 //    QCOMPARE(count.XOR_gates, 100*(16*n*n*n - 8*n*n) + 2*n);
 //    QCOMPARE(count.XNOR_gates, 100*(n));
 }
-
-void prime_arithmetic_test::Given_p_13_q_29_When_testing_find_phi_phi_n_Then_phi_phi_n_is_96()
+void prime_arithmetic_test::Given_p_13_q_29_When_testing_find_phi_n_Then_phi_n_is_336()
 {
     Count count;
     count_initialization(count);
     Large p(6);
     Large q(6);
     Large expected(12);
-    expected.init_with_small_number(96);
     p.init_with_small_number(13);
     q.init_with_small_number(29);
-    Large phi_phi_n = find_phi_phi_n(p, q, count);
+    expected.init_with_small_number(336);
+    Large phi_n = find_phi_n(p, q, count);
+    QVERIFY(is_equal(phi_n, expected, count));
+}
+
+void prime_arithmetic_test::Given_phi_n_336_When_testing_find_phi_phi_n_Then_phi_phi_n_is_96()
+{
+    Count count;
+    count_initialization(count);
+    Large phi_n(12);
+    Large expected(12);
+    phi_n.init_with_small_number(336);
+    expected.init_with_small_number(96);
+    Large phi_phi_n = find_phi_phi_n(phi_n, count);
     QVERIFY(is_equal(phi_phi_n, expected, count));
 }
 

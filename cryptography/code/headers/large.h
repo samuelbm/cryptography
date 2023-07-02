@@ -32,7 +32,7 @@ public:
     bool is_null() const;
     QString toBin() const;
     QString toHex() const;
-    void split(Large& subpart, uint64_t start_index);
+    void split(Large& subpart, uint64_t start_index) const;
     void insert(Large const& subpart, uint64_t start_index=0);
     void REG(bool enable, Large const& D, uint64_t start_index, Count& count);
     bool SHIFT_LEFT(bool enable, bool insert, Count& count);
