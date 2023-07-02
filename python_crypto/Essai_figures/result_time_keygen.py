@@ -11,8 +11,8 @@ markersize_data = 5
 markersize_mean = 10
 linewidth = 3
 nb_round = 20
-securities = np.logspace(5, 16, 100, True, 2)
 key_length_symetric = [32, 56, 80, 112, 128, 192, 256]
+securities = np.logspace(5, 17, 100, True, 2)
 
 def f_clock_keygen(nb_bits, nb_round, nb_tries):
     return 3 * nb_bits * nb_bits * nb_round * nb_tries + nb_tries
@@ -39,8 +39,7 @@ labels_rsa = ["RSA tendance", "RSA data", "RSA moyenne"]
 color_shapes_rsa = ['r-', 'ro', 'rs']
 
 def f_rsa(nb_bits, nb_round):
-    nb_tries = np.log(2)*nb_bits/2
-    return f_clock_keygen(nb_bits, nb_round, nb_tries)
+    return [f_clock_keygen(n, nb_round, np.log(2)*n/2) for n in nb_bits]
 
 
 data_ecc_p_32 = [1, 2, 3]
@@ -57,8 +56,7 @@ color_shapes_ecc_p = ['g-', 'go', 'gs']
 
 
 def f_ecc_p(nb_bits, nb_round):
-    nb_tries = np.log(2)*nb_bits/2
-    return f_clock_keygen(nb_bits, nb_round, nb_tries)
+    return [f_clock_keygen(n, nb_round, np.log(2)*n/2) for n in nb_bits]
 
 
 data_ecc_2m_32 = [1, 2, 3]
@@ -75,8 +73,8 @@ color_shapes_ecc_2m = ['b-', 'bo', 'bs']
 
 
 def f_ecc_2m(nb_bits, nb_round):
-    nb_tries = np.log(2)*nb_bits/2
-    return f_clock_keygen(nb_bits, nb_round, nb_tries)
+    print([f_clock_keygen(n, nb_round, np.log(2)*n/2) for n in nb_bits])
+    return [f_clock_keygen(n, nb_round, np.log(2)*n/2) for n in nb_bits]
 
 
 def get_RSA(n):
@@ -88,21 +86,24 @@ def get_RSA(n):
     return f4 * np.log2(np.exp(1))
 
 
+def get_ECC(n):
+    return n/2
+
+
 def plot_data(ax, security, data, label, color_shape, markersize):
     x = np.array([security for _ in data])
-    ax.plot(np.log2(x), np.log2(data), color_shape, markersize=markersize, label=label)
+    ax.plot(np.log2(x), np.log10(data), color_shape, markersize=markersize, label=label)
 
 
 def plot_mean(ax, security, data, label, color_shape, markersize):
-    ax.plot(np.log2(security), np.mean(np.log2(data)), color_shape, markersize=markersize, label=label)
+    ax.plot(np.log2(security), np.mean(np.log10(data)), color_shape, markersize=markersize, label=label)
 
 
-def plot_trend(ax, f, securities, label, linewidth, color_shape, nb_round):
-    ax.plot(np.log2(securities), np.log2(f(securities, nb_round)), color_shape, linewidth=linewidth, label=label)
+def plot_trend(ax, f, x_securities, y_securities, label, linewidth, color_shape, nb_round):
+    ax.plot(np.log2(x_securities), np.log10(f(y_securities, nb_round)), color_shape, linewidth=linewidth, label=label)
 
 
-def plot_crypto(ax, f, key_length_symetric, key_length, securities, data_vector, labels, color_shapes, markersize_data, markersize_mean, linewidth, nb_round):
-    plot_trend(ax, f, securities, labels[0], linewidth, color_shapes[0], nb_round)
+def plot_crypto(ax, f, securities, key_length_symetric, key_length, data_vector, labels, color_shapes, markersize_data, markersize_mean, linewidth, nb_round):
     for i in range(len(data_vector)):
         if i == 0:
             plot_data(ax, key_length[i], data_vector[i], labels[1], color_shapes[1], markersize_data)
@@ -115,7 +116,6 @@ def plot_crypto(ax, f, key_length_symetric, key_length, securities, data_vector,
 
 def get_axe(base, minimum, maximum):
     skip = max(1, int(np.ceil((maximum - minimum + 1) / 10)))
-
     axe = []
     count = 0
     for i in range(minimum, maximum + 1):
@@ -130,17 +130,21 @@ def get_axe(base, minimum, maximum):
 
 if __name__ == "__main__":
     x_start = 5
-    x_end = 16
-    y_start = 1
-    y_end = 10
+    x_end = 9
+    y_start = 6
+    y_end = 16
     base = 2
     fontsize = 20
     fig = plt.figure(figsize=(10, 8), dpi=100)
     ax = fig.add_subplot(111)
 
-    plot_crypto(ax, f_rsa, key_length_symetric, key_length_rsa, securities, data_rsa, labels_rsa, color_shapes_rsa, markersize_data, markersize_mean, linewidth, nb_round)
-    plot_crypto(ax, f_ecc_p, key_length_symetric, key_length_ecc_p, securities, data_ecc_p, labels_ecc_p, color_shapes_ecc_p, markersize_data, markersize_mean, linewidth, nb_round)
-    plot_crypto(ax, f_ecc_2m, key_length_symetric, key_length_ecc_2m, securities, data_ecc_2m, labels_ecc_2m, color_shapes_ecc_2m, markersize_data, markersize_mean, linewidth, nb_round)
+
+    plot_trend(ax, f_rsa, get_RSA(securities), securities, labels_rsa[0], linewidth, color_shapes_rsa[0], nb_round)
+    plot_crypto(ax, f_rsa, securities, key_length_symetric, key_length_rsa, data_rsa, labels_rsa, color_shapes_rsa, markersize_data, markersize_mean, linewidth, nb_round)
+    plot_trend(ax, f_ecc_p, get_ECC(securities), securities, labels_ecc_p[0], linewidth, color_shapes_ecc_p[0], nb_round)
+    plot_crypto(ax, f_ecc_p, securities, key_length_symetric, key_length_ecc_p, data_ecc_p, labels_ecc_p, color_shapes_ecc_p, markersize_data, markersize_mean, linewidth, nb_round)
+    #plot_trend(ax, f_ecc_2m, get_ECC(securities), securities, labels_ecc_2m[0], linewidth, color_shapes_ecc_2m[0], nb_round)
+    #plot_crypto(ax, f_ecc_2m, securities, key_length_symetric, key_length_ecc_2m, data_ecc_2m, labels_ecc_2m, color_shapes_ecc_2m, markersize_data, markersize_mean, linewidth, nb_round)
     ax.plot([np.log2(get_RSA(2048)), np.log2(get_RSA(2048))], [y_start, y_end], 'k--', linewidth=2, label='Sécurité minimale')
     ax.legend(fontsize=fontsize * 0.75)
     # ax.set_title(str(curve), fontsize=fontsize)
@@ -153,7 +157,7 @@ if __name__ == "__main__":
     ax.set_ylabel(y_label, fontsize=fontsize)
     ax.set_ylim([y_start, y_end])
     ax.set_yticks([i for i in range(y_start, y_end + 1)])
-    ax.set_yticklabels(get_axe(base, y_start, y_end), fontsize=fontsize)
+    ax.set_yticklabels(get_axe(10, y_start, y_end), fontsize=fontsize)
 
     ax.grid(visible=True, which='major', axis='both', color='k', linestyle='-', linewidth=0.1)
     plt.savefig(path)
