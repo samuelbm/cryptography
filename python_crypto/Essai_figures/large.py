@@ -1,7 +1,7 @@
 import numpy as np
+import random
 
-
-class count:
+class Count:
     def __init__(self):
         self.clock = 0
         self.regs = 0
@@ -283,9 +283,21 @@ def is_quadratiqc_residue(a, p):
     gates += c3
     return a == b, y1, clock, regs, gates
 
-def find_prime_3_equiv_4():
-    pass
-
+def find_prime_3_equiv_4(size):
+    is_prime = False
+    clock = 0
+    regs = 0
+    gates = 0
+    while not is_prime:
+        maybe_prime = 1
+        for i in range(size-3):
+            maybe_prime = (maybe_prime << 1) + random.getrandbits(1)
+        maybe_prime = (maybe_prime << 2) + 3
+        is_prime, c1, c2, c3 = is_prime_rabin_miller(maybe_prime)
+        clock += c1
+        regs += c2
+        gates += c3
+    return maybe_prime, 1, size, 0
 
 
 if __name__ == "__main__":
@@ -318,5 +330,6 @@ if __name__ == "__main__":
     print("inverse modulo", inverse_modulo(5, 2, 6))
     print("quadratic residue", is_quadratiqc_residue(4, 7))
     print("quadratic residue", is_quadratiqc_residue(3, 7))
+    print("find prime 3 equiv 4", find_prime_3_equiv_4(100))
 
-# def find_prime_3_equiv_4():
+
