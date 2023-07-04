@@ -18,6 +18,14 @@ def rsa_keygen(size, e):
     phi_phi_n, count6 = phi(factors)
     d, count7 = inverse_modulo(e, phi_phi_n, phi_n)
     n, count8 = multiplication(p, q)
+    # print(count1)
+    # print(count2)
+    # print(count3)
+    # print(count4)
+    # print(count5)
+    # print(count6)
+    # print(count7)
+    # print(count8)
     count.add_count(count1)
     count.add_count(count2)
     count.add_count(count3)
@@ -100,3 +108,7 @@ def rsa_3072(tries):
 
 if __name__ == "__main__":
     rsa_128(10)
+    rsa_400(10)
+    rsa_1024(10)
+    rsa_2044(10)
+    rsa_3072(10)

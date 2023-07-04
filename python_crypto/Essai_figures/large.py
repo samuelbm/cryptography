@@ -279,7 +279,7 @@ def pollard_rho_factorisation_gates(n):
 def pollard_rho_factorisation(n, start):
     count = Count()
     n_bits = number_of_bits(n)
-    count.space(100 * n)  # craete a small stack for recording of many factors
+    count.space(100 * n_bits)  # craete a small stack for recording of many factors
 
     factors = []
     is_prime, count1 = is_prime_rabin_miller(n)
@@ -290,7 +290,7 @@ def pollard_rho_factorisation(n, start):
         y = 2
         d = 1
         while d == 1:
-            count.time(30 * n + 6)  # 3 multiplication(2n), 3 addition(n+1) with word 2n, 3 division(3n) with word 2n
+            count.time(30 * n_bits + 6)  # 3 multiplication(2n), 3 addition(n+1) with word 2n, 3 division(3n) with word 2n
             count.power(pollard_rho_factorisation_gates(n_bits))
 
             product, count2 = multiplication(x, x)
