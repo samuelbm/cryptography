@@ -81,11 +81,15 @@ def addition_gates(n):
     return 5 * n
 
 
+def addition_regs(n):
+    return n + 1
+
+
 # clock = 0
 def addition(x, y):
     count = Count()
     n_bits = number_of_bits(max(x, y))
-    count.space(n_bits + 1)  # sum is n+1 regs
+    count.space(addition_regs(n_bits))
     count.power(addition_gates(n_bits))
     return x + y, count
 
@@ -97,11 +101,15 @@ def substraction_gates(n):
     return 5 * n
 
 
+def substraction_regs(n):
+    return n + 1
+
+
 # clock = 0
 def substraction(x, y):
     count = Count()
     n_bits = number_of_bits(max(x, y))
-    count.space(n_bits + 1)  # difference is n+1 regs
+    count.space(substraction_regs(n_bits))
     count.power(substraction_gates(n_bits))
     return x - y, count
 
@@ -111,11 +119,19 @@ def multiplication_gates(n):
     return n * addition_gates(n)
 
 
+def multiplication_regs(n):
+    return 2 * n
+
+
+def multiplication_clock(n):
+    return n
+
+
 def multiplication(x, y):
     count = Count()
     n_bits = number_of_bits(max(x, y))
-    count.time(n_bits)  # n cycles
-    count.space(2 * n_bits)  # product is 2n
+    count.time(multiplication_clock(n_bits))
+    count.space(multiplication_regs(n_bits))
     count.power(multiplication_gates(n_bits))
     return x * y, count
 
@@ -125,11 +141,21 @@ def division_modulo_gates(n):
     return n * substraction_gates(n) + n * is_less_or_equal_gates(n)
 
 
+# 2n for quotient, n for remainder
+def division_modulo_regs(n):
+    return 3 * n
+
+
+# n cycles
+def division_modulo_clock(n):
+    return n
+
+
 def division_modulo(x, y):
     count = Count()
     n_bits = number_of_bits(max(x, y))
-    count.time(n_bits)  # n cycles
-    count.space(3 * n_bits)  # 2n for quotient, n for remainder
+    count.time(division_modulo_clock(n_bits))
+    count.space(division_modulo_regs(n_bits))
     count.power(division_modulo_gates(n_bits))
 
     r = x
@@ -152,11 +178,21 @@ def addition_modulo_gates(n):
     return addition_gates(n) + division_modulo_gates(n)
 
 
+# n + 1 for addition, 3*n for division with n+1 word
+def addition_modulo_regs(n):
+    return addition_regs(n) + division_modulo_regs(n + 1)
+
+
+# 1 cycle for addition and n cycles for division
+def addition_modulo_clock(n):
+    return 1 + division_modulo_clock(n + 1)
+
+
 def addition_modulo(a, b, n):
     count = Count()
     n_bits = number_of_bits(max(a, b, n))
-    count.time(n_bits + 1)  # 1 cycle for addition and n cycles for division
-    count.space(4 * n_bits + 4)  # n + 1 for addition, 3*n for division with n+1 word
+    count.time(addition_modulo_clock(n_bits))
+    count.space(addition_modulo_regs(n_bits))
     count.power(addition_modulo_gates(n_bits))
     somme, count1 = addition(a, b)
     q, r, count2 = division_modulo(somme, n)
@@ -167,11 +203,21 @@ def substraction_modulo_gates(n):
     return substraction_gates(n) + division_modulo_gates(n)
 
 
+# n + 1 for substraction, 3*n for division with n+1 word
+def substraction_modulo_regs(n):
+    return substraction_regs(n) + division_modulo_regs(n + 1)
+
+
+# 1 cycle for substraction and n cycles for division
+def substraction_modulo_clock(n):
+    return 1 + division_modulo_clock(n + 1)
+
+
 def substraction_modulo(a, b, n):
     count = Count()
     n_bits = number_of_bits(max(a, b, n))
-    count.time(n_bits + 1)  # 1 cycle for substraction and n cycles for division
-    count.space(4 * n_bits + 4)  # n + 1 for substraction, 3*n for division with n+1 word
+    count.time(substraction_modulo_clock(n_bits))
+    count.space(substraction_modulo_regs(n_bits))
     count.power(substraction_modulo_gates(n_bits))
     difference, count1 = substraction(a, b)
     q, r, count2 = division_modulo(difference, n)
@@ -182,11 +228,21 @@ def multiplication_modulo_gates(n):
     return multiplication_gates(n) + division_modulo_gates(n)
 
 
+# 2n for multiplication, 3n for division with 2n word
+def multiplication_modulo_regs(n):
+    return multiplication_regs(n) + division_modulo_regs(2 * n)
+
+
+# n cycles for multiplication, n cycles for division
+def multiplication_modulo_clock(n):
+    return multiplication_clock(n) + division_modulo_clock(2 * n)
+
+
 def multiplication_modulo(a, b, n):
     count = Count()
     n_bits = number_of_bits(max(a, b, n))
-    count.time(2 * n_bits)  # n cycles for multiplication, n cycles for division
-    count.space(8 * n_bits)  # 2n for multiplication, 3n for division with 2n word
+    count.time(multiplication_modulo_clock(n_bits))
+    count.space(multiplication_modulo_regs(n_bits))
     count.power(multiplication_modulo_gates(n_bits))
     product, count1 = multiplication(a, b)
     q, r, count2 = division_modulo(product, n)
@@ -194,16 +250,27 @@ def multiplication_modulo(a, b, n):
 
 
 # 2n multiplication modulo and 2n is equal
-def exponentiation_modulo_gates(n):
-    return 2 * n * multiplication_modulo_gates(n) + 2 * n * is_equal_gates(n)
+def exponentiation_modulo_gates(n, e):
+    return 2 * e * multiplication_modulo_gates(n) + 2 * e * is_equal_gates(n)
+
+
+# twice multiplication modulo
+def exponentiation_modulo_regs(n):
+    return 2 * multiplication_modulo_regs(n)
+
+
+# e_bits times multiplicaiton modulo (because they can run in parallel)
+def exponentiation_modulo_clock(n, e):
+    return e * n
 
 
 def exponentiation_modulo(base, exponent, modulus):
     count = Count()
-    n_bits = number_of_bits(max(base, exponent, modulus))
-    count.time(n_bits * n_bits)  # n times multiplicaiton modulo (because they can run in parallel)
-    count.space(16 * n_bits)  # twice multiplication modulo
-    count.power(exponentiation_modulo_gates(n_bits))
+    e_bits = number_of_bits(exponent)
+    n_bits = number_of_bits(max(base, modulus))
+    count.time(exponentiation_modulo_clock(n_bits, e_bits))
+    count.space(exponentiation_modulo_regs(n_bits))
+    count.power(exponentiation_modulo_gates(n_bits, e_bits))
 
     square = base
     total = 1
@@ -223,18 +290,29 @@ def greatest_common_divisor_gates(n):
     return division_modulo_gates(n) + multiplication_modulo_gates(n) + substraction_gates(2 * n)
 
 
+# 3n for division, 2n for multiplication, n for substraction with word 2n, 3n of r, n of k
+def greatest_common_divisor_regs(n):
+    return division_modulo_regs(n) + multiplication_modulo_regs(n) + substraction_modulo_regs(n) + 4 * n
+
+
+# n cycles for multiplication, n cycles for division, 1 cycle for difference
+def greatest_common_divisor_clock(n):
+    return 1 + multiplication_clock(n) + division_modulo_clock(n)
+
+
 def greatest_common_divisor(a, b):
     count = Count()
     n_bits = number_of_bits(max(a, b))
-    count.space(12 * n_bits)  # 3n for division, 2n for multiplication, n for substraction with word 2n, 3n of r, n of k
+    count.space(greatest_common_divisor_regs(n_bits))
 
     if b > a:
         a, b = b, a
     r = [a, b]
     k = []
     while r[-1] != 0:
-        count.time(2 * n_bits + 1)  # n cycles for multiplication, n cycles for division, 1 cycle for difference
+        count.time(greatest_common_divisor_clock(n_bits))
         count.power(greatest_common_divisor_gates(n_bits))
+
         quotient, remainder, count1 = division_modulo(r[-2], r[-1])
         k.append(quotient)
         product, count2 = multiplication(k[-1], r[-1])
@@ -244,13 +322,23 @@ def greatest_common_divisor(a, b):
 
 
 def is_prime_rabin_miller_gates(n):
-    return exponentiation_modulo_gates(n)
+    return exponentiation_modulo_gates(n, n) + is_equal_gates(n)
+
+
+# 3200 bits of memory for primes and exponentation modulo
+def is_prime_rabin_miller_regs(n):
+    return 32 * 100 + exponentiation_modulo_regs(n)
+
+
+# only one exponentiation modulo to perform
+def is_prime_rabin_miller_clock(n):
+    return exponentiation_modulo_gates(n, n)
 
 
 def is_prime_rabin_miller(n):
     count = Count()
     n_bits = number_of_bits(n)
-    count.space(32 * 100 + 16 * n_bits)  # 3200 bits of memory for primes and exponentation modulo
+    count.space(is_prime_rabin_miller_regs(n_bits))
 
     primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67,
               71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157, 163, 167, 173,
@@ -262,7 +350,7 @@ def is_prime_rabin_miller(n):
         return True, count
 
     for prime in primes:
-        count.time(n_bits * n_bits)  # only one exponentiation modulo to perform
+        count.time(is_prime_rabin_miller_clock(n_bits))
         count.power(is_prime_rabin_miller_gates(n_bits))
         if prime < n:
             number, count1 = exponentiation_modulo(prime, n - 1, n)
@@ -271,64 +359,92 @@ def is_prime_rabin_miller(n):
     return True, count  # probably
 
 
-def pollard_rho_factorisation_gates(n):
-    return 3 * (multiplication_gates(n) + addition_gates(2 * n) + division_modulo_gates(2 * n))
+def pollard_rho_factorisation_regs(n):
+    return is_prime_rabin_miller_regs(n) + 3 * multiplication_regs(n) + 3 * addition_regs(n) \
+           + 4 * division_modulo_regs(n) + greatest_common_divisor_regs(n)
 
 
 # cannot give exact stats because unknown number of iterations
-def pollard_rho_factorisation(n, start):
-    count = Count()
+def pollard_rho_factorisation(n):
     n_bits = number_of_bits(n)
-    count.space(100 * n_bits)  # craete a small stack for recording of many factors
+    iteration_threshold = 50000
+    count = Count()
+    factors_to_check = []
+    factors_prime = []
+    start_vector = []
+    watchdog = True
+    count.space(pollard_rho_factorisation_regs(n_bits))
+    factor_under_test = n
 
-    factors = []
-    is_prime, count1 = is_prime_rabin_miller(n)
-    if is_prime:
-        factors.append(n)
-    else:
-        x = 2
-        y = 2
-        d = 1
-        while d == 1:
-            count.time(30 * n_bits + 6)  # 3 multiplication(2n), 3 addition(n+1) with word 2n, 3 division(3n) with word 2n
-            count.power(pollard_rho_factorisation_gates(n_bits))
+    while factor_under_test & 1 == 0:
+        factor_under_test = factor_under_test >> 1
+        factors_prime.append(2)
 
-            product, count2 = multiplication(x, x)
-            somme, count3 = addition(product, start)
-            q, x, count4 = division_modulo(somme, n)
-            product, count5 = multiplication(y, y)
-            somme, count6 = addition(product, start)
-            q, y, count7 = division_modulo(somme, n)
-            product, count8 = multiplication(y, y)
-            somme, count9 = addition(product, start)
-            q, y, count10 = division_modulo(somme, n)
+    factors_to_check.append(factor_under_test)
+    start_vector.append(1)
 
-            if x > y:
-                delta = x - y
+    while len(factors_to_check) != 0 and watchdog:
+        factor_under_test = factors_to_check.pop(0)
+        start = start_vector.pop(0)
+
+        is_prime, count1 = is_prime_rabin_miller(factor_under_test)  # is_prime_rabin_miller
+        count.time(is_prime_rabin_miller_clock(n_bits))
+        count.power(is_prime_rabin_miller_gates(n_bits))
+        if is_prime:
+            factors_prime.append(factor_under_test)
+        elif watchdog:
+            x, y, d = 2, 2, 1
+            nb_iterations = 0
+            while d == 1 and nb_iterations < iteration_threshold:  # is_equal
+                # 3 multiplications, 3 additions, 3 division modulo
+                nb_iterations += 1
+                x_temp = x * x + start
+                q, x, count2 = division_modulo(x_temp, factor_under_test)
+                y_temp1 = y * y + start
+                q, y, count3 = division_modulo(y_temp1, factor_under_test)
+                y_temp2 = y * y + start
+                q, y, count4 = division_modulo(y_temp2, factor_under_test)
+                count.time(3 * (multiplication_clock(n_bits) + 1 + division_modulo_clock(n_bits)))
+                count.power(3 * (multiplication_gates(n_bits) + addition_gates(n_bits) + division_modulo_gates(n_bits)))
+
+                if x > y:
+                    delta = x - y
+                else:
+                    delta = y - x
+                d, count5 = greatest_common_divisor(delta, factor_under_test)  # greatest common divisor
+                count.time(greatest_common_divisor_clock(n_bits))
+                count.power(greatest_common_divisor_gates(n_bits))
+
+            count.power(is_equal_gates(n_bits))
+            if d == factor_under_test:  # is equal
+                if start < 10:
+                    factors_to_check.append(factor_under_test)
+                    start_vector.append(start + 1)
+                else:
+                    watchdog = False
+            elif nb_iterations == iteration_threshold:
+                watchdog = False
             else:
-                delta = y - x
-            d, count11 = greatest_common_divisor(delta, n)
-        if d == n:
-            factorsx, count12 = pollard_rho_factorisation(n, start + 1)
-            factors.extend(factorsx)
-        else:
-            f1 = d
-            f2, remainder, count13 = division_modulo(n, f1)
-            factors1, count14 = pollard_rho_factorisation(f1, start)
-            factors2, count15 = pollard_rho_factorisation(f2, start)
-            factors.extend(factors1)
-            factors.extend(factors2)
-    return factors, count
+                f1 = d
+                f2, remainder, count6 = division_modulo(factor_under_test, f1)  # division modulo
+                factors_to_check.append(f1)
+                factors_to_check.append(f2)
+                start_vector.append(1)
+                start_vector.append(1)
+                count.time(division_modulo_clock(n_bits))
+                count.power(division_modulo_gates(n_bits))
+
+    return factors_prime, count, watchdog
 
 
-def phi_gates(n):
-    return multiplication_gates(n)
+def phi_regs(n):
+    return 2 * substraction_regs(n) + 2 * multiplication_regs(n)
 
 
 def phi(prime_list):
     count = Count()
     n_bits = number_of_bits(max(prime_list))
-    count.space(n_bits * (4 + len(prime_list)))  # 3 variable(a, b, p) + the number of factor in the list
+    count.space(phi_regs(n_bits))
 
     prime_list.sort()
     pi = []
@@ -344,37 +460,59 @@ def phi(prime_list):
     for index in range(len(pi)):
         p = pi[index]
         e = ei[index]
+        exponent = (e - 1) * (p - 1)
         phi_n *= p ** (e - 1) * (p - 1)
-        count.time(1 + n_bits * (e - 1) * (p - 1))
-        count.power((e - 1) * (p - 1) * phi_gates(n_bits))
+
+        count.time(2 + n_bits + exponent * n_bits)
+        count.power(2 * substraction_gates(n_bits) + (1 + exponent) * multiplication_gates(n_bits))
     return phi_n, count
 
 
 # 1 exponentiation modulo and 1 substraction
 def inverse_prime_modulo_gates(n):
-    return exponentiation_modulo_gates(n) + substraction_gates(n)
+    return exponentiation_modulo_gates(n, n) + substraction_gates(n)
+
+
+# n_bits + 1 for substraction and 16*n for exponentiation modulo
+def inverse_prime_modulo_regs(n):
+    return exponentiation_modulo_regs(n) + substraction_regs(n)
+
+
+# 1 for substraction and n*n for exponentiation modulo
+def inverse_prime_modulo_clock(n):
+    return 1 + exponentiation_modulo_clock(n, n)
 
 
 def inverse_prime_modulo(a, p):
     count = Count()
     n_bits = number_of_bits(max(a, p))
-    count.time(1 + n_bits * n_bits)  # 1 for substraction and n*n for exponentiation modulo
-    count.space(17*n_bits + 1)  # n_bits + 1 for substraction and 16*n for exponentiation modulo
-    count.power(exponentiation_modulo_gates(n_bits))
+    count.time(inverse_prime_modulo_clock(n_bits))
+    count.space(inverse_prime_modulo_regs(n_bits))
+    count.power(inverse_prime_modulo_gates(n_bits))
 
     inverse, count1 = exponentiation_modulo(a, p - 2, p)
     return inverse, count
 
 
 def inverse_modulo_gates(n):
-    return exponentiation_modulo_gates(n) + substraction_gates(n)
+    return exponentiation_modulo_gates(n, n) + substraction_gates(n)
+
+
+# n_bits + 1 for substraction and 16*n for exponentiation modulo
+def inverse_modulo_regs(n):
+    return exponentiation_modulo_regs(n) + substraction_regs(n)
+
+
+# 1 for substraction and n*n for exponentiation modulo
+def inverse_modulo_clock(n):
+    return 1 + exponentiation_modulo_clock(n, n)
 
 
 def inverse_modulo(a, phi_n, n):
     count = Count()
     n_bits = number_of_bits(max(a, n))
-    count.time(1 + n_bits * n_bits)  # 1 for substraction and n*n for exponentiation modulo
-    count.space(17*n_bits + 1)  # n_bits + 1 for substraction and 16*n for exponentiation modulo
+    count.time(inverse_modulo_clock(n_bits))
+    count.space(inverse_modulo_regs(n_bits))
     count.power(inverse_modulo_gates(n_bits))
 
     inverse, count1 = exponentiation_modulo(a, phi_n - 1, n)
@@ -382,20 +520,30 @@ def inverse_modulo(a, phi_n, n):
 
 
 def quadratic_residue_gates(n):
-    return addition_gates(n) + exponentiation_modulo_gates(n) + multiplication_modulo_gates(n) + is_equal_gates(n)
+    return addition_gates(n) + exponentiation_modulo_gates(n, n) + multiplication_modulo_gates(n) + is_equal_gates(n)
+
+
+def quadratic_residue_regs(n):
+    return addition_regs(n) + exponentiation_modulo_regs(n) + multiplication_modulo_regs(n)
+
+
+# 1 for addition, 2 for shift right, n*n for exponentiation modulo, 2n for addition
+def quadratic_residue_clock(n):
+    return 3 + multiplication_modulo_clock(n) + exponentiation_modulo_clock(n, n)
 
 
 def is_quadratiqc_residue(a, p):
     count = Count()
     n_bits = number_of_bits(max(a, p))
-    count.time(3 + n_bits*n_bits + 2*n_bits)  #1 for addition, 2 for shift right, n*n for exponentiation modulo, 2n for addition
-    count.space(25*n_bits + 1)  #
+    count.time(quadratic_residue_clock(n_bits))
+    count.space(quadratic_residue_regs(n_bits))
     count.power(quadratic_residue_gates(n_bits))
 
-    exponent = (p+1) >> 2
+    exponent = (p + 1) >> 2
     y1, count1 = exponentiation_modulo(a, exponent, p)
     b, count2 = multiplication_modulo(y1, y1, p)
     return a == b, y1, count
+
 
 def find_prime_3_equiv_4(size):
     is_prime = False
@@ -403,12 +551,12 @@ def find_prime_3_equiv_4(size):
     count = Count()
     while not is_prime:
         maybe_prime = 1
-        for i in range(size-3):
+        for i in range(size - 3):
             maybe_prime = (maybe_prime << 1) + random.getrandbits(1)
         maybe_prime = (maybe_prime << 2) + 3
         is_prime, count = is_prime_rabin_miller(maybe_prime)
         count.time(1)
-        count.space(size)
+    count.space(size)
     return maybe_prime, count
 
 
@@ -433,8 +581,8 @@ if __name__ == "__main__":
     print("greatest common divisor", greatest_common_divisor(n1, n2))
     print("is prime rabin miller", is_prime_rabin_miller(n1))
     z = 1234567890
-    print("pollard rho factorisation", pollard_rho_factorisation(z, 1))
-    f, c = pollard_rho_factorisation(z, 1)
+    print("pollard rho factorisation", pollard_rho_factorisation(z))
+    f, c, worked = pollard_rho_factorisation(z)
     f.sort()
     print("phi", phi(f))
     print("inverse prime modulo", inverse_prime_modulo(5, 7))
@@ -443,7 +591,6 @@ if __name__ == "__main__":
     print("quadratic residue", is_quadratiqc_residue(3, 7))
     print("find prime 3 equiv 4", find_prime_3_equiv_4(100))
 
-
     # random.seed(1234)
     # x = [100, 200, 400, 800, 1600, 3200, 6400]
     # for i in x:
@@ -451,3 +598,5 @@ if __name__ == "__main__":
     #     p, c = find_prime_3_equiv_4(i)
     #     t2 = time.time()
     #     print(i, t2 - t1, p)
+
+
