@@ -9,6 +9,9 @@ class Count:
         self.regs = 0
         self.gates = 0
 
+    def __str__(self):
+        return "clock: {}, regs: {}, gates: {}".format(self.clock, self.regs, self.gates)
+
     def time(self, clock):
         self.clock += clock
 
@@ -17,6 +20,11 @@ class Count:
 
     def power(self, gates):
         self.gates += gates
+
+    def add_count(self, count2):
+        self.clock += count2.clock
+        self.regs += count2.regs
+        self.gates += count2.gates
 
 
 def number_of_bits(x):
@@ -389,13 +397,10 @@ def is_quadratiqc_residue(a, p):
     b, count2 = multiplication_modulo(y1, y1, p)
     return a == b, y1, count
 
-
-def find_prime_3_equiv_4_gates(n):
-    return 1
-
-
 def find_prime_3_equiv_4(size):
     is_prime = False
+    maybe_prime = 1
+    count = Count()
     while not is_prime:
         maybe_prime = 1
         for i in range(size-3):
@@ -437,6 +442,7 @@ if __name__ == "__main__":
     print("quadratic residue", is_quadratiqc_residue(4, 7))
     print("quadratic residue", is_quadratiqc_residue(3, 7))
     print("find prime 3 equiv 4", find_prime_3_equiv_4(100))
+
 
     # random.seed(1234)
     # x = [100, 200, 400, 800, 1600, 3200, 6400]
