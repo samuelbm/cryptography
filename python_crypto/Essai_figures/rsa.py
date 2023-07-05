@@ -2,6 +2,59 @@ from large import *
 import time
 
 
+# def rsa_keygen(size, e):
+#     t1 = time.time()
+#     count = Count()
+#     delta = size >> 6
+#     p_size = (size >> 1) - delta
+#     q_size = (size >> 1) + delta
+#
+#     count_p = Count()
+#     condition_p = False
+#     while not condition_p:
+#         p, count1 = find_prime_3_equiv_4(p_size)
+#         factors_p, count2, condition_p = pollard_rho_factorisation(p - 1)
+#         if count_p.clock == 0:
+#             count_p.add_count(count1)
+#             count_p.add_count(count2)
+#         else:
+#             count_p.power(count1.gates)
+#             count_p.time(count1.clock)
+#             count_p.power(count2.gates)
+#             count_p.time(count2.clock)
+#     count.add_count(count_p)
+#
+#     count_q = Count()
+#     condition_q = False
+#     while not condition_q:
+#         q, count1 = find_prime_3_equiv_4(q_size)
+#         factors_q, count2, condition_q = pollard_rho_factorisation(q - 1)
+#         if count_q.clock == 0:
+#             count_q.add_count(count1)
+#             count_q.add_count(count2)
+#         else:
+#             count_q.power(count1.gates)
+#             count_q.time(count1.clock)
+#             count_q.power(count2.gates)
+#             count_q.time(count2.clock)
+#     count.add_count(count_q)
+#
+#     factors = []
+#     phi_n, count5 = multiplication(p - 1, q - 1)
+#     factors.extend(factors_p)
+#     factors.extend(factors_q)
+#     phi_phi_n, count6 = phi(factors)
+#     d, count7 = inverse_modulo(e, phi_phi_n, phi_n)
+#     n, count8 = multiplication(p, q)
+#     count.add_count(count5)
+#     count.add_count(count6)
+#     count.add_count(count7)
+#     count.add_count(count8)
+#     t2 = time.time()
+#     string = "time: {}, rsa keygen {}, p: {}, q: {}, n: {}, e: {}, d: {}, clock: {}, regs: {}, gates: {}"
+#     print(string.format(t2 - t1, size, p, q, n, e, d, count.clock, count.regs, count.gates))
+#     return p, q, n, e, d, count
+
 def rsa_keygen(size, e):
     t1 = time.time()
     count = Count()
@@ -9,50 +62,39 @@ def rsa_keygen(size, e):
     p_size = (size >> 1) - delta
     q_size = (size >> 1) + delta
 
-    count_p = Count()
-    condition_p = False
-    while not condition_p:
-        p, count1 = find_prime_3_equiv_4(p_size)
-        factors_p, count2, condition_p = pollard_rho_factorisation(p - 1)
-        if count_p.clock == 0:
-            count_p.add_count(count1)
-            count_p.add_count(count2)
-        else:
-            count_p.power(count1.gates)
-            count_p.time(count1.clock)
-            count_p.power(count2.gates)
-            count_p.time(count2.clock)
+    p, p_small, n_p, count_p = find_smart_prime(p_size)
+    factor_p, count1, worked_p = pollard_rho_factorisation(n_p)
+    factor_p.append(p_small)
     count.add_count(count_p)
+    count.add_count(count1)
 
-    count_q = Count()
-    condition_q = False
-    while not condition_q:
-        q, count1 = find_prime_3_equiv_4(q_size)
-        factors_q, count2, condition_q = pollard_rho_factorisation(q - 1)
-        if count_q.clock == 0:
-            count_q.add_count(count1)
-            count_q.add_count(count2)
-        else:
-            count_q.power(count1.gates)
-            count_q.time(count1.clock)
-            count_q.power(count2.gates)
-            count_q.time(count2.clock)
+    q, q_small, n_q, count_q = find_smart_prime(q_size)
+    factor_q, count2, worked_q = pollard_rho_factorisation(n_q)
+    factor_q.append(q_small)
     count.add_count(count_q)
+    count.add_count(count2)
 
-    factors = []
-    phi_n, count5 = multiplication(p - 1, q - 1)
-    factors.extend(factors_p)
-    factors.extend(factors_q)
-    phi_phi_n, count6 = phi(factors)
-    d, count7 = inverse_modulo(e, phi_phi_n, phi_n)
-    n, count8 = multiplication(p, q)
-    count.add_count(count5)
-    count.add_count(count6)
-    count.add_count(count7)
-    count.add_count(count8)
-    t2 = time.time()
-    string = "time: {}, rsa keygen {}, p: {}, q: {}, n: {}, e: {}, d: {}, clock: {}, regs: {}, gates: {}"
-    print(string.format(t2 - t1, size, p, q, n, e, d, count.clock, count.regs, count.gates))
+    if worked_p and  worked_q:
+        factors = []
+        phi_n, count5 = multiplication(p - 1, q - 1)
+        factors.extend(factor_p)
+        factors.extend(factor_q)
+        phi_phi_n, count6 = phi(factors)
+        d, count7 = inverse_modulo(e, phi_phi_n, phi_n)
+        n, count8 = multiplication(p, q)
+        count.add_count(count5)
+        count.add_count(count6)
+        count.add_count(count7)
+        count.add_count(count8)
+        t2 = time.time()
+        string = "time: {}, rsa keygen {}, p: {}, q: {}, n: {}, e: {}, d: {}, clock: {}, regs: {}, gates: {}"
+        print(string.format(t2 - t1, size, p, q, n, e, d, count.clock, count.regs, count.gates))
+    else:
+        if not worked_p:
+            print("not working", p_small)
+        if not worked_q:
+            print("not working", q_small)
+
     return p, q, n, e, d, count
 
 
@@ -115,19 +157,29 @@ def rsa_3072(tries):
         m, count_decryption = rsa_decryption(C, d, n)
 
 
-# too long to process
-# def rsa_7680(tries):
-#     pass
-#
+def rsa_7680(tries):
+    random.seed(1234)
+    m = 123
+    for i in range(tries):
+        p, q, n, e, d, count_keygen = rsa_keygen(7680, 65537)
+        C, count_encryption = rsa_encryption(m, e, n)
+        m, count_decryption = rsa_decryption(C, d, n)
 
-# too long to process
-# def rsa_15360(tries):
-#     pass
+
+def rsa_15360(tries):
+    random.seed(1234)
+    m = 123
+    for i in range(tries):
+        p, q, n, e, d, count_keygen = rsa_keygen(15360, 65537)
+        C, count_encryption = rsa_encryption(m, e, n)
+        m, count_decryption = rsa_decryption(C, d, n)
 
 
 if __name__ == "__main__":
     rsa_128(10)
     rsa_400(10)
-    rsa_1024(1)
-    rsa_2044(1)
-    rsa_3072(1)
+    rsa_1024(10)
+    rsa_2044(10)
+    rsa_3072(10)
+    rsa_7680(10)
+    rsa_15360(10)
