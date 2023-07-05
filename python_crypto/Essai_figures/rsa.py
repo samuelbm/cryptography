@@ -1,6 +1,6 @@
 from large import *
 import time
-
+from system_file import*
 
 # def rsa_keygen(size, e):
 #     t1 = time.time()
@@ -88,92 +88,122 @@ def rsa_keygen(size, e):
         count.add_count(count8)
         t2 = time.time()
         string = "time: {}, rsa keygen {}, p: {}, q: {}, n: {}, e: {}, d: {}, clock: {}, regs: {}, gates: {}"
-        print(string.format(t2 - t1, size, p, q, n, e, d, count.clock, count.regs, count.gates))
+        string = string.format(t2 - t1, size, p, q, n, e, d, count.clock, count.regs, count.gates)
+        print(string)
     else:
         if not worked_p:
             print("not working", p_small)
         if not worked_q:
             print("not working", q_small)
 
-    return p, q, n, e, d, count
+    return p, q, n, e, d, count, string
 
 
 def rsa_encryption(m, e, n):
     C, count = exponentiation_modulo(m, e, n)
     string = "rsa encryption, m: {}, e: {}, n: {}, C: {}, clock: {}, regs: {}, gates: {}"
-    print(string.format(m, e, n, C, count.clock, count.regs, count.gates))
-    return C, count
+    string = string.format(m, e, n, C, count.clock, count.regs, count.gates)
+    print(string)
+    return C, count, string
 
 
 def rsa_decryption(C, d, n):
     m, count = exponentiation_modulo(C, d, n)
     string = "rsa decryption, C: {}, d: {}, n: {}, m: {}, clock: {}, regs: {}, gates: {}"
-    print(string.format(C, d, n, m, count.clock, count.regs, count.gates))
-    return m, count
+    string = string.format(C, d, n, m, count.clock, count.regs, count.gates)
+    print(string)
+    return m, count, string
 
 
 def rsa_128(tries):
+    path = "./data/rsa_128.txt"
     random.seed(1234)
     m = 123
     for i in range(tries):
-        p, q, n, e, d, count_keygen = rsa_keygen(128, 65537)
-        C, count_encryption = rsa_encryption(m, e, n)
-        m, count_decryption = rsa_decryption(C, d, n)
+        p, q, n, e, d, count_keygen, string_keygen = rsa_keygen(128, 65537)
+        C, count_encryption, string_encryption = rsa_encryption(m, e, n)
+        m, count_decryption, string_decryption = rsa_decryption(C, d, n)
+        append_file(path, string_keygen)
+        append_file(path, string_encryption)
+        append_file(path, string_decryption)
 
 
 def rsa_400(tries):
+    path = "./data/rsa_400.txt"
     random.seed(1234)
     m = 123
     for i in range(tries):
-        p, q, n, e, d, count_keygen = rsa_keygen(400, 65537)
-        C, count_encryption = rsa_encryption(m, e, n)
-        m, count_decryption = rsa_decryption(C, d, n)
+        p, q, n, e, d, count_keygen, string_keygen = rsa_keygen(400, 65537)
+        C, count_encryption, string_encryption = rsa_encryption(m, e, n)
+        m, count_decryption, string_decryption = rsa_decryption(C, d, n)
+        append_file(path, string_keygen)
+        append_file(path, string_encryption)
+        append_file(path, string_decryption)
 
 
 def rsa_1024(tries):
+    path = "./data/rsa_1024.txt"
     random.seed(1234)
     m = 123
     for i in range(tries):
-        p, q, n, e, d, count_keygen = rsa_keygen(1024, 65537)
-        C, count_encryption = rsa_encryption(m, e, n)
-        m, count_decryption = rsa_decryption(C, d, n)
+        p, q, n, e, d, count_keygen, string_keygen = rsa_keygen(1024, 65537)
+        C, count_encryption, string_encryption = rsa_encryption(m, e, n)
+        m, count_decryption, string_decryption = rsa_decryption(C, d, n)
+        append_file(path, string_keygen)
+        append_file(path, string_encryption)
+        append_file(path, string_decryption)
 
 
 def rsa_2044(tries):
+    path = "./data/rsa_2044.txt"
     random.seed(1234)
     m = 123
     for i in range(tries):
-        p, q, n, e, d, count_keygen = rsa_keygen(2044, 65537)
-        C, count_encryption = rsa_encryption(m, e, n)
-        m, count_decryption = rsa_decryption(C, d, n)
+        p, q, n, e, d, count_keygen, string_keygen = rsa_keygen(2044, 65537)
+        C, count_encryption, string_encryption = rsa_encryption(m, e, n)
+        m, count_decryption, string_decryption = rsa_decryption(C, d, n)
+        append_file(path, string_keygen)
+        append_file(path, string_encryption)
+        append_file(path, string_decryption)
 
 
 def rsa_3072(tries):
+    path = "./data/rsa_3072.txt"
     random.seed(1234)
     m = 123
     for i in range(tries):
-        p, q, n, e, d, count_keygen = rsa_keygen(3072, 65537)
-        C, count_encryption = rsa_encryption(m, e, n)
-        m, count_decryption = rsa_decryption(C, d, n)
+        p, q, n, e, d, count_keygen, string_keygen = rsa_keygen(3072, 65537)
+        C, count_encryption, string_encryption = rsa_encryption(m, e, n)
+        m, count_decryption, string_decryption = rsa_decryption(C, d, n)
+        append_file(path, string_keygen)
+        append_file(path, string_encryption)
+        append_file(path, string_decryption)
 
 
 def rsa_7680(tries):
+    path = "./data/rsa_7680.txt"
     random.seed(1234)
     m = 123
     for i in range(tries):
-        p, q, n, e, d, count_keygen = rsa_keygen(7680, 65537)
-        C, count_encryption = rsa_encryption(m, e, n)
-        m, count_decryption = rsa_decryption(C, d, n)
+        p, q, n, e, d, count_keygen, string_keygen = rsa_keygen(7680, 65537)
+        C, count_encryption, string_encryption = rsa_encryption(m, e, n)
+        m, count_decryption, string_decryption = rsa_decryption(C, d, n)
+        append_file(path, string_keygen)
+        append_file(path, string_encryption)
+        append_file(path, string_decryption)
 
 
 def rsa_15360(tries):
+    path = "./data/rsa_15360.txt"
     random.seed(1234)
     m = 123
     for i in range(tries):
-        p, q, n, e, d, count_keygen = rsa_keygen(15360, 65537)
-        C, count_encryption = rsa_encryption(m, e, n)
-        m, count_decryption = rsa_decryption(C, d, n)
-
+        p, q, n, e, d, count_keygen, string_keygen = rsa_keygen(15360, 65537)
+        C, count_encryption, string_encryption = rsa_encryption(m, e, n)
+        m, count_decryption, string_decryption = rsa_decryption(C, d, n)
+        append_file(path, string_keygen)
+        append_file(path, string_encryption)
+        append_file(path, string_decryption)
 
 if __name__ == "__main__":
     rsa_128(10)
