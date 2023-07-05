@@ -1,6 +1,7 @@
 from large import *
 import time
-from system_file import*
+from system_file import *
+
 
 # def rsa_keygen(size, e):
 #     t1 = time.time()
@@ -74,7 +75,7 @@ def rsa_keygen(size, e):
     count.add_count(count_q)
     count.add_count(count2)
 
-    if worked_p and  worked_q:
+    if worked_p and worked_q:
         factors = []
         phi_n, count5 = multiplication(p - 1, q - 1)
         factors.extend(factor_p)
@@ -204,6 +205,7 @@ def rsa_15360(tries):
         append_file(path, string_keygen)
         append_file(path, string_encryption)
         append_file(path, string_decryption)
+
 
 if __name__ == "__main__":
     rsa_128(10)
