@@ -187,8 +187,8 @@ if __name__ == "__main__":
     fig = plt.figure(figsize=(10, 8), dpi=100)
     ax = fig.add_subplot(111)
 
-    ax.scatter(np.log2(rsa_equivalent), np.log10(rsa_keygen_clock_v))
-    ax.scatter(np.log2(ecc_p_equivalent), np.log10(ecc_p_keygen_clock_v))
+    ax.scatter(np.log2(rsa_equivalent), np.log10(rsa_keygen_clock_v), label="RSA")
+    ax.scatter(np.log2(ecc_p_equivalent), np.log10(ecc_p_keygen_clock_v), label=r"ECC $GF(p)$")
 
     # ax.plot(np.log2(x), np.log10(data), color_shape, markersize=markersize, label=label)
     # color_shapes_rsa = ['r-', 'ro', 'rs']
