@@ -4,6 +4,7 @@ from math import comb
 from graphs import *
 import numpy as np
 from system_file import *
+import scipy
 
 
 def get_rsa_data(rsa_paths):
@@ -181,20 +182,34 @@ if __name__ == "__main__":
     x_start = 4
     x_end = 10
     y_start = 1
-    y_end = 20
+    y_end = 22
     base = 2
     fontsize = 20
+    linewidth = 2
+    markersize = 20
     fig = plt.figure(figsize=(10, 8), dpi=100)
     ax = fig.add_subplot(111)
 
-    ax.scatter(np.log2(rsa_equivalent), np.log10(rsa_keygen_clock_v), label="RSA")
-    ax.scatter(np.log2(ecc_p_equivalent), np.log10(ecc_p_keygen_clock_v), label=r"ECC $GF(p)$")
+    nb_points = 1000
+    x = np.linspace(x_start, x_end, nb_points, True)
 
-    # ax.plot(np.log2(x), np.log10(data), color_shape, markersize=markersize, label=label)
+    x_rsa = np.log2(rsa_equivalent)
+    y_rsa = np.log10(rsa_keygen_clock_v)
+    slope_rsa, intercept_rsa, r, p, se = scipy.stats.linregress(x_rsa, y_rsa)
+    y_rsa_trend = slope_rsa * x + intercept_rsa
+    ax.scatter(x_rsa, y_rsa, label="RSA", s=markersize, marker='o')
+    ax.plot(x, y_rsa_trend, label="RSA régression", linewidth=linewidth)
+
+
+    x_ecc_p = np.log2(ecc_p_equivalent)
+    y_ecc_p = np.log10(ecc_p_keygen_clock_v)
+    slope_ecc_p, intercept_ecc_p, r, p, se = scipy.stats.linregress(x_ecc_p, y_ecc_p)
+    y_ecc_p_trend = slope_ecc_p * x + intercept_ecc_p
+    ax.scatter(x_ecc_p, y_ecc_p, label=r"ECC $GF(p)$", s=markersize, marker='o')
+    ax.plot(x, y_ecc_p_trend, label="ECC régression", linewidth=linewidth)
+
     # color_shapes_rsa = ['r-', 'ro', 'rs']
-    # labels_ecc_p = [r"ECC $GF(p)$ tendance", "ECC $GF(p)$ data", "ECC $GF(p)$ moyenne"]
     # color_shapes_ecc_p = ['g-', 'go', 'gs']
-    # labels_ecc_2m = [r"ECC $GF(2^m)$ tendance", "ECC $GF(2^m)$ data", "ECC $GF(2^m)$ moyenne"]
     # color_shapes_ecc_2m = ['b-', 'bo', 'bs']
 
     ax.legend(fontsize=fontsize * 0.75)
