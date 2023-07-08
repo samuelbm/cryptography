@@ -156,11 +156,12 @@ def ecc_p_521(tries):
 
 
 if __name__ == "__main__":
-    ecc_p_192(10)
-    ## ecc_p_224(10)
-    ecc_p_256(10)
-    ecc_p_384(10)
-    ecc_p_521(10)
+    pass
+    # ecc_p_192(10)
+    # ## ecc_p_224(10)
+    # ecc_p_256(10)
+    # ecc_p_384(10)
+    # ecc_p_521(10)
 
     # curve = ecc_create_curve(1, 6, 11, 2, 7)
     # a, b, p, G = curve
