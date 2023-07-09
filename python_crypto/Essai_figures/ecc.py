@@ -173,7 +173,7 @@ def get_slope_m(curve, point1, point2):
         count.add_count(count7)
 
     denum_inverse, count10 = inverse_prime_modulo(denum, p)
-    count.add_count(count10)
+    #count.add_count(count10)
 
     num_add, count11 = addition(p, num)
     m, count12 = multiplication_modulo(num_add, denum_inverse, p)

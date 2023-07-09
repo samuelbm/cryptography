@@ -132,10 +132,6 @@ def plot_data(ax, security, data, label, color_shape, markersize):
     ax.plot(np.log2(x), np.log10(data), color_shape, markersize=markersize, label=label)
 
 
-# def plot_trend(ax, f, x_securities, y_securities, label, linewidth, color_shape, nb_round):
-#     ax.plot(np.log2(x_securities), np.log10(f(y_securities, nb_round)), color_shape, linewidth=linewidth, label=label)
-
-
 def get_axe(base, minimum, maximum):
     skip = max(1, int(np.ceil((maximum - minimum + 1) / 10)))
     axe = []
@@ -173,9 +169,6 @@ markersize_mean = 10
 linewidth = 3
 nb_round = 10
 
-# securities = np.logspace(5, 17, 100, True, 2)
-
-
 
 if __name__ == "__main__":
     pass
@@ -208,9 +201,7 @@ if __name__ == "__main__":
     ax.scatter(x_ecc_p, y_ecc_p, label=r"ECC $GF(p)$", s=markersize, marker='o')
     ax.plot(x, y_ecc_p_trend, label="ECC régression", linewidth=linewidth)
 
-    # color_shapes_rsa = ['r-', 'ro', 'rs']
-    # color_shapes_ecc_p = ['g-', 'go', 'gs']
-    # color_shapes_ecc_2m = ['b-', 'bo', 'bs']
+    print(slope_rsa, slope_ecc_p)
 
     ax.legend(fontsize=fontsize * 0.75)
     # ax.set_title(str(curve), fontsize=fontsize)
