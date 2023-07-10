@@ -161,6 +161,13 @@ ecc_p_decryption_clock_v, ecc_p_decryption_regs_v, ecc_p_decryption_gates_v = ge
 ecc_p_strengh = [96, 128, 192, 256]
 ecc_p_equivalent = ecc_p_security_translation(ecc_p_size_v, ecc_p_strengh)
 
+ecc_p_data_paths2 = ["./data/ecc_p_192_without_inversion.txt", "./data/ecc_p_256_without_inversion.txt", "./data/ecc_p_384_without_inversion.txt", "./data/ecc_p_521_without_inversion.txt"]
+ecc_p_size_v2, ecc_p_kb_v2, ecc_p_Pb_v2, ecc_p_m_v2, ecc_p_Pm_v2, ecc_p_C_v2, ecc_p_keygen_clock_v2, ecc_p_keygen_regs_v2, \
+ecc_p_keygen_gates_v2, ecc_p_encryption_clock_v2, ecc_p_encryption_regs_v2, ecc_p_encryption_gates_v2, \
+ecc_p_decryption_clock_v2, ecc_p_decryption_regs_v2, ecc_p_decryption_gates_v2 = get_ecc_p_data(ecc_p_data_paths2)
+ecc_p_strengh2 = [96, 128, 192, 256]
+ecc_p_equivalent2 = ecc_p_security_translation(ecc_p_size_v2, ecc_p_strengh2)
+
 path = "./images/figure_space_keygen.png"
 x_label = "Sécurité [bits]"
 y_label = "Espace mémoire [bits]"
@@ -191,7 +198,8 @@ if __name__ == "__main__":
     slope_rsa, intercept_rsa, r, p, se = scipy.stats.linregress(x_rsa, y_rsa)
     y_rsa_trend = slope_rsa * x + intercept_rsa
     ax.scatter(x_rsa, y_rsa, label="RSA", s=markersize, marker='o')
-    ax.plot(x, y_rsa_trend, label="RSA régression", linewidth=linewidth)
+    #ax.plot(x, y_rsa_trend, label="RSA régression", linewidth=linewidth)
+    ax.plot(x, y_rsa_trend, label="", linewidth=linewidth)
 
 
     x_ecc_p = np.log2(ecc_p_equivalent)
@@ -199,9 +207,20 @@ if __name__ == "__main__":
     slope_ecc_p, intercept_ecc_p, r, p, se = scipy.stats.linregress(x_ecc_p, y_ecc_p)
     y_ecc_p_trend = slope_ecc_p * x + intercept_ecc_p
     ax.scatter(x_ecc_p, y_ecc_p, label=r"ECC $GF(p)$", s=markersize, marker='o')
-    ax.plot(x, y_ecc_p_trend, label="ECC régression", linewidth=linewidth)
-    print(y_rsa, y_ecc_p)
-    print(slope_rsa, slope_ecc_p)
+    #ax.plot(x, y_ecc_p_trend, label="ECC régression", linewidth=linewidth)
+    ax.plot(x, y_ecc_p_trend, label="", linewidth=linewidth)
+
+
+    x_ecc_p2 = np.log2(ecc_p_equivalent2)
+    y_ecc_p2 = np.log10(ecc_p_keygen_regs_v2)
+    slope_ecc_p2, intercept_ecc_p2, r2, p2, se2 = scipy.stats.linregress(x_ecc_p2, y_ecc_p2)
+    y_ecc_p_trend2 = slope_ecc_p2 * x + intercept_ecc_p2
+    ax.scatter(x_ecc_p2, y_ecc_p2, label=r"ECC $GF(p)$ sans inversion", s=markersize, marker='o')
+    #ax.plot(x, y_ecc_p_trend2, label="ECC $GF(p)$ sans inversion régression", linewidth=linewidth)
+    ax.plot(x, y_ecc_p_trend2, label="", linewidth=linewidth)
+
+
+    ax.plot([np.log2(get_RSA(2048)), np.log2(get_RSA(2048))], [y_start, y_end], 'k--', linewidth=2, label='Sécurité minimale')
 
     ax.legend(fontsize=fontsize * 0.75)
     # ax.set_title(str(curve), fontsize=fontsize)
