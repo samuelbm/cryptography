@@ -30,7 +30,7 @@ def ecc_is_point_on_curve(curve, point):
     count = Count()
     a, b, p, G = curve
     x, y = point.px, point.py
-    left_side, count1 = exponentiation_modulo(y, 2, p)
+    left_side, count1 = multiplication_modulo(y, y, p)
     right_side, count2 = ecc_compute_y2(curve, x)
     count.add_count(count1)
     count.add_count(count2)
