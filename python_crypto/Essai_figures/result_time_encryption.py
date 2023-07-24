@@ -147,7 +147,7 @@ def get_axe(base, minimum, maximum):
 
 
 rsa_data_paths = ["./data/rsa_128.txt", "./data/rsa_400.txt", "./data/rsa_1024.txt", "./data/rsa_2044.txt",
-                  "./data/rsa_3072.txt"]
+                  "./data/rsa_3072.txt", "./data/rsa_7680.txt"]
 rsa_size_v, rsa_p_v, rsa_q_v, rsa_n_v, rsa_e_v, rsa_d_v, rsa_m_v, rsa_C_v, rsa_keygen_clock_v, rsa_keygen_regs_v, \
 rsa_keygen_gates_v, rsa_encryption_clock_v, rsa_encryption_regs_v, rsa_encryption_gates_v, rsa_decryption_clock_v, \
 rsa_decryption_regs_v, rsa_decryption_gates_v = get_rsa_data(rsa_data_paths)
@@ -221,7 +221,9 @@ if __name__ == "__main__":
 
     ax.plot([np.log2(get_RSA(2048)), np.log2(get_RSA(2048))], [y_start, y_end], 'k--', linewidth=2, label='Sécurité minimale')
 
-    print(slope_rsa, slope_ecc_p)
+    print("slope_rsa: {}".format(slope_rsa))
+    print("slope_ecc_p: {}".format(slope_ecc_p))
+    print("slope_ecc_p2: {}".format(slope_ecc_p2))
 
     ax.legend(fontsize=fontsize * 0.75)
     # ax.set_title(str(curve), fontsize=fontsize)
