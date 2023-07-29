@@ -22,9 +22,9 @@ def ecc_p_encryption(curve, m, Pb, size):
     x = m << 20
     is_first_pass = True
     while not find_Pm:
+        x, count3 = addition(x, 1)
         y2, count1 = ecc_compute_y2(curve, x)
         find_Pm, y, count2 = is_quadratiqc_residue(y2, p)
-        x, count3 = addition(x, 1)
         if is_first_pass:
             is_first_pass = False
             count.add_count(count1)
