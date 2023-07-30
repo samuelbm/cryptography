@@ -182,7 +182,7 @@ if __name__ == "__main__":
     x_start = 4
     x_end = 10
     y_start = 1
-    y_end = 22
+    y_end = 7
     base = 2
     fontsize = 20
     linewidth = 2
