@@ -170,7 +170,7 @@ ecc_p_equivalent2 = ecc_p_security_translation(ecc_p_size_v2, ecc_p_strengh2)
 
 path = "./images/figure_time_encryption.png"
 x_label = "Sécurité [bits]"
-y_label = "Temps [cycle d'horloge]"
+y_label = "Temps [cycles d'horloge]"
 markersize_data = 5
 markersize_mean = 10
 linewidth = 3
