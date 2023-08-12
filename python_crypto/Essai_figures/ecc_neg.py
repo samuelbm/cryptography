@@ -56,6 +56,8 @@ ax1.plot([-1, -1], [-f(-1, a, b), f(-1, a, b)], c=u'#ff7f0e')
 ax1.scatter([-1, -1], [-f(-1, a, b), f(-1, a, b)], c=u'#ff7f0e', zorder=2)
 ax1.text(-1, 2.5, r"$P$", fontsize=fontsize)
 ax1.text(-1, -3.5, r"$Q=-P$", fontsize=fontsize)
+ax1.plot([xmin, xmax], [0, 0], c='k', zorder=1)
+ax1.plot([0, 0], [ymin, ymax], c='k', zorder=1)
 
 ax2 = fig.add_subplot(1,2,2)
 a = -3
@@ -80,6 +82,8 @@ ax2.plot([-1, -1], [-f(-1, a, b), f(-1, a, b)], c=u'#ff7f0e')
 ax2.scatter([-1, -1], [-f(-1, a, b), f(-1, a, b)], c=u'#ff7f0e', zorder=2)
 ax2.text(-1, 2.5, r"$P$", fontsize=fontsize)
 ax2.text(-1, -3.5, r"$Q=-P$", fontsize=fontsize)
+ax2.plot([xmin, xmax], [0, 0], c='k', zorder=1)
+ax2.plot([0, 0], [ymin, ymax], c='k', zorder=1)
 
 
 plt.tight_layout()

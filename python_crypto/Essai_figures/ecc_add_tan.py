@@ -78,6 +78,8 @@ ax1.text(x1-0.5, y1, r"$P$", fontsize=fontsize)
 ax1.text(x4+0.25, y4-0.75, r"$-R$", fontsize=fontsize)
 ax1.text(x3+0.5, y3, r"$R$", fontsize=fontsize)
 ax1.text(-2, -8, r"$R=P+P$", fontsize=fontsize)
+ax1.plot([xmin, xmax], [0, 0], c='k', zorder=1)
+ax1.plot([0, 0], [ymin, ymax], c='k', zorder=1)
 
 ax2 = fig.add_subplot(1, 2, 2)
 a = -3
@@ -114,6 +116,8 @@ ax2.text(x1-0.5, y1, r"$P$", fontsize=fontsize)
 ax2.text(x4+0.25, y4-1, r"$-R$", fontsize=fontsize)
 ax2.text(x3+0.5, y3, r"$R$", fontsize=fontsize)
 ax2.text(-2, -8, r"$R=P+P$", fontsize=fontsize)
+ax2.plot([xmin, xmax], [0, 0], c='k', zorder=1)
+ax2.plot([0, 0], [ymin, ymax], c='k', zorder=1)
 
 plt.tight_layout()
 plt.savefig(path)
